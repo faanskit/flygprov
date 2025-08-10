@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/main.js",
   "scripts": {
-    "build": "esbuild src/main.ts src/dashboard.ts src/test.ts src/result.ts --bundle --outdir=dist"
+    "build": "esbuild src/main.ts src/dashboard.ts src/test.ts src/result.ts src/examinator.ts src/student-details.ts src/create-test.ts --bundle --outdir=dist"
   },
   "keywords": [],
   "author": "",

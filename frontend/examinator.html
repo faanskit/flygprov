@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examinator Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1>Examinator-översikt</h1>
+            <button id="logout-button" class="btn btn-danger">Logga ut</button>
+        </div>
+        <p>Välkommen! Här är en översikt över studenternas framsteg.</p>
+        
+        <table class="table table-hover mt-4">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Framsteg</th>
+                    <th>Åtgärd</th>
+                </tr>
+            </thead>
+            <tbody id="student-overview-body">
+                <!-- Studentöversikt renderas här -->
+            </tbody>
+        </table>
+
+        <div id="error-container" class="alert alert-danger d-none mt-4" role="alert"></div>
+    </div>
+    <script src="dist/examinator.js"></script>
+</body>
+</html>

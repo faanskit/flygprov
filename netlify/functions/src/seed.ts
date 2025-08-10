@@ -37,11 +37,12 @@ async function seedDatabase() {
     
     // --- Seed Users ---
     const usersCollection = db.collection<User>('users');
-    await usersCollection.deleteMany({ username: 'student' });
-    const hashedPassword = await bcrypt.hash('password', 10);
+    await usersCollection.deleteMany({ username: { $in: ['student', 'examinator'] } });
+    
+    const studentPassword = await bcrypt.hash('password', 10);
     const studentUser: User = {
         username: 'student',
-        password: hashedPassword,
+        password: studentPassword,
         role: 'student',
         createdAt: new Date(),
         archived: false,
@@ -49,6 +50,17 @@ async function seedDatabase() {
     const studentResult = await usersCollection.insertOne(studentUser);
     const studentId = studentResult.insertedId;
     console.log(`Created student user with ID: ${studentId}`);
+
+    const examinatorPassword = await bcrypt.hash('password', 10);
+    const examinatorUser: User = {
+        username: 'examinator',
+        password: examinatorPassword,
+        role: 'examinator',
+        createdAt: new Date(),
+        archived: false,
+    };
+    await usersCollection.insertOne(examinatorUser);
+    console.log(`Created examinator user.`);
 
     // --- Seed Subjects ---
     const subjectsCollection = db.collection<Subject>('subjects');
@@ -100,7 +112,7 @@ async function seedDatabase() {
     }
 
     console.log('\nSeed complete!');
-    console.log(`You can log in with:\nUsername: student\nPassword: password`);
+    console.log(`You can log in with:\n- Student: student / password\n- Examinator: examinator / password`);
 
     await client.close();
     console.log('Database connection closed.');

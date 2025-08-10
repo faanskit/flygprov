@@ -34,10 +34,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 resultDiv.textContent = 'Inloggning lyckades! Omdirigerar...';
                 console.log('Token:', data.token);
                 
-                // Spara token och omdirigera till dashboard
+                // Spara token och omdirigera baserat på roll
                 localStorage.setItem('jwt_token', data.token);
                 setTimeout(() => {
-                    window.location.href = '/dashboard.html';
+                    if (data.user.role === 'examinator') {
+                        window.location.href = '/examinator.html';
+                    } else {
+                        window.location.href = '/dashboard.html';
+                    }
                 }, 1000);
 
             } catch (error: any) {
