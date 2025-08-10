@@ -1,0 +1,20 @@
+{
+	"geolocation": {
+		"data": {
+			"city": "Karlskrona",
+			"country": {
+				"code": "SE",
+				"name": "Sweden"
+			},
+			"subdivision": {
+				"code": "K",
+				"name": "Blekinge County"
+			},
+			"timezone": "Europe/Stockholm",
+			"latitude": 56.1625,
+			"longitude": 15.5801,
+			"postalCode": "371 12"
+		},
+		"timestamp": 1754801191909
+	}
+}

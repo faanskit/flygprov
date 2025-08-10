@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        .status {
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        .status-passed { background-color: #e8f5e9; color: #2e7d32; }
+        .status-available { background-color: #e3f2fd; color: #1565c0; }
+        .status-locked { background-color: #fce4ec; color: #ad1457; }
+        .btn-start {
+            padding: 0.4rem 0.8rem;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+        .btn-start:hover {
+            background-color: #218838;
+        }
+        #logout-button {
+            display: block;
+            margin-top: 1.5rem;
+            padding: 0.5rem 1rem;
+            background-color: #d32f2f;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        #logout-button:hover {
+            background-color: #c62828;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Min Översikt</h1>
+        <p>Välkommen! Här är din status för de olika provdelarna.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Ämne</th>
+                    <th>Status</th>
+                    <th>Antal Försök</th>
+                    <th>Bästa Resultat</th>
+                    <th>Åtgärd</th>
+                </tr>
+            </thead>
+            <tbody id="dashboard-table-body">
+                <!-- Raderna kommer att fyllas i av JavaScript -->
+            </tbody>
+        </table>
+        <button id="logout-button">Logga ut</button>
+    </div>
+    <script src="dist/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "flygprov",
+  "version": "1.0.0",
+  "description": "Pre-test application for flight students",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "build": "npm run build -ws"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "workspaces": [
+    "frontend",
+    "netlify/functions"
+  ]
+}
