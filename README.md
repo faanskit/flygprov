@@ -9,7 +9,7 @@ En webbapplikation för förberedande prov (pre-tests) för pilotelever vid Kalm
 *   Fullständigt provflöde med 20 flervalsfrågor.
 *   Visning av en fråga i taget med framstegsindikator (progress bar).
 *   Navigering mellan frågor (föregående/nästa och via progress-baren).
-*   Inlämning av prov.
+*   Inlämning av flygprov.
 *   Detaljerad resultatsida som visar poäng och en genomgång av rätt/fel svar.
 
 ## Teknisk Stack
