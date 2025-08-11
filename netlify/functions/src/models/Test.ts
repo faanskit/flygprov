@@ -9,4 +9,5 @@ export interface Test {
     timeLimitMinutes: number;
     createdAt: Date;
     createdBy: ObjectId; // Examinator's ObjectId
+    assignedStudentIds: ObjectId[]; // Students assigned to this test
 }

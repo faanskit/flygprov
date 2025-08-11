@@ -32,10 +32,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             detailsBody.innerHTML = '';
             data.details.forEach((subject: any) => {
                 const row = document.createElement('tr');
-                let actionCell = '<td>-</td>';
-                if (subject.status !== 'passed') {
+                let actionCell = '<td>-</td>'; // Default för godkända ämnen
+
+                if (subject.status === 'assigned') {
+                    actionCell = `<td><button class="btn btn-outline-secondary btn-sm" disabled>Prov Tilldelat</button></td>`;
+                } else if (subject.status !== 'passed') {
                     actionCell = `<td><button class="btn btn-success btn-sm create-test-btn" data-subject-id="${subject.subjectId}" data-subject-name="${subject.subjectName}" data-student-name="${data.student.username}">Skapa Prov</button></td>`;
                 }
+
                 row.innerHTML = `
                     <td>${subject.subjectName}</td>
                     <td><span class="status status-${subject.status}">${subject.status.replace('_', ' ')}</span></td>

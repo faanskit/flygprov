@@ -28,16 +28,35 @@ async function getStudentOverview(db: Db) {
 async function getStudentDetails(db: Db, studentId: ObjectId) {
     const student = await db.collection<User>('users').findOne({ _id: studentId }, { projection: { password: 0 }});
     if (!student) throw new Error("Student not found");
+
     const subjects = await db.collection<Subject>('subjects').find().toArray();
     const attempts = await db.collection<TestAttempt>('test_attempts').find({ studentId }).toArray();
+    const assignedTests = await db.collection('tests').find({ assignedStudentIds: studentId }).toArray();
+
     const details = subjects.map(subject => {
         const subjectAttempts = attempts.filter(a => a.subjectId.equals(subject._id!));
         const hasPassed = subjectAttempts.some(a => a.passed);
         const bestScore = subjectAttempts.length > 0 ? Math.max(...subjectAttempts.map(a => a.score)) : null;
+        
+        // Finns det ett tilldelat prov för detta ämne som inte har några försök än?
+        const isAssignedAndNotStarted = assignedTests.some(t => t.subjectId.equals(subject._id!) && !attempts.some(a => a.testId.equals(t._id!)));
+
         let status = 'not_started';
-        if (hasPassed) status = 'passed';
-        else if (subjectAttempts.length > 0) status = 'in_progress';
-        return { subjectId: subject._id, subjectName: subject.name, status, attemptsCount: subjectAttempts.length, bestScore: bestScore !== null ? `${bestScore}/20` : null };
+        if (hasPassed) {
+            status = 'passed';
+        } else if (isAssignedAndNotStarted) {
+            status = 'assigned'; // Ny status!
+        } else if (subjectAttempts.length > 0) {
+            status = 'in_progress';
+        }
+
+        return { 
+            subjectId: subject._id, 
+            subjectName: subject.name, 
+            status, 
+            attemptsCount: subjectAttempts.length, 
+            bestScore: bestScore !== null ? `${bestScore}/20` : null 
+        };
     });
     return { student, details };
 }

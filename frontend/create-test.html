@@ -11,16 +11,24 @@
         <div id="loading">Laddar...</div>
         <div id="create-test-container" class="d-none">
             <h1>Skapa Prov</h1>
-            <p>Här är 20 slumpmässigt utvalda frågor för <strong id="subject-name"></strong> till student <strong id="student-name"></strong>.</p>
-            <p>Du kan byta ut enskilda frågor genom att klicka på uppdatera-ikonen.</p>
+            <p>Här är 20 slumpmässigt utvalda frågor för ämnet <strong id="subject-name"></strong> till student <strong id="student-name"></strong>.</p>
+            <p>Granska frågorna nedan. Du kan byta ut enskilda frågor genom att klicka på uppdatera-ikonen (&#x21bb;).</p>
 
-            <div id="question-list" class="list-group mt-4">
+            <div class="mb-3">
+                <label for="test-name" class="form-label">Provets Namn</label>
+                <input type="text" class="form-control" id="test-name" required>
+            </div>
+
+            <h5 class="mt-4">Frågor</h5>
+            <div id="question-list" class="list-group">
                 <!-- Frågorna kommer att renderas här -->
             </div>
 
-            <button id="finalize-test-btn" class="btn btn-success mt-4">Färdigställ och Tilldela Prov</button>
+            <button id="assign-test-btn" class="btn btn-success mt-4">Färdigställ och Tilldela Prov</button>
         </div>
         <div id="error-container" class="alert alert-danger d-none mt-4"></div>
+        <div id="success-container" class="alert alert-success d-none mt-4"></div>
+        <div id="navigation-container" class="mt-2"></div>
     </div>
     <script src="dist/create-test.js"></script>
 </body>

@@ -9,6 +9,7 @@ import { verifyToken } from "../src/utils/auth";
 const getDashboardData = async (db: Db, studentId: ObjectId) => {
     const subjects = await db.collection<Subject>('subjects').find().toArray();
     const attempts = await db.collection<TestAttempt>('test_attempts').find({ studentId }).toArray();
+    const assignedTests = await db.collection<Test>('tests').find({ assignedStudentIds: studentId }).toArray();
 
     const dashboardData = subjects.map((subject: Subject) => {
         const subjectAttempts = attempts.filter((a: TestAttempt) => a.subjectId.equals(subject._id!));
@@ -18,21 +19,22 @@ const getDashboardData = async (db: Db, studentId: ObjectId) => {
             ? Math.max(...subjectAttempts.map((a: TestAttempt) => a.score))
             : null;
 
+        // Finns det ett tilldelat prov för detta ämne som studenten INTE har påbörjat än?
+        const hasAvailableTest = assignedTests.some(assignedTest => 
+            assignedTest.subjectId.equals(subject._id!) && 
+            !attempts.some(attempt => attempt.testId.equals(assignedTest._id!))
+        );
+
         let status = 'locked';
         if (hasPassed) {
             status = 'passed';
-        } else if (attemptsCount > 0) {
+        } else if (hasAvailableTest) {
             status = 'available';
-        } else {
-            if (subject.code === 'LAW') {
-                status = 'available';
-            }
+        } else if (attemptsCount > 0) {
+            // Om det inte finns tillgängliga prov men det finns försök, är det "in progress"
+            status = 'in_progress';
         }
         
-        if (hasPassed) {
-            status = 'passed';
-        }
-
         return {
             subjectId: subject._id,
             subject: subject.name,
@@ -44,11 +46,12 @@ const getDashboardData = async (db: Db, studentId: ObjectId) => {
     return dashboardData;
 };
 
-const getAvailableTests = async (db: Db) => {
-    // For now, return all tests. Later, this can be filtered based on student progress.
-    const tests = await db.collection<Test>('tests').find({}, {
-        projection: { name: 1, description: 1, subjectId: 1 }
-    }).toArray();
+const getAvailableTests = async (db: Db, studentId: ObjectId) => {
+    // Return tests specifically assigned to the student.
+    const tests = await db.collection<Test>('tests').find(
+        { assignedStudentIds: studentId },
+        { projection: { name: 1, description: 1, subjectId: 1 } }
+    ).toArray();
     return tests;
 };
 
@@ -73,7 +76,7 @@ const handler: Handler = async (event: HandlerEvent, context) => {
         }
 
         if (event.path.endsWith('/tests')) {
-            const data = await getAvailableTests(db);
+            const data = await getAvailableTests(db, studentId);
             return { statusCode: 200, body: JSON.stringify(data), headers: { "Content-Type": "application/json" }};
         }
 

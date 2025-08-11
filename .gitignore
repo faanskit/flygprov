@@ -1,5 +1,6 @@
 # Dependencies
 /node_modules
+/netlify/functions/node_modules
 
 # Build output
 /frontend/dist

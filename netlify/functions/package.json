@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "db:seed": "ts-node src/seed.ts",
-    "db:seed:tests": "ts-node src/seed-tests.ts"
+    "db:seed:tests": "ts-node src/seed-tests.ts",
+    "db:reset:student": "dotenv -e ../../.env ts-node src/reset-student.ts"
   },
   "keywords": [],
   "author": "",
