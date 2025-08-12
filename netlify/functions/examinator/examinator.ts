@@ -62,12 +62,16 @@ async function getStudentDetails(db: Db, studentId: ObjectId) {
 }
 
 async function createTestSession(db: Db, subjectId: ObjectId) {
+    const subject = await db.collection<Subject>('subjects').findOne({ _id: subjectId });
+    if (!subject) throw new Error("Subject not found");
+
     const questions = await db.collection<Question>('questions').aggregate([
         { $match: { subjectId: subjectId } },
         { $sample: { size: 20 } }
     ]).toArray();
     if (questions.length < 20) throw new Error(`Not enough questions in the database for subject ${subjectId}. Found only ${questions.length}.`);
-    return { questions };
+    
+    return { questions, subject };
 }
 
 async function replaceQuestion(db: Db, subjectId: ObjectId, excludeIds: string[]) {

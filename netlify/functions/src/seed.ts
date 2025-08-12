@@ -13,15 +13,15 @@ import { TestAttempt } from './models/TestAttempt';
 import bcrypt from 'bcryptjs';
 
 const subjectsData: Omit<Subject, '_id'>[] = [
-    { name: 'Luftfartsrätt och bestämmelser', code: 'LAW', description: 'Omfattar nationella och internationella luftfartsregler.' },
-    { name: 'Allmän flygplanslära', code: 'AGK', description: 'Behandlar flygplanets konstruktion, system, instrument och motorer.' },
-    { name: 'Flygningens grundprinciper', code: 'POF', description: 'Fokuserar på aerodynamik.' },
-    { name: 'Prestanda och färdplanering', code: 'FPP', description: 'Inkluderar beräkningar av start- och landningssträckor.' },
-    { name: 'Människans prestationsförmåga', code: 'HPL', description: 'Tar upp de fysiologiska och psykologiska aspekterna av flygning.' },
-    { name: 'Meteorologi', code: 'MET', description: 'Ger kunskap om väderfenomen.' },
-    { name: 'Navigation', code: 'NAV', description: 'Omfattar metoder för att bestämma ett flygplans position.' },
-    { name: 'Operativa procedurer', code: 'OP', description: 'Behandlar de standardprocedurer som används under en flygning.' },
-    { name: 'Kommunikation', code: 'COM', description: 'Fokuserar på fraseologi och procedurer för radiokommunikation.' }
+    { name: 'Luftfartsrätt och bestämmelser', code: 'LAW', description: 'Omfattar nationella och internationella luftfartsregler.', defaultTimeLimitMinutes: 60 },
+    { name: 'Allmän flygplanslära', code: 'AGK', description: 'Behandlar flygplanets konstruktion, system, instrument och motorer.', defaultTimeLimitMinutes: 60 },
+    { name: 'Flygningens grundprinciper', code: 'POF', description: 'Fokuserar på aerodynamik.', defaultTimeLimitMinutes: 60 },
+    { name: 'Prestanda och färdplanering', code: 'FPP', description: 'Inkluderar beräkningar av start- och landningssträckor.', defaultTimeLimitMinutes: 60 },
+    { name: 'Människans prestationsförmåga', code: 'HPL', description: 'Tar upp de fysiologiska och psykologiska aspekterna av flygning.', defaultTimeLimitMinutes: 60 },
+    { name: 'Meteorologi', code: 'MET', description: 'Ger kunskap om väderfenomen.', defaultTimeLimitMinutes: 60 },
+    { name: 'Navigation', code: 'NAV', description: 'Omfattar metoder för att bestämma ett flygplans position.', defaultTimeLimitMinutes: 60 },
+    { name: 'Operativa procedurer', code: 'OP', description: 'Behandlar de standardprocedurer som används under en flygning.', defaultTimeLimitMinutes: 60 },
+    { name: 'Kommunikation', code: 'COM', description: 'Fokuserar på fraseologi och procedurer för radiokommunikation.', defaultTimeLimitMinutes: 60 }
 ];
 
 

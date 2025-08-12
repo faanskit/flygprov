@@ -181,8 +181,6 @@ Student
   * Kan endast klicka på ämnen som examinatorn har gjort tillgängliga/släppt.  
   * Godkända prov är låsta och visar endast resultatet (t.ex. "GODKÄND, 19/20").  
 * **Starta Prov:**  
-  * Vid val av ett tillgängligt ämne visas en informationssida.  
-  * Sidan visar vilket ämne provet avser, antal frågor (20), tidsgräns och eventuellt material som behövs.  
   * En "Starta provet"-knapp finns för att påbörja testet.  
 * **Genomföra Prov:**  
   * En nedräkningstimer är synlig uppe i högra hörnet.  
@@ -215,10 +213,32 @@ Examinator
   * Vid provtillfället kan examinatorn "släppa" provet (ändra status till  
      released), vilket gör det tillgängligt för studenten.  
   * Studenten ska inte kunna se provet innan det släppts.
+* **Provgranskning:** 
+  * Efter att studenten genomfört ett prov så ska examinatorn kunna kolla på det detaljerade resultatet, 
+      i princip samma vy som studenten ser på sin resultatsida. 
+  * Resultatsidan för examinatorn ska tala om ifall provet skickades in automatiskt eller av studenten.
+
 
 Administrator
 
 * Hanterar examinator-konton.  
 * Har tillgång till back-office verktyg för databashantering.  
 * Systemet ska automatiskt arkivera studenter som klarat alla nio delprov efter en viss tid.
+
+Feedback:
+1.
+Student, provtillfälle: Nu är det röd text. Kan vi göra så att det blir vit text på röd bakgrund för timern när det 
+bara är en minut kvar
+
+2.
+Student, provtillfälle: Om tiden löper ut så visas en dialogrutan innan det skickas in. Detta är en fuskrisk. Vi ska omedelbart utan att
+meddela skicka in provet.
+
+
+3.
+Examinator, nytt krav:
+* **Provgranskning:** 
+  * Efter att studenten genomfört ett prov så ska examinatorn kunna kolla på det detaljerade resultatet, 
+      i princip samma vy som studenten ser på sin resultatsida. 
+  * Resultatsidan för examinatorn ska tala om ifall provet skickades in automatiskt eller av studenten.
 

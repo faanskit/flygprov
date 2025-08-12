@@ -79,10 +79,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             // Spara data i sessionStorage för att hämta på nästa sida
             sessionStorage.setItem('createTestData', JSON.stringify({
-                ...testData,
+                questions: testData.questions,
+                subject: testData.subject, // Skicka med hela objektet
                 studentId,
                 subjectId,
-                subjectName,
                 studentName
             }));
 

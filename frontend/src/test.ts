@@ -4,15 +4,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     // State
     let questions: any[] = [];
     let userAnswers: (number | null)[] = [];
-    let visitedQuestions: boolean[] = []; // Håller reda på besökta frågor
+    let visitedQuestions: boolean[] = [];
     let currentQuestionIndex = 0;
     let attemptId: string | null = null;
+    let timerInterval: number | null = null;
 
     // DOM Elements
     const loadingEl = document.getElementById('loading') as HTMLDivElement;
     const errorEl = document.getElementById('error-container') as HTMLDivElement;
     const testContainer = document.getElementById('test-container') as HTMLDivElement;
     const testNameEl = document.getElementById('test-name') as HTMLHeadingElement;
+    const timerEl = document.getElementById('timer') as HTMLDivElement;
     const questionNumberEl = document.getElementById('question-number') as HTMLSpanElement;
     const progressBar = document.getElementById('progress-bar') as HTMLDivElement;
     const questionCard = document.getElementById('question-card') as HTMLDivElement;
@@ -46,12 +48,39 @@ document.addEventListener('DOMContentLoaded', async () => {
         loadingEl.classList.add('d-none');
         testContainer.classList.remove('d-none');
 
-        // Markera första frågan som besökt direkt
         visitedQuestions[0] = true;
+        startTimer(data.timeLimitMinutes);
         renderAll();
     } catch (error) {
         console.error(error);
         showError('Kunde inte ladda provet.');
+    }
+
+    // --- Timer ---
+    function startTimer(minutes: number) {
+        let seconds = minutes * 60;
+        
+        timerInterval = window.setInterval(() => {
+            seconds--;
+
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            timerEl.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+            // Varningar
+            if (seconds <= 300 && seconds > 60) { // 5 minuter
+                timerEl.classList.toggle('blinking');
+            } else if (seconds <= 60) {
+                timerEl.classList.remove('blinking');
+                timerEl.classList.add('urgent'); // Röd
+            }
+
+            if (seconds <= 0) {
+                if(timerInterval) clearInterval(timerInterval);
+                alert("Tiden är slut! Provet kommer nu att lämnas in automatiskt.");
+                submitTest();
+            }
+        }, 1000);
     }
 
     // --- Rendering Functions ---
@@ -72,9 +101,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 ${question.options.map((option: string, i: number) => `
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="question-${question._id}" id="q-${question._id}-o-${i}" value="${i}" ${userAnswers[currentQuestionIndex] === i ? 'checked' : ''}>
-                        <label class="form-check-label" for="q-${question._id}-o-${i}">
-                            ${option}
-                        </label>
+                        <label class="form-check-label" for="q-${question._id}-o-${i}">${option}</label>
                     </div>
                 `).join('')}
             </div>
@@ -89,14 +116,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         for (let i = 0; i < questions.length; i++) {
             const dash = document.createElement('div');
             dash.className = 'progress-dash';
-            if (userAnswers[i] !== null) {
-                dash.classList.add('answered'); // Grön
-            } else if (visitedQuestions[i]) {
-                dash.classList.add('skipped'); // Röd
-            }
-            if (i === currentQuestionIndex) {
-                dash.classList.add('current'); // Blå
-            }
+            if (userAnswers[i] !== null) dash.classList.add('answered');
+            else if (visitedQuestions[i]) dash.classList.add('skipped');
+            if (i === currentQuestionIndex) dash.classList.add('current');
             dash.dataset.index = `${i}`;
             progressBar.appendChild(dash);
         }
@@ -106,11 +128,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         prevBtn.disabled = currentQuestionIndex === 0;
         nextBtn.disabled = currentQuestionIndex === questions.length - 1;
         
-        if (userAnswers.every(answer => answer !== null)) {
-            submitBtn.classList.remove('d-none');
-        } else {
-            submitBtn.classList.add('d-none');
-        }
+        const allAnswered = userAnswers.every(answer => answer !== null);
+        submitBtn.classList.toggle('d-none', !allAnswered);
     }
 
     function showError(message: string) {
@@ -121,15 +140,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // --- Navigation & State Change ---
     function changeQuestion(newIndex: number) {
-        // Markera nuvarande fråga som besökt innan vi byter
         visitedQuestions[currentQuestionIndex] = true;
         currentQuestionIndex = newIndex;
-        // Markera den nya frågan som besökt också
         visitedQuestions[currentQuestionIndex] = true;
         renderAll();
     }
 
-    // --- Event Handlers ---
+    // --- Event Handlers & Submission ---
     function handleAnswerChange(event: Event) {
         const selectedOption = (event.target as HTMLInputElement).value;
         userAnswers[currentQuestionIndex] = parseInt(selectedOption, 10);
@@ -137,35 +154,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         updateNavButtons();
     }
 
-    prevBtn.addEventListener('click', () => {
-        if (currentQuestionIndex > 0) {
-            changeQuestion(currentQuestionIndex - 1);
-        }
-    });
-
-    nextBtn.addEventListener('click', () => {
-        if (currentQuestionIndex < questions.length - 1) {
-            changeQuestion(currentQuestionIndex + 1);
-        }
-    });
-
-    progressBar.addEventListener('click', (event) => {
-        const target = event.target as HTMLDivElement;
-        if (target && target.dataset.index) {
-            const newIndex = parseInt(target.dataset.index, 10);
-            if (newIndex !== currentQuestionIndex) {
-                changeQuestion(newIndex);
-            }
-        }
-    });
-
-    submitBtn.addEventListener('click', async () => {
+    async function submitTest() {
+        if (timerInterval) clearInterval(timerInterval);
         if (!attemptId) {
             showError("Kunde inte hitta provförsökets ID. Kan inte lämna in.");
             return;
         }
 
-        // Formatera svaren för backend
+        // Inaktivera alla knappar
+        submitBtn.disabled = true;
+        prevBtn.disabled = true;
+        nextBtn.disabled = true;
+
         const answersPayload = questions.map((q, index) => ({
             questionId: q._id,
             selectedOptionIndex: userAnswers[index]
@@ -174,23 +174,23 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             const response = await fetch(`/api/tests/${attemptId}/submit`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify({ answers: answersPayload })
             });
 
-            if (!response.ok) {
-                throw new Error('Inlämningen misslyckades.');
-            }
-
-            // Omdirigera till en resultatsida (som vi skapar senare)
+            if (!response.ok) throw new Error('Inlämningen misslyckades.');
             window.location.href = `/result.html?attemptId=${attemptId}`;
-
         } catch (error) {
             console.error("Error submitting test:", error);
             showError("Ett fel uppstod vid inlämning. Försök igen.");
         }
+    }
+
+    prevBtn.addEventListener('click', () => changeQuestion(currentQuestionIndex - 1));
+    nextBtn.addEventListener('click', () => changeQuestion(currentQuestionIndex + 1));
+    progressBar.addEventListener('click', (event) => {
+        const target = event.target as HTMLDivElement;
+        if (target && target.dataset.index) changeQuestion(parseInt(target.dataset.index, 10));
     });
+    submitBtn.addEventListener('click', submitTest);
 });

@@ -14,9 +14,15 @@
             <p>Här är 20 slumpmässigt utvalda frågor för ämnet <strong id="subject-name"></strong> till student <strong id="student-name"></strong>.</p>
             <p>Granska frågorna nedan. Du kan byta ut enskilda frågor genom att klicka på uppdatera-ikonen (&#x21bb;).</p>
 
-            <div class="mb-3">
-                <label for="test-name" class="form-label">Provets Namn</label>
-                <input type="text" class="form-control" id="test-name" required>
+            <div class="row">
+                <div class="col-md-8">
+                    <label for="test-name" class="form-label">Provets Namn</label>
+                    <input type="text" class="form-control" id="test-name" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="test-time-limit" class="form-label">Tidsgräns (minuter)</label>
+                    <input type="number" class="form-control" id="test-time-limit" required>
+                </div>
             </div>
 
             <h5 class="mt-4">Frågor</h5>

@@ -28,6 +28,18 @@
         .progress-dash.current {
             background-color: #0d6efd; /* Blå */
         }
+        .blinking {
+            animation: blinker 1s linear infinite;
+        }
+        .urgent {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        @keyframes blinker {
+            50% {
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -37,7 +49,10 @@
         </div>
 
         <div id="test-container" class="d-none">
-            <h2 id="test-name"></h2>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h2 id="test-name" class="mb-0"></h2>
+                <div id="timer" class="fs-4 fw-bold">--:--</div>
+            </div>
             <p>Fråga <span id="question-number"></span> av 20</p>
             
             <div id="progress-bar"></div>

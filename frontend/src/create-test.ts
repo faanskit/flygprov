@@ -15,7 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
         subjectId: string, 
         subjectName: string, 
         studentName: string, 
-        questions: any[] 
+        questions: any[],
+        subject: any // Hela ämnesobjektet
     } | null = null;
 
     // --- Initialisering ---
@@ -25,11 +26,15 @@ document.addEventListener('DOMContentLoaded', () => {
         
         testData = JSON.parse(storedData);
 
-        if (subjectNameEl) subjectNameEl.textContent = testData!.subjectName;
+        if (subjectNameEl) subjectNameEl.textContent = testData!.subject.name;
         if (studentNameEl) studentNameEl.textContent = testData!.studentName;
+        
+        const timeLimitInput = document.getElementById('test-time-limit') as HTMLInputElement;
+        if (timeLimitInput) timeLimitInput.value = testData!.subject.defaultTimeLimitMinutes;
+
         if (testNameInput) {
             const today = new Date().toISOString().split('T')[0];
-            testNameInput.value = `Prov i ${testData!.subjectName} för ${testData!.studentName} - ${today}`;
+            testNameInput.value = `Prov i ${testData!.subject.name} för ${testData!.studentName} - ${today}`;
         }
 
         renderQuestionList(testData!.questions);
@@ -110,17 +115,19 @@ document.addEventListener('DOMContentLoaded', () => {
         showError('');
         showSuccess('');
 
+        const timeLimitInput = document.getElementById('test-time-limit') as HTMLInputElement;
+
         const testPayload = {
             name: testNameInput.value,
             description: `Prov för ${testData.studentName}`,
-            timeLimitMinutes: 60, // Defaulting to 60 minutes
+            timeLimitMinutes: parseInt(timeLimitInput.value, 10),
             subjectId: testData.subjectId,
             questionIds: testData.questions.map(q => q._id),
             assignedStudentIds: [testData.studentId] // Assign directly to the student
         };
 
-        if (!testPayload.name) {
-            showError("Provets namn är obligatoriskt.");
+        if (!testPayload.name || !testPayload.timeLimitMinutes) {
+            showError("Provets namn och tidsgräns är obligatoriska.");
             return;
         }
 
