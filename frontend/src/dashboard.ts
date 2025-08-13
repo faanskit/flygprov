@@ -38,8 +38,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const dashboardData = await dashboardRes.json();
         const availableTests = await testsRes.json();
-        console.log("Dashboard data:", dashboardData);
-        console.log("Available tests:", availableTests);
 
         renderTable(dashboardData, availableTests);
 

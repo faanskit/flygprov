@@ -16,6 +16,7 @@
     "netlify/functions"
   ],
   "dependencies": {
+    "csv-parser": "^3.2.0",
     "dotenv": "^17.2.1",
     "find-up": "^7.0.0"
   },

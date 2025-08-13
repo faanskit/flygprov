@@ -1,0 +1,342 @@
+code,question,option_1,option_2,option_3,option_4,correct_option
+POF,"Vad är den primära kraften som lyfter ett flygplan?","Dragkraft","Lyftkraft","Tyngdkraft","Sidokraft",2
+POF,"Vilken av Newtons lagar förklarar varför ett flygplan kan flyga framåt?","Första lagen","Andra lagen","Tredje lagen","Fjärde lagen",3
+POF,"Vad kallas vinkeln mellan vingens korda och den relativa luftströmmen?","Anfallsvinkel","Glidvinkel","Rullvinkel","Givinkel",1
+POF,"Vilken kraft motverkar lyftkraften hos ett flygplan?","Dragkraft","Tyngdkraft","Sidokraft","Framåtkraft",2
+POF,"Vad är syftet med en vingeprofil?","Öka dragkraften","Minska bränsleförbrukningen","Skapa lyftkraft","Stabilisera planet",3
+POF,"Vad händer med lyftkraften om anfallsvinkeln ökar för mycket?","Ökar obegränsat","Blir konstant","Minskar pga stall","Försvinner helt",3
+POF,"Vilken komponent på ett flygplan styr dess gir (yaw)?","Höjdroder","Sidroder","Skevroder","Flaps",2
+POF,"Vad är Bernoulli-principen relaterad till i flygsammanhang?","Lyftkraft","Dragkraft","Tyngdkraft","Sidokraft",1
+POF,"Vilken faktor påverkar lyftkraften mest?","Vingytans storlek","Flygplanets vikt","Luftens temperatur","Motorstyrka",1
+POF,"Vad kallas fenomenet när luftflödet över vingen separerar?","Turbulens","Stall","Drag","Lyft",2
+POF,"Vad är syftet med flaps vid start och landning?","Öka lyftkraft vid låga hastigheter","Minska bränsleförbrukning","Styra gir","Öka hastighet",1
+POF,"Vad är syftet med höjdroder?","Styra stigning och sjunkning","Styra gir","Öka lyftkraft","Minska dragkraft",1
+POF,"Vilken faktor påverkar luftdensiteten mest?","Höjd","Hastighet","Vingform","Motorstyrka",1
+POF,"Vad kallas den punkt där flygplanets totala vikt verkar?","Tyngdpunkt","Lyftpunkt","Dragpunkt","Rullpunkt",1
+POF,"Vad är syftet med skevroder?","Styra rullning","Styra stigning","Öka lyftkraft","Minska hastighet",1
+POF,"Vilken kraft gör att ett flygplan svänger i en kurva?","Centripetalkraft","Lyftkraft","Dragkraft","Tyngdkraft",1
+POF,"Vad är den relativa vindens riktning i förhållande till flygplanet?","Motsatt flygplanets rörelse","Samma som flygplanets rörelse","Vinkelrät mot vingen","Oberoende av rörelse",1
+POF,"Vad är en vanlig orsak till turbulens?","Plötsliga vindförändringar","Vingform","Motorvibrationer","Höjdroderjusteringar",1
+POF,"Vad är Mach-talet ett mått på?","Hastighet i förhållande till ljudets hastighet","Lyftkraft","Dragkraft","Luftdensitet",1
+POF,"Vilken del av vingen bidrar mest till lyftkraften?","Ovansidan","Undersidan","Framkanten","Bakkanten",1
+POF,"Vad kallas den hastighet där ett flygplan varken stiger eller sjunker?","Stallhastighet","Krysshastighet","Maxhastighet","Glidhastighet",2
+POF,"Vad är syftet med en stabilisator på ett flygplan?","Ge longitudinell stabilitet","Öka lyftkraft","Minska vikt","Styra sidrörelse",1
+POF,"Vad är den primära funktionen för en jetmotor?","Skapa dragkraft","Skapa lyftkraft","Styra planet","Minska ljudnivå",1
+POF,"Vad är en vanlig effekt av att flyga i hög höjd?","Lägre luftdensitet","Högre lyftkraft","Ökad dragkraft","Minskad tyngdkraft",1
+POF,"Vad kallas det när ett flygplan roterar runt sin vertikala axel?","Gir","Rullning","Stigning","Sjunkning",1
+POF,"Vilken typ av vinge ger bäst lyftkraft vid låga hastigheter?","Högvinge","Lågvinge","Deltaformad vinge","Rektangulär vinge",1
+POF,"Vad är en stallhastighet?","Minsta hastighet för att bibehålla lyft","Högsta tillåtna hastighet","Hastighet vid landning","Hastighet vid start",1
+POF,"Vad påverkar dragkraften mest?","Motorstorlek","Vingform","Luftdensitet","Flygplanets vikt",1
+POF,"Vilken komponent används för att minska vingens lyftkraft vid landning?","Flaps","Spoilers","Skevroder","Höjdroder",2
+POF,"Vad är syftet med en trimflik?","Justera flygplanets balans","Öka hastighet","Minska bränsleförbrukning","Styra svängar",1
+POF,"Vad kallas den vinkel som vingen är monterad i förhållande till flygkroppen?","Dihedralvinkel","Anfallsvinkel","Glidvinkel","Svepevinkel",1
+POF,"Vad är den största fördelen med en deltaformad vinge?","Hög hastighet och manövrerbarhet","Låg vikt","Hög lyftkraft vid låga hastigheter","Låg kostnad",1
+POF,"Vad är en vanlig orsak till att ett flygplan rullar?","Obalans i skevroder","Höjdroderfel","Motorstopp","Vindbyar",1
+POF,"Vilken kraft motverkar dragkraften?","Lyftkraft","Tyngdkraft","Friktion","Aerodynamiskt motstånd",4
+POF,"Vad är syftet med en pitotrör?","Mäta lufthastighet","Mäta höjd","Mäta bränsleflöde","Mäta temperatur",1
+POF,"Vad kallas det när ett flygplan tappar lyftkraft pga låg hastighet?","Stall","Turbulens","Glidning","Svängning",1
+POF,"Vilken typ av motor används oftast i kommersiella flygplan?","Kolvmotor","Jetmotor","Turboprop","Elektrisk motor",2
+POF,"Vad är en viktig faktor för att bestämma flygplanets räckvidd?","Bränslekapacitet","Vingform","Höjdroderstorlek","Sidroderstorlek",1
+POF,"Vad kallas den vinkel som flygplanet har i förhållande till horisonten under stigning?","Stigningsvinkel","Anfallsvinkel","Glidvinkel","Rullvinkel",1
+POF,"Vad är syftet med en leading edge slat?","Öka lyftkraft vid låga hastigheter","Minska bränsleförbrukning","Styra gir","Öka hastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan tappar höjd?","Minskad lyftkraft","Ökad dragkraft","Motorstopp","Höjdroderfel",1
+POF,"Vad kallas den hastighet där flygplanet kan flyga med minsta möjliga effekt?","Bästa glidvinkel","Krysshastighet","Stallhastighet","Maxhastighet",2
+POF,"Vad är en fördel med att ha en hög vingbelastning?","Bättre manövrerbarhet vid höga hastigheter","Högre lyftkraft vid låga hastigheter","Lägre bränsleförbrukning","Minskad vikt",1
+POF,"Vad är syftet med en spoiler på vingen?","Minska lyftkraft","Öka lyftkraft","Styra gir","Öka hastighet",1
+POF,"Vad är den relativa vindens effekt på lyftkraften?","Ökar med högre hastighet","Minskar med högre hastighet","Är oberoende av hastighet","Påverkar bara vid svängar",1
+POF,"Vad är en viktig funktion hos en flygkropp?","Ge strukturell styrka","Skapa lyftkraft","Minska luftmotstånd","Styra planet",1
+POF,"Vad kallas det när ett flygplan rör sig sidledes utan att gira?","Sidoslir","Stall","Rullning","Svängning",1
+POF,"Vad är syftet med en vertikal stabilisator?","Ge riktningsstabilitet","Öka lyftkraft","Minska dragkraft","Styra stigning",1
+POF,"Vad kallas den punkt där lyftkraften verkar på vingen?","Lyftpunkt","Tyngdpunkt","Aerodynamiskt centrum","Rullpunkt",3
+POF,"Vad är en fördel med en turbopropmotor?","Hög effektivitet vid låga hastigheter","Hög hastighet","Låg vikt","Låg kostnad",1
+POF,"Vad är syftet med en luftbroms?","Minska hastighet","Öka lyftkraft","Styra gir","Minska bränsleförbrukning",1
+POF,"Vilken faktor påverkar stallhastigheten mest?","Vingbelastning","Motorstyrka","Luftdensitet","Flygplanets längd",1
+POF,"Vad är syftet med en vingspets?","Minska virvelmotstånd","Öka lyftkraft","Styra gir","Minska vikt",1
+POF,"Vad kallas den hastighet där flygplanet kan flyga längst tid i luften?","Uthållighetshastighet","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en fördel med en swept-back vinge?","Bättre prestanda vid höga hastigheter","Högre lyftkraft vid låga hastigheter","Lägre vikt","Minskad bränsleförbrukning",1
+POF,"Vad är syftet med en horisontell stabilisator?","Ge longitudinell stabilitet","Öka lyftkraft","Minska dragkraft","Styra sidrörelse",1
+POF,"Vad är en vanlig orsak till att ett flygplan svänger oavsiktligt?","Obalans i skevroder","Höjdroderfel","Motorstopp","Vindbyar",1
+POF,"Vad kallas den hastighet där flygplanet kan flyga längst sträcka?","Räckviddshastighet","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en fördel med en låg vingbelastning?","Bättre lyftkraft vid låga hastigheter","Högre hastighet","Lägre bränsleförbrukning","Bättre manövrerbarhet vid höga hastigheter",1
+POF,"Vad är syftet med en yaw damper?","Minska oönskad gir","Öka lyftkraft","Minska hastighet","Styra stigning",1
+POF,"Vad är en vanlig orsak till att ett flygplan tappar lyftkraft?","För hög anfallsvinkel","För hög hastighet","För låg höjd","För hög luftdensitet",1
+POF,"Vad kallas den kraft som motverkar flygplanets framåtrörelse?","Dragkraft","Lyftkraft","Aerodynamiskt motstånd","Tyngdkraft",3
+POF,"Vad är en fördel med en hög vingspann?","Minska virvelmotstånd","Öka hastighet","Minska lyftkraft","Öka bränsleförbrukning",1
+POF,"Vad är syftet med en canardvinge?","Ge extra lyftkraft och stabilitet","Minska vikt","Öka hastighet","Minska bränsleförbrukning",1
+POF,"Vad är en vanlig orsak till att ett flygplan stallar vid svängar?","Ökad vingbelastning","Minskad luftdensitet","Ökad dragkraft","Minskad motorstyrka",1
+POF,"Vad är syftet med en vingprofil med hög camber?","Öka lyftkraft vid låga hastigheter","Minska bränsleförbrukning","Öka hastighet","Styra gir",1
+POF,"Vad kallas den hastighet där flygplanet har bäst lyft-till-motstånd-förhållande?","Bästa glidvinkel","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en fördel med en turbofanmotor?","Hög effektivitet och låg ljudnivå","Hög hastighet","Låg vikt","Låg kostnad",1
+POF,"Vad är syftet med en vingspetsvinge (winglet)?","Minska virvelmotstånd","Öka lyftkraft","Styra gir","Minska hastighet",1
+POF,"Vad kallas den punkt där alla aerodynamiska krafter verkar?","Aerodynamiskt centrum","Tyngdpunkt","Lyftpunkt","Rullpunkt",1
+POF,"Vad är en vanlig orsak till att ett flygplan tappar stabilitet?","Obalans i tyngdpunkt","Ökad lyftkraft","Minskad dragkraft","Ökad motorstyrka",1
+POF,"Vad är syftet med en variabel pitch propeller?","Optimera effektivitet vid olika hastigheter","Minska vikt","Öka lyftkraft","Minska bränsleförbrukning",1
+POF,"Vad är en fördel med en lågvingad konstruktion?","Bättre stabilitet vid höga hastigheter","Högre lyftkraft","Bättre markfrigång","Minskad vikt",1
+POF,"Vad är syftet med en stallremsa?","Utlösa stall vid önskad punkt","Öka lyftkraft","Minska hastighet","Styra gir",1
+POF,"Vad kallas den hastighet där flygplanet kan klättra snabbast?","Bästa stigningshastighet","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan vibrerar?","Obalans i propeller eller motor","Ökad lyftkraft","Minskad luftdensitet","Ökad hastighet",1
+POF,"Vad kallas den kraft som håller ett flygplan i en stabil sväng?","Centripetalkraft","Lyftkraft","Dragkraft","Tyngdkraft",1
+POF,"Vad är en fördel med en hög anfallsvinkel vid start?","Ökar lyftkraft","Minskar hastighet","Ökar bränsleförbrukning","Minskar stabilitet",1
+POF,"Vad är syftet med en tryckkabin?","Upprätthålla behaglig trycknivå","Öka lyftkraft","Minska hastighet","Öka bränsleförbrukning",1
+POF,"Vad kallas den effekt som gör att ett flygplan tenderar att gira vid rullning?","Adverse yaw","Stall","Sidoslir","Rullmoment",1
+POF,"Vad är en vanlig orsak till att ett flygplan tappar lyftkraft vid hög höjd?","Lägre luftdensitet","Ökad hastighet","Minskad motorstyrka","Ökad vingbelastning",1
+POF,"Vad är syftet med en strömlinjeformad flygkropp?","Minska aerodynamiskt motstånd","Öka lyftkraft","Styra gir","Minska vikt",1
+POF,"Vad kallas den hastighet där flygplanet kan flyga med minsta bränsleförbrukning per kilometer?","Räckviddshastighet","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en fördel med en hög vingspann-till-korda-förhållande?","Bättre glidprestanda","Högre hastighet","Lägre lyftkraft","Ökad bränsleförbrukning",1
+POF,"Vad är syftet med en differentialskontroll av skevroder?","Minska adverse yaw","Öka lyftkraft","Minska hastighet","Styra stigning",1
+POF,"Vad kallas den vinkel som vingens framkant har i förhållande till flygkroppen?","Svepevinkel","Anfallsvinkel","Dihedralvinkel","Glidvinkel",1
+POF,"Vad är syftet med en anti-icing-system på vingen?","Förhindra isbildning","Öka lyftkraft","Minska hastighet","Styra gir",1
+POF,"Vad är en fördel med en jetmotor jämfört med en kolvmotor?","Högre hastighet och effektivitet","Lägre vikt","Högre lyftkraft","Lägre kostnad",1
+POF,"Vad kallas den punkt där flygplanets rullning balanserar?","Rullpunkt","Tyngdpunkt","Lyftpunkt","Aerodynamiskt centrum",1
+POF,"Vad är syftet med en variabel geometri-vinge?","Optimera prestanda vid olika hastigheter","Minska vikt","Öka lyftkraft","Minska bränsleförbrukning",1
+POF,"Vad är en fördel med en högvingad konstruktion?","Bättre markfrigång","Högre hastighet","Lägre lyftkraft","Ökad bränsleförbrukning",1
+POF,"Vad är syftet med en vortex generator på vingen?","Fördröja stall","Öka hastighet","Minska lyftkraft","Styra gir",1
+POF,"Vad kallas den hastighet där flygplanet kan klättra med högsta vinkel?","Bästa stigningsvinkel","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är syftet med en vingklaff vid hög hastighet?","Minska lyftkraft","Öka lyftkraft","Styra gir","Minska bränsleförbrukning",1
+POF,"Vad är en fördel med en låg anfallsvinkel vid kryssning?","Minska bränsleförbrukning","Öka lyftkraft","Öka hastighet","Minska stabilitet",1
+POF,"Vad är syftet med en vingspetsvirvel?","Öka aerodynamiskt motstånd","Minska lyftkraft","Förbättra stabilitet","Minska bränsleförbrukning",1
+POF,"Vad är en vanlig orsak till att ett flygplan tappar kontroll?","Obalans i tyngdpunkt","Ökad lyftkraft","Minskad dragkraft","Ökad motorstyrka",1
+POF,"Vad är syftet med en strömplatta på vingen?","Förbättra luftflödet","Öka hastighet","Minska lyftkraft","Styra gir",1
+POF,"Vad kallas den effekt som uppstår när luften accelererar över vingens ovansida?","Venturi-effekten","Bernoulli-effekten","Coanda-effekten","Magnus-effekten",2
+POF,"Vad är syftet med en balansroder?","Minska pilotens ansträngning","Öka lyftkraft","Minska hastighet","Öka bränsleförbrukning",1
+POF,"Vad är en nackdel med en hög vingbelastning?","Sämre lyftkraft vid låga hastigheter","Högre hastighet","Lägre bränsleförbrukning","Bättre stabilitet",1
+POF,"Vad kallas den vinkel som vingens plan har i förhållande till horisontalplanet?","Dihedralvinkel","Anfallsvinkel","Svepevinkel","Glidvinkel",1
+POF,"Vad är syftet med en T-tail-konfiguration?","Minska störningar från propellerflöde","Öka lyftkraft","Minska vikt","Öka hastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan upplever vibrationer vid hög hastighet?","Aerodynamisk obalans","Ökad lyftkraft","Minskad luftdensitet","Felaktig bränsleblandning",1
+POF,"Vad är syftet med en Krueger-flap?","Öka lyftkraft vid låga hastigheter","Minska hastighet","Styra gir","Minska bränsleförbrukning",1
+POF,"Vad kallas den effekt som gör att ett flygplan tenderar att återgå till stabil flygning?","Statisk stabilitet","Dynamisk stabilitet","Aerodynamisk stabilitet","Termisk stabilitet",1
+POF,"Vad är en fördel med en hög vingspann-till-korda-förhållande vid glidflygning?","Bättre glidprestanda","Högre hastighet","Lägre lyftkraft","Ökad bränsleförbrukning",1
+POF,"Vad är syftet med en vingklaff vid start?","Öka lyftkraft och minska starsträcka","Minska hastighet","Styra gir","Öka bränsleförbrukning",1
+POF,"Vad kallas den hastighet där flygplanet har högsta lyft-till-motstånd-förhållande?","Bästa glidvinkel","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan stallar vid hög höjd?","Lägre luftdensitet","Ökad hastighet","Minskad motorstyrka","Ökad vingbelastning",1
+POF,"Vad är syftet med en fenliknande struktur på flygkroppen?","Förbättra riktningsstabilitet","Öka lyftkraft","Minska hastighet","Öka bränsleförbrukning",1
+POF,"Vad kallas den effekt som gör att ett flygplan kan svänga utan att rulla?","Koordinerad sväng","Sidoslir","Adverse yaw","Rullmoment",1
+POF,"Vad är en fördel med en lågvingad konstruktion vid höga hastigheter?","Bättre stabilitet","Högre lyftkraft","Bättre markfrigång","Minskad vikt",1
+POF,"Vad är syftet med en vingklaff vid landning?","Öka lyftkraft och minska hastighet","Öka hastighet","Styra gir","Minska bränsleförbrukning",1
+POF,"Vad kallas den hastighet där flygplanet kan flyga med minsta bränsleförbrukning per kilometer?","Räckviddshastighet","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan upplever sidoslir?","Obalans i sidroder","Ökad lyftkraft","Minskad dragkraft","Ökad motorstyrka",1
+POF,"Vad är syftet med en vingprofil med låg camber?","Bättre prestanda vid höga hastigheter","Öka lyftkraft vid låga hastigheter","Minska bränsleförbrukning","Styra gir",1
+POF,"Vad kallas den effekt som gör att ett flygplan tenderar att rulla vid gir?","Rullmoment","Adverse yaw","Sidoslir","Stall",1
+POF,"Vad är en fördel med en hög vingspann?","Minska virvelmotstånd","Öka hastighet","Minska lyftkraft","Öka bränsleförbrukning",1
+POF,"Vad är syftet med en tryckkabin i hög höjd?","Upprätthålla behaglig trycknivå","Öka lyftkraft","Minska hastighet","Öka bränsleförbrukning",1
+POF,"Vad kallas den vinkel som flygplanet har i förhållande till vinden under landning?","Glidvinkel","Anfallsvinkel","Svängvinkel","Rullvinkel",1
+POF,"Vad är syftet med en vortex generator på vingen?","Fördröja stall","Öka hastighet","Minska lyftkraft","Styra gir",1
+POF,"Vad kallas den hastighet där flygplanet kan klättra med högsta vinkel?","Bästa stigningsvinkel","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan vibrerar under flygning?","Obalans i motor eller propeller","Ökad lyftkraft","Minskad luftdensitet","Ökad hastighet",1
+POF,"Vad är syftet med en strömplatta på vingen?","Förbättra luftflödet","Öka hastighet","Minska lyftkraft","Styra gir",1
+POF,"Vad kallas den effekt som uppstår när luften accelererar över vingens ovansida?","Venturi-effekten","Bernoulli-effekten","Coanda-effekten","Magnus-effekten",2
+POF,"Vad är syftet med en balansroder?","Minska pilotens ansträngning","Öka lyftkraft","Minska hastighet","Öka bränsleförbrukning",1
+POF,"Vad är en nackdel med en hög vingbelastning?","Sämre lyftkraft vid låga hastigheter","Högre hastighet","Lägre bränsleförbrukning","Bättre stabilitet",1
+POF,"Vad kallas den vinkel som vingens plan har i förhållande till horisontalplanet?","Dihedralvinkel","Anfallsvinkel","Svepevinkel","Glidvinkel",1
+POF,"Vad är syftet med en T-tail-konfiguration?","Minska störningar från propellerflöde","Öka lyftkraft","Minska vikt","Öka hastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan upplever vibrationer vid hög hastighet?","Aerodynamisk obalans","Ökad lyftkraft","Minskad luftdensitet","Felaktig bränsleblandning",1
+POF,"Vad är syftet med en Krueger-flap?","Öka lyftkraft vid låga hastigheter","Minska hastighet","Styra gir","Minska bränsleförbrukning",1
+POF,"Vad kallas den effekt som gör att ett flygplan tenderar att återgå till stabil flygning?","Statisk stabilitet","Dynamisk stabilitet","Aerodynamisk stabilitet","Termisk stabilitet",1
+POF,"Vad är en fördel med en hög vingspann-till-korda-förhållande vid glidflygning?","Bättre glidprestanda","Högre hastighet","Lägre lyftkraft","Ökad bränsleförbrukning",1
+POF,"Vad är syftet med en vingklaff vid start?","Öka lyftkraft och minska starsträcka","Minska hastighet","Styra gir","Öka bränsleförbrukning",1
+POF,"Vad kallas den hastighet där flygplanet har högsta lyft-till-motstånd-förhållande?","Bästa glidvinkel","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan stallar vid hög höjd?","Lägre luftdensitet","Ökad hastighet","Minskad motorstyrka","Ökad vingbelastning",1
+POF,"Vad är syftet med en fenliknande struktur på flygkroppen?","Förbättra riktningsstabilitet","Öka lyftkraft","Minska hastighet","Öka bränsleförbrukning",1
+POF,"Vad kallas den effekt som gör att ett flygplan kan svänga utan att rulla?","Koordinerad sväng","Sidoslir","Adverse yaw","Rullmoment",1
+POF,"Vad är en fördel med en lågvingad konstruktion vid höga hastigheter?","Bättre stabilitet","Högre lyftkraft","Better markfrigång","Minskad vikt",1
+POF,"Vad är syftet med en vingklaff vid landning?","Öka lyftkraft och minska hastighet","Öka hastighet","Styra gir","Minska bränsleförbrukning",1
+POF,"Vad kallas den hastighet där flygplanet kan flyga med minsta bränsleförbrukning per kilometer?","Räckviddshastighet","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan upplever sidoslir?","Obalans i sidroder","Ökad lyftkraft","Minskad dragkraft","Ökad motorstyrka",1
+POF,"Vad är syftet med en vingprofil med låg camber?","Bättre prestanda vid höga hastigheter","Öka lyftkraft vid låga hastigheter","Minska bränsleförbrukning","Styra gir",1
+POF,"Vad kallas den effekt som gör att ett flygplan tenderar att rulla vid gir?","Rullmoment","Adverse yaw","Sidoslir","Stall",1
+POF,"Vad är en fördel med en hög vingspann?","Minska virvelmotstånd","Öka hastighet","Minska lyftkraft","Öka bränsleförbrukning",1
+POF,"Vad är syftet med en tryckkabin i hög höjd?","Upprätthålla behaglig trycknivå","Öka lyftkraft","Minska hastighet","Öka bränsleförbrukning",1
+POF,"Vad kallas den vinkel som flygplanet har i förhållande till vinden under landning?","Glidvinkel","Anfallsvinkel","Svängvinkel","Rullvinkel",1
+POF,"Vad är syftet med en vortex generator på vingen?","Fördröja stall","Öka hastighet","Minska lyftkraft","Styra gir",1
+POF,"Vad kallas den hastighet där flygplanet kan klättra med högsta vinkel?","Bästa stigningsvinkel","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan vibrerar under flygning?","Obalans i motor eller propeller","Ökad lyftkraft","Minskad luftdensitet","Ökad hastighet",1
+POF,"Vad är syftet med en strömplatta på vingen?","Förbättra luftflödet","Öka hastighet","Minska lyftkraft","Styra gir",1
+POF,"Vad kallas den effekt som uppstår när luften accelererar över vingens ovansida?","Venturi-effekten","Bernoulli-effekten","Coanda-effekten","Magnus-effekten",2
+POF,"Vad är syftet med en balansroder?","Minska pilotens ansträngning","Öka lyftkraft","Minska hastighet","Öka bränsleförbrukning",1
+POF,"Vad är en nackdel med en hög vingbelastning?","Sämre lyftkraft vid låga hastigheter","Högre hastighet","Lägre bränsleförbrukning","Bättre stabilitet",1
+POF,"Vad kallas den vinkel som vingens plan har i förhållande till horisontalplanet?","Dihedralvinkel","Anfallsvinkel","Svepevinkel","Glidvinkel",1
+POF,"Vad är syftet med en T-tail-konfiguration?","Minska störningar från propellerflöde","Öka lyftkraft","Minska vikt","Öka hastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan upplever vibrationer vid hög hastighet?","Aerodynamisk obalans","Ökad lyftkraft","Minskad luftdensitet","Felaktig bränsleblandning",1
+POF,"Vad är syftet med en Krueger-flap?","Öka lyftkraft vid låga hastigheter","Minska hastighet","Styra gir","Minska bränsleförbrukning",1
+POF,"Vad kallas den effekt som gör att ett flygplan tenderar att återgå till stabil flygning?","Statisk stabilitet","Dynamisk stabilitet","Aerodynamisk stabilitet","Termisk stabilitet",1
+POF,"Vad är en fördel med en hög vingspann-till-korda-förhållande vid glidflygning?","Bättre glidprestanda","Högre hastighet","Lägre lyftkraft","Ökad bränsleförbrukning",1
+POF,"Vad är syftet med en vingklaff vid start?","Öka lyftkraft och minska starsträcka","Minska hastighet","Styra gir","Öka bränsleförbrukning",1
+POF,"Vad kallas den hastighet där flygplanet har högsta lyft-till-motstånd-förhållande?","Bästa glidvinkel","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan stallar vid hög höjd?","Lägre luftdensitet","Ökad hastighet","Minskad motorstyrka","Ökad vingbelastning",1
+POF,"Vad är syftet med en fenliknande struktur på flygkroppen?","Förbättra riktningsstabilitet","Öka lyftkraft","Minska hastighet","Öka bränsleförbrukning",1
+POF,"Vad kallas den effekt som gör att ett flygplan kan svänga utan att rulla?","Koordinerad sväng","Sidoslir","Adverse yaw","Rullmoment",1
+POF,"Vad är en fördel med en lågvingad konstruktion vid höga hastigheter?","Bättre stabilitet","Högre lyftkraft","Better markfrigång","Minskad vikt",1
+POF,"Vad är syftet med en vingklaff vid landning?","Öka lyftkraft och minska hastighet","Öka hastighet","Styra gir","Minska bränsleförbrukning",1
+POF,"Vad kallas den hastighet där flygplanet kan flyga med minsta bränsleförbrukning per kilometer?","Räckviddshastighet","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan upplever sidoslir?","Obalans i sidroder","Ökad lyftkraft","Minskad dragkraft","Ökad motorstyrka",1
+POF,"Vad är syftet med en vingprofil med låg camber?","Bättre prestanda vid höga hastigheter","Öka lyftkraft vid låga hastigheter","Minska bränsleförbrukning","Styra gir",1
+POF,"Vad kallas den effekt som gör att ett flygplan tenderar att rulla vid gir?","Rullmoment","Adverse yaw","Sidoslir","Stall",1
+POF,"Vad är en fördel med en hög vingspann?","Minska virvelmotstånd","Öka hastighet","Minska lyftkraft","Öka bränsleförbrukning",1
+POF,"Vad är syftet med en tryckkabin i hög höjd?","Upprätthålla behaglig trycknivå","Öka lyftkraft","Minska hastighet","Öka bränsleförbrukning",1
+POF,"Vad kallas den vinkel som flygplanet har i förhållande till vinden under landning?","Glidvinkel","Anfallsvinkel","Svängvinkel","Rullvinkel",1
+POF,"Vad är syftet med en vortex generator på vingen?","Fördröja stall","Öka hastighet","Minska lyftkraft","Styra gir",1
+POF,"Vad kallas den hastighet där flygplanet kan klättra med högsta vinkel?","Bästa stigningsvinkel","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan vibrerar under flygning?","Obalans i motor eller propeller","Ökad lyftkraft","Minskad luftdensitet","Ökad hastighet",1
+POF,"Vad är syftet med en strömplatta på vingen?","Förbättra luftflödet","Öka hastighet","Minska lyftkraft","Styra gir",1
+POF,"Vad kallas den effekt som uppstår när luften accelererar över vingens ovansida?","Venturi-effekten","Bernoulli-effekten","Coanda-effekten","Magnus-effekten",2
+POF,"Vad är syftet med en balansroder?","Minska pilotens ansträngning","Öka lyftkraft","Minska hastighet","Öka bränsleförbrukning",1
+POF,"Vad är en nackdel med en hög vingbelastning?","Sämre lyftkraft vid låga hastigheter","Högre hastighet","Lägre bränsleförbrukning","Bättre stabilitet",1
+POF,"Vad kallas den vinkel som vingens plan har i förhållande till horisontalplanet?","Dihedralvinkel","Anfallsvinkel","Svepevinkel","Glidvinkel",1
+POF,"Vad är syftet med en T-tail-konfiguration?","Minska störningar från propellerflöde","Öka lyftkraft","Minska vikt","Öka hastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan upplever vibrationer vid hög hastighet?","Aerodynamisk obalans","Ökad lyftkraft","Minskad luftdensitet","Felaktig bränsleblandning",1
+POF,"Vad är syftet med en Krueger-flap?","Öka lyftkraft vid låga hastigheter","Minska hastighet","Styra gir","Minska bränsleförbrukning",1
+POF,"Vad kallas den effekt som gör att ett flygplan tenderar att återgå till stabil flygning?","Statisk stabilitet","Dynamisk stabilitet","Aerodynamisk stabilitet","Termisk stabilitet",1
+POF,"Vad är en fördel med en hög vingspann-till-korda-förhållande vid glidflygning?","Bättre glidprestanda","Högre hastighet","Lägre lyftkraft","Ökad bränsleförbrukning",1
+POF,"Vad är syftet med en vingklaff vid start?","Öka lyftkraft och minska starsträcka","Minska hastighet","Styra gir","Öka bränsleförbrukning",1
+POF,"Vad kallas den hastighet där flygplanet har högsta lyft-till-motstånd-förhållande?","Bästa glidvinkel","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan stallar vid hög höjd?","Lägre luftdensitet","Ökad hastighet","Minskad motorstyrka","Ökad vingbelastning",1
+POF,"Vad är syftet med en fenliknande struktur på flygkroppen?","Förbättra riktningsstabilitet","Öka lyftkraft","Minska hastighet","Öka bränsleförbrukning",1
+POF,"Vad kallas den effekt som gör att ett flygplan kan svänga utan att rulla?","Koordinerad sväng","Sidoslir","Adverse yaw","Rullmoment",1
+POF,"Vad är en fördel med en lågvingad konstruktion vid höga hastigheter?","Bättre stabilitet","Högre lyftkraft","Better markfrigång","Minskad vikt",1
+POF,"Vad är syftet med en vingklaff vid landning?","Öka lyftkraft och minska hastighet","Öka hastighet","Styra gir","Minska bränsleförbrukning",1
+POF,"Vad kallas den hastighet där flygplanet kan flyga med minsta bränsleförbrukning per kilometer?","Räckviddshastighet","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan upplever sidoslir?","Obalans i sidroder","Ökad lyftkraft","Minskad dragkraft","Ökad motorstyrka",1
+POF,"Vad är syftet med en vingprofil med låg camber?","Bättre prestanda vid höga hastigheter","Öka lyftkraft vid låga hastigheter","Minska bränsleförbrukning","Styra gir",1
+POF,"Vad kallas den effekt som gör att ett flygplan tenderar att rulla vid gir?","Rullmoment","Adverse yaw","Sidoslir","Stall",1
+POF,"Vad är en fördel med en hög vingspann?","Minska virvelmotstånd","Öka hastighet","Minska lyftkraft","Öka bränsleförbrukning",1
+POF,"Vad är syftet med en tryckkabin i hög höjd?","Upprätthålla behaglig trycknivå","Öka lyftkraft","Minska hastighet","Öka bränsleförbrukning",1
+POF,"Vad kallas den vinkel som flygplanet har i förhållande till vinden under landning?","Glidvinkel","Anfallsvinkel","Svängvinkel","Rullvinkel",1
+POF,"Vad är syftet med en vortex generator på vingen?","Fördröja stall","Öka hastighet","Minska lyftkraft","Styra gir",1
+POF,"Vad kallas den hastighet där flygplanet kan klättra med högsta vinkel?","Bästa stigningsvinkel","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan vibrerar under flygning?","Obalans i motor eller propeller","Ökad lyftkraft","Minskad luftdensitet","Ökad hastighet",1
+POF,"Vad är syftet med en strömplatta på vingen?","Förbättra luftflödet","Öka hastighet","Minska lyftkraft","Styra gir",1
+POF,"Vad kallas den effekt som uppstår när luften accelererar över vingens ovansida?","Venturi-effekten","Bernoulli-effekten","Coanda-effekten","Magnus-effekten",2
+POF,"Vad är syftet med en balansroder?","Minska pilotens ansträngning","Öka lyftkraft","Minska hastighet","Öka bränsleförbrukning",1
+POF,"Vad är en nackdel med en hög vingbelastning?","Sämre lyftkraft vid låga hastigheter","Högre hastighet","Lägre bränsleförbrukning","Bättre stabilitet",1
+POF,"Vad kallas den vinkel som vingens plan har i förhållande till horisontalplanet?","Dihedralvinkel","Anfallsvinkel","Svepevinkel","Glidvinkel",1
+POF,"Vad är syftet med en T-tail-konfiguration?","Minska störningar från propellerflöde","Öka lyftkraft","Minska vikt","Öka hastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan upplever vibrationer vid hög hastighet?","Aerodynamisk obalans","Ökad lyftkraft","Minskad luftdensitet","Felaktig bränsleblandning",1
+POF,"Vad är syftet med en Krueger-flap?","Öka lyftkraft vid låga hastigheter","Minska hastighet","Styra gir","Minska bränsleförbrukning",1
+POF,"Vad kallas den effekt som gör att ett flygplan tenderar att återgå till stabil flygning?","Statisk stabilitet","Dynamisk stabilitet","Aerodynamisk stabilitet","Termisk stabilitet",1
+POF,"Vad är en fördel med en hög vingspann-till-korda-förhållande vid glidflygning?","Bättre glidprestanda","Högre hastighet","Lägre lyftkraft","Ökad bränsleförbrukning",1
+POF,"Vad är syftet med en vingklaff vid start?","Öka lyftkraft och minska starsträcka","Minska hastighet","Styra gir","Öka bränsleförbrukning",1
+POF,"Vad kallas den hastighet där flygplanet har högsta lyft-till-motstånd-förhållande?","Bästa glidvinkel","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan stallar vid hög höjd?","Lägre luftdensitet","Ökad hastighet","Minskad motorstyrka","Ökad vingbelastning",1
+POF,"Vad är syftet med en fenliknande struktur på flygkroppen?","Förbättra riktningsstabilitet","Öka lyftkraft","Minska hastighet","Öka bränsleförbrukning",1
+POF,"Vad kallas den effekt som gör att ett flygplan kan svänga utan att rulla?","Koordinerad sväng","Sidoslir","Adverse yaw","Rullmoment",1
+POF,"Vad är en fördel med en lågvingad konstruktion vid höga hastigheter?","Bättre stabilitet","Högre lyftkraft","Better markfrigång","Minskad vikt",1
+POF,"Vad är syftet med en vingklaff vid landning?","Öka lyftkraft och minska hastighet","Öka hastighet","Styra gir","Minska bränsleförbrukning",1
+POF,"Vad kallas den hastighet där flygplanet kan flyga med minsta bränsleförbrukning per kilometer?","Räckviddshastighet","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan upplever sidoslir?","Obalans i sidroder","Ökad lyftkraft","Minskad dragkraft","Ökad motorstyrka",1
+POF,"Vad är syftet med en vingprofil med låg camber?","Bättre prestanda vid höga hastigheter","Öka lyftkraft vid låga hastigheter","Minska bränsleförbrukning","Styra gir",1
+POF,"Vad kallas den effekt som gör att ett flygplan tenderar att rulla vid gir?","Rullmoment","Adverse yaw","Sidoslir","Stall",1
+POF,"Vad är en fördel med en hög vingspann?","Minska virvelmotstånd","Öka hastighet","Minska lyftkraft","Öka bränsleförbrukning",1
+POF,"Vad är syftet med en tryckkabin i hög höjd?","Upprätthålla behaglig trycknivå","Öka lyftkraft","Minska hastighet","Öka bränsleförbrukning",1
+POF,"Vad kallas den vinkel som flygplanet har i förhållande till vinden under landning?","Glidvinkel","Anfallsvinkel","Svängvinkel","Rullvinkel",1
+POF,"Vad är syftet med en vortex generator på vingen?","Fördröja stall","Öka hastighet","Minska lyftkraft","Styra gir",1
+POF,"Vad kallas den hastighet där flygplanet kan klättra med högsta vinkel?","Bästa stigningsvinkel","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan vibrerar under flygning?","Obalans i motor eller propeller","Ökad lyftkraft","Minskad luftdensitet","Ökad hastighet",1
+POF,"Vad är syftet med en strömplatta på vingen?","Förbättra luftflödet","Öka hastighet","Minska lyftkraft","Styra gir",1
+POF,"Vad kallas den effekt som uppstår när luften accelererar över vingens ovansida?","Venturi-effekten","Bernoulli-effekten","Coanda-effekten","Magnus-effekten",2
+POF,"Vad är syftet med en balansroder?","Minska pilotens ansträngning","Öka lyftkraft","Minska hastighet","Öka bränsleförbrukning",1
+POF,"Vad är en nackdel med en hög vingbelastning?","Sämre lyftkraft vid låga hastigheter","Högre hastighet","Lägre bränsleförbrukning","Bättre stabilitet",1
+POF,"Vad kallas den vinkel som vingens plan har i förhållande till horisontalplanet?","Dihedralvinkel","Anfallsvinkel","Svepevinkel","Glidvinkel",1
+POF,"Vad är syftet med en T-tail-konfiguration?","Minska störningar från propellerflöde","Öka lyftkraft","Minska vikt","Öka hastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan upplever vibrationer vid hög hastighet?","Aerodynamisk obalans","Ökad lyftkraft","Minskad luftdensitet","Felaktig bränsleblandning",1
+POF,"Vad är syftet med en Krueger-flap?","Öka lyftkraft vid låga hastigheter","Minska hastighet","Styra gir","Minska bränsleförbrukning",1
+POF,"Vad kallas den effekt som gör att ett flygplan tenderar att återgå till stabil flygning?","Statisk stabilitet","Dynamisk stabilitet","Aerodynamisk stabilitet","Termisk stabilitet",1
+POF,"Vad är en fördel med en hög vingspann-till-korda-förhållande vid glidflygning?","Bättre glidprestanda","Högre hastighet","Lägre lyftkraft","Ökad bränsleförbrukning",1
+POF,"Vad är syftet med en vingklaff vid start?","Öka lyftkraft och minska starsträcka","Minska hastighet","Styra gir","Öka bränsleförbrukning",1
+POF,"Vad kallas den hastighet där flygplanet har högsta lyft-till-motstånd-förhållande?","Bästa glidvinkel","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan stallar vid hög höjd?","Lägre luftdensitet","Ökad hastighet","Minskad motorstyrka","Ökad vingbelastning",1
+POF,"Vad är syftet med en fenliknande struktur på flygkroppen?","Förbättra riktningsstabilitet","Öka lyftkraft","Minska hastighet","Öka bränsleförbrukning",1
+POF,"Vad kallas den effekt som gör att ett flygplan kan svänga utan att rulla?","Koordinerad sväng","Sidoslir","Adverse yaw","Rullmoment",1
+POF,"Vad är en fördel med en lågvingad konstruktion vid höga hastigheter?","Bättre stabilitet","Högre lyftkraft","Better markfrigång","Minskad vikt",1
+POF,"Vad är syftet med en vingklaff vid landning?","Öka lyftkraft och minska hastighet","Öka hastighet","Styra gir","Minska bränsleförbrukning",1
+POF,"Vad kallas den hastighet där flygplanet kan flyga med minsta bränsleförbrukning per kilometer?","Räckviddshastighet","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan upplever sidoslir?","Obalans i sidroder","Ökad lyftkraft","Minskad dragkraft","Ökad motorstyrka",1
+POF,"Vad är syftet med en vingprofil med låg camber?","Bättre prestanda vid höga hastigheter","Öka lyftkraft vid låga hastigheter","Minska bränsleförbrukning","Styra gir",1
+POF,"Vad kallas den effekt som gör att ett flygplan tenderar att rulla vid gir?","Rullmoment","Adverse yaw","Sidoslir","Stall",1
+POF,"Vad är en fördel med en hög vingspann?","Minska virvelmotstånd","Öka hastighet","Minska lyftkraft","Öka bränsleförbrukning",1
+POF,"Vad är syftet med en tryckkabin i hög höjd?","Upprätthålla behaglig trycknivå","Öka lyftkraft","Minska hastighet","Öka bränsleförbrukning",1
+POF,"Vad kallas den vinkel som flygplanet har i förhållande till vinden under landning?","Glidvinkel","Anfallsvinkel","Svängvinkel","Rullvinkel",1
+POF,"Vad är syftet med en vortex generator på vingen?","Fördröja stall","Öka hastighet","Minska lyftkraft","Styra gir",1
+POF,"Vad kallas den hastighet där flygplanet kan klättra med högsta vinkel?","Bästa stigningsvinkel","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan vibrerar under flygning?","Obalans i motor eller propeller","Ökad lyftkraft","Minskad luftdensitet","Ökad hastighet",1
+POF,"Vad är syftet med en strömplatta på vingen?","Förbättra luftflödet","Öka hastighet","Minska lyftkraft","Styra gir",1
+POF,"Vad kallas den effekt som uppstår när luften accelererar över vingens ovansida?","Venturi-effekten","Bernoulli-effekten","Coanda-effekten","Magnus-effekten",2
+POF,"Vad är syftet med en balansroder?","Minska pilotens ansträngning","Öka lyftkraft","Minska hastighet","Öka bränsleförbrukning",1
+POF,"Vad är en nackdel med en hög vingbelastning?","Sämre lyftkraft vid låga hastigheter","Högre hastighet","Lägre bränsleförbrukning","Bättre stabilitet",1
+POF,"Vad kallas den vinkel som vingens plan har i förhållande till horisontalplanet?","Dihedralvinkel","Anfallsvinkel","Svepevinkel","Glidvinkel",1
+POF,"Vad är syftet med en T-tail-konfiguration?","Minska störningar från propellerflöde","Öka lyftkraft","Minska vikt","Öka hastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan upplever vibrationer vid hög hastighet?","Aerodynamisk obalans","Ökad lyftkraft","Minskad luftdensitet","Felaktig bränsleblandning",1
+POF,"Vad är syftet med en Krueger-flap?","Öka lyftkraft vid låga hastigheter","Minska hastighet","Styra gir","Minska bränsleförbrukning",1
+POF,"Vad kallas den effekt som gör att ett flygplan tenderar att återgå till stabil flygning?","Statisk stabilitet","Dynamisk stabilitet","Aerodynamisk stabilitet","Termisk stabilitet",1
+POF,"Vad är en fördel med en hög vingspann-till-korda-förhållande vid glidflygning?","Bättre glidprestanda","Högre hastighet","Lägre lyftkraft","Ökad bränsleförbrukning",1
+POF,"Vad är syftet med en vingklaff vid start?","Öka lyftkraft och minska starsträcka","Minska hastighet","Styra gir","Öka bränsleförbrukning",1
+POF,"Vad kallas den hastighet där flygplanet har högsta lyft-till-motstånd-förhållande?","Bästa glidvinkel","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan stallar vid hög höjd?","Lägre luftdensitet","Ökad hastighet","Minskad motorstyrka","Ökad vingbelastning",1
+POF,"Vad är syftet med en fenliknande struktur på flygkroppen?","Förbättra riktningsstabilitet","Öka lyftkraft","Minska hastighet","Öka bränsleförbrukning",1
+POF,"Vad kallas den effekt som gör att ett flygplan kan svänga utan att rulla?","Koordinerad sväng","Sidoslir","Adverse yaw","Rullmoment",1
+POF,"Vad är en fördel med en lågvingad konstruktion vid höga hastigheter?","Bättre stabilitet","Högre lyftkraft","Better markfrigång","Minskad vikt",1
+POF,"Vad är syftet med en vingklaff vid landning?","Öka lyftkraft och minska hastighet","Öka hastighet","Styra gir","Minska bränsleförbrukning",1
+POF,"Vad kallas den hastighet där flygplanet kan flyga med minsta bränsleförbrukning per kilometer?","Räckviddshastighet","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan upplever sidoslir?","Obalans i sidroder","Ökad lyftkraft","Minskad dragkraft","Ökad motorstyrka",1
+POF,"Vad är syftet med en vingprofil med låg camber?","Bättre prestanda vid höga hastigheter","Öka lyftkraft vid låga hastigheter","Minska bränsleförbrukning","Styra gir",1
+POF,"Vad kallas den effekt som gör att ett flygplan tenderar att rulla vid gir?","Rullmoment","Adverse yaw","Sidoslir","Stall",1
+POF,"Vad är en fördel med en hög vingspann?","Minska virvelmotstånd","Öka hastighet","Minska lyftkraft","Öka bränsleförbrukning",1
+POF,"Vad är syftet med en tryckkabin i hög höjd?","Upprätthålla behaglig trycknivå","Öka lyftkraft","Minska hastighet","Öka bränsleförbrukning",1
+POF,"Vad kallas den vinkel som flygplanet har i förhållande till vinden under landning?","Glidvinkel","Anfallsvinkel","Svängvinkel","Rullvinkel",1
+POF,"Vad är syftet med en vortex generator på vingen?","Fördröja stall","Öka hastighet","Minska lyftkraft","Styra gir",1
+POF,"Vad kallas den hastighet där flygplanet kan klättra med högsta vinkel?","Bästa stigningsvinkel","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan vibrerar under flygning?","Obalans i motor eller propeller","Ökad lyftkraft","Minskad luftdensitet","Ökad hastighet",1
+POF,"Vad är syftet med en strömplatta på vingen?","Förbättra luftflödet","Öka hastighet","Minska lyftkraft","Styra gir",1
+POF,"Vad kallas den effekt som uppstår när luften accelererar över vingens ovansida?","Venturi-effekten","Bernoulli-effekten","Coanda-effekten","Magnus-effekten",2
+POF,"Vad är syftet med en balansroder?","Minska pilotens ansträngning","Öka lyftkraft","Minska hastighet","Öka bränsleförbrukning",1
+POF,"Vad är en nackdel med en hög vingbelastning?","Sämre lyftkraft vid låga hastigheter","Högre hastighet","Lägre bränsleförbrukning","Bättre stabilitet",1
+POF,"Vad kallas den vinkel som vingens plan har i förhållande till horisontalplanet?","Dihedralvinkel","Anfallsvinkel","Svepevinkel","Glidvinkel",1
+POF,"Vad är syftet med en T-tail-konfiguration?","Minska störningar från propellerflöde","Öka lyftkraft","Minska vikt","Öka hastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan upplever vibrationer vid hög hastighet?","Aerodynamisk obalans","Ökad lyftkraft","Minskad luftdensitet","Felaktig bränsleblandning",1
+POF,"Vad är syftet med en Krueger-flap?","Öka lyftkraft vid låga hastigheter","Minska hastighet","Styra gir","Minska bränsleförbrukning",1
+POF,"Vad kallas den effekt som gör att ett flygplan tenderar att återgå till stabil flygning?","Statisk stabilitet","Dynamisk stabilitet","Aerodynamisk stabilitet","Termisk stabilitet",1
+POF,"Vad är en fördel med en hög vingspann-till-korda-förhållande vid glidflygning?","Bättre glidprestanda","Högre hastighet","Lägre lyftkraft","Ökad bränsleförbrukning",1
+POF,"Vad är syftet med en vingklaff vid start?","Öka lyftkraft och minska starsträcka","Minska hastighet","Styra gir","Öka bränsleförbrukning",1
+POF,"Vad kallas den hastighet där flygplanet har högsta lyft-till-motstånd-förhållande?","Bästa glidvinkel","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan stallar vid hög höjd?","Lägre luftdensitet","Ökad hastighet","Minskad motorstyrka","Ökad vingbelastning",1
+POF,"Vad är syftet med en fenliknande struktur på flygkroppen?","Förbättra riktningsstabilitet","Öka lyftkraft","Minska hastighet","Öka bränsleförbrukning",1
+POF,"Vad kallas den effekt som gör att ett flygplan kan svänga utan att rulla?","Koordinerad sväng","Sidoslir","Adverse yaw","Rullmoment",1
+POF,"Vad är en fördel med en lågvingad konstruktion vid höga hastigheter?","Bättre stabilitet","Högre lyftkraft","Better markfrigång","Minskad vikt",1
+POF,"Vad är syftet med en vingklaff vid landning?","Öka lyftkraft och minska hastighet","Öka hastighet","Styra gir","Minska bränsleförbrukning",1
+POF,"Vad kallas den hastighet där flygplanet kan flyga med minsta bränsleförbrukning per kilometer?","Räckviddshastighet","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan upplever sidoslir?","Obalans i sidroder","Ökad lyftkraft","Minskad dragkraft","Ökad motorstyrka",1
+POF,"Vad är syftet med en vingprofil med låg camber?","Bättre prestanda vid höga hastigheter","Öka lyftkraft vid låga hastigheter","Minska bränsleförbrukning","Styra gir",1
+POF,"Vad kallas den effekt som gör att ett flygplan tenderar att rulla vid gir?","Rullmoment","Adverse yaw","Sidoslir","Stall",1
+POF,"Vad är en fördel med en hög vingspann?","Minska virvelmotstånd","Öka hastighet","Minska lyftkraft","Öka bränsleförbrukning",1
+POF,"Vad är syftet med en tryckkabin i hög höjd?","Upprätthålla behaglig trycknivå","Öka lyftkraft","Minska hastighet","Öka bränsleförbrukning",1
+POF,"Vad kallas den vinkel som flygplanet har i förhållande till vinden under landning?","Glidvinkel","Anfallsvinkel","Svängvinkel","Rullvinkel",1
+POF,"Vad är syftet med en vortex generator på vingen?","Fördröja stall","Öka hastighet","Minska lyftkraft","Styra gir",1
+POF,"Vad kallas den hastighet där flygplanet kan klättra med högsta vinkel?","Bästa stigningsvinkel","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan vibrerar under flygning?","Obalans i motor eller propeller","Ökad lyftkraft","Minskad luftdensitet","Ökad hastighet",1
+POF,"Vad är syftet med en strömplatta på vingen?","Förbättra luftflödet","Öka hastighet","Minska lyftkraft","Styra gir",1
+POF,"Vad kallas den effekt som uppstår när luften accelererar över vingens ovansida?","Venturi-effekten","Bernoulli-effekten","Coanda-effekten","Magnus-effekten",2
+POF,"Vad är syftet med en balansroder?","Minska pilotens ansträngning","Öka lyftkraft","Minska hastighet","Öka bränsleförbrukning",1
+POF,"Vad är en nackdel med en hög vingbelastning?","Sämre lyftkraft vid låga hastigheter","Högre hastighet","Lägre bränsleförbrukning","Bättre stabilitet",1
+POF,"Vad kallas den vinkel som vingens plan har i förhållande till horisontalplanet?","Dihedralvinkel","Anfallsvinkel","Svepevinkel","Glidvinkel",1
+POF,"Vad är syftet med en T-tail-konfiguration?","Minska störningar från propellerflöde","Öka lyftkraft","Minska vikt","Öka hastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan upplever vibrationer vid hög hastighet?","Aerodynamisk obalans","Ökad lyftkraft","Minskad luftdensitet","Felaktig bränsleblandning",1
+POF,"Vad är syftet med en Krueger-flap?","Öka lyftkraft vid låga hastigheter","Minska hastighet","Styra gir","Minska bränsleförbrukning",1
+POF,"Vad kallas den effekt som gör att ett flygplan tenderar att återgå till stabil flygning?","Statisk stabilitet","Dynamisk stabilitet","Aerodynamisk stabilitet","Termisk stabilitet",1
+POF,"Vad är en fördel med en hög vingspann-till-korda-förhållande vid glidflygning?","Bättre glidprestanda","Högre hastighet","Lägre lyftkraft","Ökad bränsleförbrukning",1
+POF,"Vad är syftet med en vingklaff vid start?","Öka lyftkraft och minska starsträcka","Minska hastighet","Styra gir","Öka bränsleförbrukning",1
+POF,"Vad kallas den hastighet där flygplanet har högsta lyft-till-motstånd-förhållande?","Bästa glidvinkel","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan stallar vid hög höjd?","Lägre luftdensitet","Ökad hastighet","Minskad motorstyrka","Ökad vingbelastning",1
+POF,"Vad är syftet med en fenliknande struktur på flygkroppen?","Förbättra riktningsstabilitet","Öka lyftkraft","Minska hastighet","Öka bränsleförbrukning",1
+POF,"Vad kallas den effekt som gör att ett flygplan kan svänga utan att rulla?","Koordinerad sväng","Sidoslir","Adverse yaw","Rullmoment",1
+POF,"Vad är en fördel med en lågvingad konstruktion vid höga hastigheter?","Bätter stabilitet","Högre lyftkraft","Better markfrigång","Minskad vikt",1
+POF,"Vad är syftet med en vingklaff vid landning?","Öka lyftkraft och minska hastighet","Öka hastighet","Styra gir","Minska bränsleförbrukning",1
+POF,"Vad kallas den hastighet där flygplanet kan flyga med minsta bränsleförbrukning per kilometer?","Räckviddshastighet","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan upplever sidoslir?","Obalans i sidroder","Ökad lyftkraft","Minskad dragkraft","Ökad motorstyrka",1
+POF,"Vad är syftet med en vingprofil med låg camber?","Bättre prestanda vid höga hastigheter","Öka lyftkraft vid låga hastigheter","Minska bränsleförbrukning","Styra gir",1
+POF,"Vad kallas den effekt som gör att ett flygplan tenderar att rulla vid gir?","Rullmoment","Adverse yaw","Sidoslir","Stall",1
+POF,"Vad är en fördel med en hög vingspann?","Minska virvelmotstånd","Öka hastighet","Minska lyftkraft","Öka bränsleförbrukning",1
+POF,"Vad är syftet med en tryckkabin i hög höjd?","Upprätthålla behaglig trycknivå","Öka lyftkraft","Minska hastighet","Öka bränsleförbrukning",1
+POF,"Vad kallas den vinkel som flygplanet har i förhållande till vinden under landning?","Glidvinkel","Anfallsvinkel","Svängvinkel","Rullvinkel",1
+POF,"Vad är syftet med en vortex generator på vingen?","Fördröja stall","Öka hastighet","Minska lyftkraft","Styra gir",1
+POF,"Vad kallas den hastighet där flygplanet kan klättra med högsta vinkel?","Bästa stigningsvinkel","Krysshastighet","Stallhastighet","Maxhastighet",1
+POF,"Vad är en vanlig orsak till att ett flygplan vibrerar under flygning?","Obalans i motor eller propeller","Ökad lyftkraft","Minskad luftdensitet","Ökad hastighet",1
+POF,"Vad är syftet med en strömplatta på vingen?","Förbättra luftflödet","Öka hastighet","Minska lyftkraft","Styra gir",1
