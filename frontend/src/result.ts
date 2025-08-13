@@ -46,6 +46,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         `;
         resultSummary.classList.add(data.passed ? 'passed' : 'failed');
 
+        // Render submission info
+        const submissionInfoEl = document.getElementById('submission-info');
+        if (submissionInfoEl) {
+            if (data.submissionType === 'auto') {
+                submissionInfoEl.textContent = 'Provet lämnades in automatiskt eftersom tiden tog slut.';
+            } else if (data.submissionType === 'manual') {
+                submissionInfoEl.textContent = 'Provet lämnades in manuellt av användaren.';
+            } else {
+                submissionInfoEl.textContent = 'Inlämningsmetod ej specificerad.';
+            }
+        }
+
         // Render question-by-question review
         questionsReviewContainer.innerHTML = data.detailedAnswers.map((answer: any, index: number) => {
             const { questionText, options, correctOptionIndex, selectedOptionIndex, isCorrect } = answer;

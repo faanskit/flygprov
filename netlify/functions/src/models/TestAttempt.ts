@@ -15,4 +15,5 @@ export interface TestAttempt {
     score: number; // Number of correct answers
     passed: boolean;
     submittedAt: Date;
+    submissionType?: 'manual' | 'auto';
 }

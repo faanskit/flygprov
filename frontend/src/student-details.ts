@@ -54,6 +54,44 @@ document.addEventListener('DOMContentLoaded', async () => {
                 button.addEventListener('click', handleCreateTestClick);
             });
         }
+        renderAttemptsList(data.attempts, data.details);
+    }
+
+    function renderAttemptsList(attempts: any[], subjects: any[]) {
+        const attemptsList = document.getElementById('attempts-list');
+        if (!attemptsList) return;
+
+        attemptsList.innerHTML = ''; // Rensa listan
+
+        if (attempts.length === 0) {
+            attemptsList.innerHTML = '<p>Studenten har inte genomfört några prov än.</p>';
+            return;
+        }
+        
+        // Sortera efter inlämningsdatum, nyast först
+        attempts.sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime());
+
+        attempts.forEach(attempt => {
+            const subject = subjects.find(s => s.subjectId === attempt.subjectId);
+            const subjectName = subject ? subject.subjectName : 'Okänt ämne';
+            const submittedDate = new Date(attempt.submittedAt).toLocaleString('sv-SE');
+            const passedText = attempt.passed ? 'Godkänt' : 'Underkänt';
+            const passedClass = attempt.passed ? 'text-success' : 'text-danger';
+
+            const listItem = document.createElement('a');
+            listItem.href = `/result.html?attemptId=${attempt._id}`;
+            listItem.className = 'list-group-item list-group-item-action flex-column align-items-start';
+            
+            listItem.innerHTML = `
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">${subjectName}</h5>
+                    <small>${submittedDate}</small>
+                </div>
+                <p class="mb-1">Resultat: ${attempt.score}/20 - <strong class="${passedClass}">${passedText}</strong></p>
+                <small>Inlämningstyp: ${attempt.submissionType || 'manual'}</small>
+            `;
+            attemptsList.appendChild(listItem);
+        });
     }
 
     async function handleCreateTestClick(event: Event) {

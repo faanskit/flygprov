@@ -58,7 +58,7 @@ async function getStudentDetails(db: Db, studentId: ObjectId) {
             bestScore: bestScore !== null ? `${bestScore}/20` : null 
         };
     });
-    return { student, details };
+    return { student, details, attempts };
 }
 
 async function createTestSession(db: Db, subjectId: ObjectId) {

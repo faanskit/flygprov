@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             if (seconds <= 0) {
                 if(timerInterval) clearInterval(timerInterval);
-                submitTest();
+                submitTest('auto');
             }
         }, 1000);
     }
@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         updateNavButtons();
     }
 
-    async function submitTest() {
+    async function submitTest(submissionType: 'manual' | 'auto' = 'manual') {
         if (timerInterval) clearInterval(timerInterval);
         if (!attemptId) {
             showError("Kunde inte hitta provförsökets ID. Kan inte lämna in.");
@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const response = await fetch(`/api/tests/${attemptId}/submit`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                body: JSON.stringify({ answers: answersPayload })
+                body: JSON.stringify({ answers: answersPayload, submissionType: submissionType })
             });
 
             if (!response.ok) throw new Error('Inlämningen misslyckades.');
@@ -193,5 +193,5 @@ document.addEventListener('DOMContentLoaded', async () => {
         const target = event.target as HTMLDivElement;
         if (target && target.dataset.index) changeQuestion(parseInt(target.dataset.index, 10));
     });
-    submitBtn.addEventListener('click', submitTest);
+    submitBtn.addEventListener('click', () => submitTest('manual'));
 });

@@ -44,7 +44,7 @@ const handleStartTest = async (db: Db, testId: string, studentId: ObjectId) => {
     };
 };
 
-const handleSubmitTest = async (db: Db, attemptId: string, studentId: ObjectId, submittedAnswers: any[]) => {
+const handleSubmitTest = async (db: Db, attemptId: string, studentId: ObjectId, submittedAnswers: any[], submissionType: 'manual' | 'auto' = 'manual') => {
     const attemptsCollection = db.collection<TestAttempt>('test_attempts');
     const attempt = await attemptsCollection.findOne({ _id: new ObjectId(attemptId) });
 
@@ -65,12 +65,17 @@ const handleSubmitTest = async (db: Db, attemptId: string, studentId: ObjectId, 
     
     let score = 0;
     const gradedAnswers = submittedAnswers.map(userAnswer => {
-        const question = questions.find(q => q._id.equals(userAnswer.questionId));
+        const question = questions.find(q => q._id.toString() === userAnswer.questionId);
         const isCorrect = question ? question.correctOptionIndex === userAnswer.selectedOptionIndex : false;
         if (isCorrect) {
             score++;
         }
-        return { ...userAnswer, isCorrect };
+        // Konvertera questionId till ObjectId innan det sparas. Detta är den kritiska fixen.
+        return { 
+            questionId: new ObjectId(userAnswer.questionId), 
+            selectedOptionIndex: userAnswer.selectedOptionIndex,
+            isCorrect: isCorrect 
+        };
     });
 
     // Godkäntgräns: 75% (15/20)
@@ -84,7 +89,8 @@ const handleSubmitTest = async (db: Db, attemptId: string, studentId: ObjectId, 
                 score: score,
                 passed: passed,
                 endTime: new Date(),
-                submittedAt: new Date()
+                submittedAt: new Date(),
+                submissionType: submissionType
             }
         }
     );
@@ -120,7 +126,7 @@ const handler: Handler = async (event: HandlerEvent, context) => {
 
         if (event.httpMethod === "POST" && action === 'submit') {
             const body = JSON.parse(event.body || '{}');
-            return handleSubmitTest(db, id, studentId, body.answers);
+            return handleSubmitTest(db, id, studentId, body.answers, body.submissionType);
         }
 
         return { statusCode: 405, body: "Method or action not allowed." };
