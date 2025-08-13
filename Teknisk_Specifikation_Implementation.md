@@ -225,17 +225,7 @@ Administrator
 * Har tillgång till back-office verktyg för databashantering.  
 * Systemet ska automatiskt arkivera studenter som klarat alla nio delprov efter en viss tid.
 
-Feedback:
-1.
-Student, provtillfälle: Nu är det röd text. Kan vi göra så att det blir vit text på röd bakgrund för timern när det 
-bara är en minut kvar
-
-2.
-Student, provtillfälle: Om tiden löper ut så visas en dialogrutan innan det skickas in. Detta är en fuskrisk. Vi ska omedelbart utan att
-meddela skicka in provet.
-
-
-3.
+TODO
 Examinator, nytt krav:
 * **Provgranskning:** 
   * Efter att studenten genomfört ett prov så ska examinatorn kunna kolla på det detaljerade resultatet, 

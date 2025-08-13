@@ -1,70 +1,97 @@
 import type { Handler, HandlerEvent } from "@netlify/functions";
-import { ObjectId } from "mongodb";
+import { Db, ObjectId } from "mongodb";
 import connectToDatabase from "../src/database";
-import { TestAttempt } from "../src/models/TestAttempt";
-import { Question } from "../src/models/Question";
-import { Test } from "../src/models/Test";
 import { verifyToken } from "../src/utils/auth";
 
-const handler: Handler = async (event: HandlerEvent, context) => {
-    if (event.httpMethod !== "GET") {
-        return { statusCode: 405, body: "Method Not Allowed" };
-    }
-
+const handler: Handler = async (event: HandlerEvent) => {
     const decodedToken = verifyToken(event);
     if (!decodedToken) {
         return { statusCode: 401, body: "Unauthorized" };
     }
 
-    const pathParts = event.path.split('/');
+    const pathParts = event.path.split('/').filter(p => p);
     const attemptId = pathParts.pop();
 
-    if (!attemptId) {
-        return { statusCode: 400, body: "Attempt ID missing" };
+    if (event.httpMethod !== "GET" || !attemptId) {
+        return { statusCode: 400, body: "Invalid request. Requires GET /api/attempts/{attemptId}" };
     }
 
     try {
         const { db } = await connectToDatabase();
         const studentId = new ObjectId(decodedToken.userId);
 
-        const attempt = await db.collection<TestAttempt>('test_attempts').findOne({ 
-            _id: new ObjectId(attemptId) 
+        // Använd aggregation för att hämta provförsöket och slå ihop det med frågorna.
+        const results = await db.collection('test_attempts').aggregate([
+            // Hitta det specifika provförsöket
+            { $match: { _id: new ObjectId(attemptId) } },
+            // Säkerställ att studenten äger detta försök
+            { $match: { studentId: studentId } },
+            // Konvertera answers.questionId till ObjectId
+            {
+                $addFields: {
+                    answers: {
+                        $map: {
+                            input: "$answers",
+                            as: "a",
+                            in: {
+                                $mergeObjects: [
+                                    "$$a",
+                                    {
+                                        questionIdObj: { $toObjectId: "$$a.questionId" }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                $lookup: {
+                    from: "questions",
+                    localField: "answers.questionIdObj",
+                    foreignField: "_id",
+                    as: "questionDetails"
+                }
+            }
+        ]).toArray();
+
+        if (results.length === 0) {
+            return { statusCode: 404, body: "Test attempt not found or you do not have permission to view it." };
+        }
+
+        const result = results[0];
+
+        // Kombinera användarens svar med frågetexten för enklare hantering i frontend
+        console.log("Result:", result);
+        const detailedAnswers = result.answers.map((answer: any) => {
+            const question = result.questionDetails.find((q: any) => q._id.equals(answer.questionId));
+            return {
+                ...answer,
+                questionText: question?.questionText || 'Fråga ej hittad',
+                options: question?.options || [],
+                correctOptionIndex: question?.correctOptionIndex
+            };
         });
 
-        if (!attempt) {
-            return { statusCode: 404, body: "Test attempt not found." };
-        }
+        const finalResult = {
+            _id: result._id,
+            testId: result.testId,
+            studentId: result.studentId,
+            score: result.score,
+            passed: result.passed,
+            submittedAt: result.submittedAt,
+            detailedAnswers: detailedAnswers
+        };
 
-        // Endast den som gjort provet eller en examinator får se resultatet
-        if (decodedToken.role === 'student' && !attempt.studentId.equals(studentId)) {
-            return { statusCode: 403, body: "Forbidden: You cannot view this result." };
-        }
-
-        const test = await db.collection<Test>('tests').findOne({ _id: attempt.testId });
-        if (!test) {
-            return { statusCode: 404, body: "Associated test not found." };
-        }
-
-        const questions = await db.collection<Question>('questions').find({ 
-            _id: { $in: test.questionIds } 
-        }).toArray();
-
-        // Returnera en kombination av provförsöket och de fullständiga frågorna
         return {
             statusCode: 200,
-            body: JSON.stringify({
-                attempt,
-                questions
-            }),
+            body: JSON.stringify(finalResult),
             headers: { "Content-Type": "application/json" }
         };
 
     } catch (error) {
-        console.error("Error fetching result:", error);
-        return {
-            statusCode: 500,
-            body: JSON.stringify({ error: "Internal Server Error" })
-        };
+        console.error("Error fetching attempt details:", error);
+        return { statusCode: 500, body: JSON.stringify({ error: "Internal Server Error" }) };
     }
 };
 

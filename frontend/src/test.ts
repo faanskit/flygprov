@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // --- Timer ---
     function startTimer(minutes: number) {
+        console.log(`Starting timer for ${minutes} minutes`);
         let seconds = minutes * 60;
         
         timerInterval = window.setInterval(() => {
@@ -69,15 +70,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // Varningar
             if (seconds <= 300 && seconds > 60) { // 5 minuter
-                timerEl.classList.toggle('blinking');
+                timerEl.classList.add('blinking');
             } else if (seconds <= 60) {
-                timerEl.classList.remove('blinking');
-                timerEl.classList.add('urgent'); // Röd
+                timerEl.classList.add('blinking', 'urgent'); // Både röd och blinkande
+            } else {
+                timerEl.classList.remove('blinking', 'urgent');
             }
 
             if (seconds <= 0) {
                 if(timerInterval) clearInterval(timerInterval);
-                alert("Tiden är slut! Provet kommer nu att lämnas in automatiskt.");
                 submitTest();
             }
         }, 1000);

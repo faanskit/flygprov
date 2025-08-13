@@ -1,17 +1,15 @@
 // netlify/functions/src/seed-tests.ts
 import dotenv from 'dotenv';
 import { resolve } from 'path';
-import { ObjectId } from 'mongodb';
-
-dotenv.config({ path: resolve(__dirname, '../../../.env') });
-
 import connectToDatabase from './database';
-import { Question } from './models/Question';
 import { Subject } from './models/Subject';
-import { Test } from './models/Test';
+import { Question } from './models/Question';
 
-async function seedExtraQuestions() {
-    console.log('Starting extra questions seed...');
+// Ladda .env från roten
+dotenv.config({ path: resolve(__dirname, '../../.env') });
+
+async function seedAllQuestions() {
+    console.log('Starting seed for questions across ALL subjects...');
 
     if (!process.env.MONGO_URI) {
         console.error('MONGO_URI is not defined in your .env file.');
@@ -19,47 +17,44 @@ async function seedExtraQuestions() {
     }
 
     const { db, client } = await connectToDatabase();
+    
+    try {
+        const subjects = await db.collection<Subject>('subjects').find().toArray();
+        if (subjects.length === 0) {
+            throw new Error("No subjects found. Please run the main seed script (db:seed) first.");
+        }
 
-    const subjectsCollection = db.collection<Subject>('subjects');
-    const questionsCollection = db.collection<Question>('questions');
-    const testsCollection = db.collection<Test>('tests');
+        // Rensa ALLA gamla frågor för att undvika dubbletter och fel
+        await db.collection<Question>('questions').deleteMany({});
+        console.log('Successfully removed all old questions.');
 
-    // Hitta ämnet "Meteorologi"
-    const metSubject = await subjectsCollection.findOne({ code: 'MET' });
-    if (!metSubject) {
-        console.error('Subject with code MET not found. Please seed base data first.');
+        for (const subject of subjects) {
+            const questions: Omit<Question, '_id'>[] = [];
+            for (let i = 1; i <= 50; i++) { // Skapa 50 frågor per ämne
+                questions.push({
+                    subjectId: subject._id!,
+                    questionText: `Detta är fråga #${i} för ämnet ${subject.name}. Vad är det korrekta svaret?`,
+                    options: [
+                        `Svarsalternativ A för fråga ${i}`,
+                        `Svarsalternativ B för fråga ${i}`,
+                        `Svarsalternativ C för fråga ${i}`,
+                        `Svarsalternativ D för fråga ${i}`
+                    ],
+                    correctOptionIndex: i % 4
+                });
+            }
+            await db.collection<Question>('questions').insertMany(questions);
+            console.log(`-> Inserted 50 new questions for subject: ${subject.code}`);
+        }
+
+        console.log('\nQuestion seed complete for all subjects!');
+
+    } catch (error) {
+        console.error('An error occurred during the question seed process:', error);
+    } finally {
         await client.close();
-        return;
+        console.log('Database connection closed.');
     }
-
-    // Rensa ALLA gamla testdata för MET för att undvika dubbletter
-    const oldTests = await testsCollection.find({ subjectId: metSubject._id }).toArray();
-    if (oldTests.length > 0) {
-        await testsCollection.deleteMany({ subjectId: metSubject._id });
-        console.log(`Removed ${oldTests.length} old test(s) for subject MET.`);
-    }
-    await questionsCollection.deleteMany({ subjectId: metSubject._id });
-    console.log('Removed all old questions for subject MET.');
-    
-    // --- Skapa en större frågebank ---
-    const questionsData: Omit<Question, '_id'>[] = [];
-    for (let i = 1; i <= 50; i++) {
-        questionsData.push({
-            subjectId: metSubject._id,
-            questionText: `Meteorologi fråga #${i}: Vad är en front?`,
-            options: [`Gränsen mellan två städer`, `Gränsen mellan två luftmassor`, `En typ av moln`, `Ett högtryckssystem`],
-            correctOptionIndex: 1,
-        });
-    }
-
-    const questionInsertResult = await questionsCollection.insertMany(questionsData);
-    console.log(`Inserted ${questionInsertResult.insertedCount} new questions for MET.`);
-    
-    console.log('\nExtra questions seed complete!');
-    await client.close();
 }
 
-seedExtraQuestions().catch(error => {
-    console.error('Error seeding extra questions:', error);
-    process.exit(1);
-});
+seedAllQuestions();

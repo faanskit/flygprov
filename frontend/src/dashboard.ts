@@ -38,6 +38,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const dashboardData = await dashboardRes.json();
         const availableTests = await testsRes.json();
+        console.log("Dashboard data:", dashboardData);
+        console.log("Available tests:", availableTests);
 
         renderTable(dashboardData, availableTests);
 
@@ -61,7 +63,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // Om ämnet är tillgängligt, hitta provet och skapa en knapp
             if (item.status === 'available') {
-                const testForSubject = tests.find(t => t.subjectId === item.subjectId);
+                const testForSubject = tests.find(t => t.subjectId === item.subjectId && t.status === 'available');
                 if (testForSubject) {
                     actionCell = `
                         <td>

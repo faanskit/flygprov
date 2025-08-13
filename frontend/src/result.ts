@@ -1,5 +1,3 @@
-// frontend/src/result.ts
-
 document.addEventListener('DOMContentLoaded', async () => {
     // DOM Elements
     const loadingEl = document.getElementById('loading') as HTMLDivElement;
@@ -19,50 +17,57 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
-        // Denna endpoint måste vi skapa
         const response = await fetch(`/api/attempts/${attemptId}`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
-        if (!response.ok) throw new Error('Kunde inte hämta resultat.');
+        if (!response.ok) {
+            const errData = await response.json();
+            throw new Error(errData.error || 'Kunde inte hämta resultat.');
+        }
 
-        const data = await response.json();
+        const resultData = await response.json();
         
-        renderResult(data);
+        renderResult(resultData);
 
         loadingEl.classList.add('d-none');
         resultContainer.classList.remove('d-none');
 
     } catch (error) {
         console.error(error);
-        showError('Ett fel uppstod vid hämtning av resultat.');
+        showError((error as Error).message);
     }
 
     function renderResult(data: any) {
         // Render summary
+        const totalQuestions = data.detailedAnswers.length;
         resultSummary.innerHTML = `
-            <h2>${data.attempt.passed ? 'Godkänd!' : 'Underkänd'}</h2>
-            <p>Du fick ${data.attempt.score} av ${data.questions.length} rätt.</p>
+            <h2>${data.passed ? 'Godkänd!' : 'Underkänd'}</h2>
+            <p>Du fick ${data.score} av ${totalQuestions} rätt.</p>
         `;
-        resultSummary.classList.add(data.attempt.passed ? 'passed' : 'failed');
+        resultSummary.classList.add(data.passed ? 'passed' : 'failed');
 
         // Render question-by-question review
-        questionsReviewContainer.innerHTML = data.questions.map((q: any, index: number) => {
-            const userAnswer = data.attempt.answers.find((a: any) => a.questionId === q._id);
-            const userOptionIndex = userAnswer ? userAnswer.selectedOptionIndex : -1;
-            const isCorrect = userAnswer ? userAnswer.isCorrect : false;
+        questionsReviewContainer.innerHTML = data.detailedAnswers.map((answer: any, index: number) => {
+            const { questionText, options, correctOptionIndex, selectedOptionIndex, isCorrect } = answer;
 
             return `
                 <div class="question-review ${isCorrect ? 'correct' : 'incorrect'}">
                     <h6>Fråga ${index + 1}</h6>
-                    <p>${q.questionText}</p>
-                    <ul>
-                        ${q.options.map((opt: string, i: number) => `
-                            <li class="${i === q.correctOptionIndex ? 'correct-answer' : ''} ${i === userOptionIndex && !isCorrect ? 'text-danger' : ''}">
-                                ${opt}
-                                ${i === q.correctOptionIndex ? ' (Rätt svar)' : ''}
-                                ${i === userOptionIndex ? ' (Ditt svar)' : ''}
-                            </li>
-                        `).join('')}
+                    <p class="fw-bold">${questionText}</p>
+                    <ul class="list-unstyled">
+                        ${options.map((opt: string, i: number) => {
+                            let classes = '';
+                            let labels = '';
+                            if (i === correctOptionIndex) {
+                                classes += 'correct-answer';
+                                labels += ' (Rätt svar)';
+                            }
+                            if (i === selectedOptionIndex) {
+                                if (!isCorrect) classes += ' text-danger';
+                                labels += ' (Ditt svar)';
+                            }
+                            return `<li class="${classes}">${opt}${labels}</li>`;
+                        }).join('')}
                     </ul>
                 </div>
             `;

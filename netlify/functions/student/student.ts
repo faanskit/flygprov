@@ -19,11 +19,16 @@ const getDashboardData = async (db: Db, studentId: ObjectId) => {
             ? Math.max(...subjectAttempts.map((a: TestAttempt) => a.score))
             : null;
 
-        // Finns det ett tilldelat prov för detta ämne som studenten INTE har påbörjat än?
-        const hasAvailableTest = assignedTests.some(assignedTest => 
-            assignedTest.subjectId.equals(subject._id!) && 
-            !attempts.some(attempt => attempt.testId.equals(assignedTest._id!))
-        );
+        // Finns det ett tilldelat prov för detta ämne som studenten INTE har förbrukat än?
+        const hasAvailableTest = assignedTests
+            .filter(assignedTest => assignedTest.subjectId.equals(subject._id!))
+            .some(assignedTest => {
+            // Finns det INGET attempt för detta test där submittedAt !== null?
+            return !attempts.some(attempt =>
+                attempt.testId.equals(assignedTest._id!) &&
+                attempt.submittedAt !== null
+            );
+            });
 
         let status = 'locked';
         if (hasPassed) {
@@ -34,7 +39,7 @@ const getDashboardData = async (db: Db, studentId: ObjectId) => {
             // Om det inte finns tillgängliga prov men det finns försök, är det "in progress"
             status = 'in_progress';
         }
-        
+
         return {
             subjectId: subject._id,
             subject: subject.name,
@@ -48,11 +53,27 @@ const getDashboardData = async (db: Db, studentId: ObjectId) => {
 
 const getAvailableTests = async (db: Db, studentId: ObjectId) => {
     // Return tests specifically assigned to the student.
-    const tests = await db.collection<Test>('tests').find(
-        { assignedStudentIds: studentId },
-        { projection: { name: 1, description: 1, subjectId: 1 } }
-    ).toArray();
-    return tests;
+    const tests = await db.collection<Test>('tests').find({ assignedStudentIds: studentId }).toArray();
+    const attempts = await db.collection<TestAttempt>('test_attempts').find({ studentId: new ObjectId(studentId) }).toArray();
+
+    // Skapa en lookup-tabell för försök per test
+    const attemptMap: { [key: string]: string } = {};
+    for (const attempt of attempts) {
+        const testIdStr = attempt.testId.toString();
+        if (attempt.passed === true) {
+            attemptMap[testIdStr] = 'passed';
+        } else if (attempt.passed === false && attempt.submittedAt) {
+            if (!attemptMap[testIdStr]) attemptMap[testIdStr] = 'failed';
+        } else if (attempt.passed === false && !attempt.submittedAt) {
+            if (!attemptMap[testIdStr]) attemptMap[testIdStr] = 'available';
+        }
+    }
+
+    // Lägg till status på varje test
+    return tests.map(test => {
+        const status = attemptMap[test._id.toString()] || 'available';
+        return { ...test, status };
+    });
 };
 
 const handler: Handler = async (event: HandlerEvent, context) => {
