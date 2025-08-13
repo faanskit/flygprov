@@ -5,11 +5,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     const resultContainer = document.getElementById('result-container') as HTMLDivElement;
     const resultSummary = document.getElementById('result-summary') as HTMLDivElement;
     const questionsReviewContainer = document.getElementById('questions-review-container') as HTMLDivElement;
+    const backButton = document.getElementById('back-button') as HTMLAnchorElement;
 
     // --- Initialization ---
     const urlParams = new URLSearchParams(window.location.search);
     const attemptId = urlParams.get('attemptId');
     const token = localStorage.getItem('jwt_token');
+
+    // Handle back navigation
+    const from = urlParams.get('from');
+    const studentId = urlParams.get('studentId');
+
+    if (from === 'student-details' && studentId && backButton) {
+        backButton.href = `/student-details.html?studentId=${studentId}`;
+        backButton.textContent = 'Tillbaka till studentens detaljer';
+    }
 
     if (!attemptId || !token) {
         showError('Provförsöks-ID eller token saknas.');

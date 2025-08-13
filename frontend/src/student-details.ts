@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const passedClass = attempt.passed ? 'text-success' : 'text-danger';
 
             const listItem = document.createElement('a');
-            listItem.href = `/result.html?attemptId=${attempt._id}`;
+            listItem.href = `/result.html?attemptId=${attempt._id}&from=student-details&studentId=${studentId}`;
             listItem.className = 'list-group-item list-group-item-action flex-column align-items-start';
             
             listItem.innerHTML = `

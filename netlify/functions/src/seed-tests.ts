@@ -31,17 +31,22 @@ async function seedAllQuestions() {
         for (const subject of subjects) {
             const questions: Omit<Question, '_id'>[] = [];
             for (let i = 1; i <= 50; i++) { // Skapa 50 frågor per ämne
-                questions.push({
-                    subjectId: subject._id!,
-                    questionText: `Detta är fråga #${i} för ämnet ${subject.name}. Vad är det korrekta svaret?`,
-                    options: [
-                        `Svarsalternativ A för fråga ${i}`,
-                        `Svarsalternativ B för fråga ${i}`,
-                        `Svarsalternativ C för fråga ${i}`,
-                        `Svarsalternativ D för fråga ${i}`
-                    ],
-                    correctOptionIndex: i % 4
-                });
+            const correctIndex = i % 4;
+            const options: [string, string, string, string] = [
+                `Svarsalternativ A för fråga ${i}`,
+                `Svarsalternativ B för fråga ${i}`,
+                `Svarsalternativ C för fråga ${i}`,
+                `Svarsalternativ D för fråga ${i}`
+            ].map((option, idx) =>
+                idx === correctIndex ? `${option} - Rätt svar` : option
+            ) as [string, string, string, string];
+
+            questions.push({
+                subjectId: subject._id!,
+                questionText: `Detta är fråga #${i} för ämnet ${subject.name}. Vad är det korrekta svaret?`,
+                options,
+                correctOptionIndex: correctIndex
+            });
             }
             await db.collection<Question>('questions').insertMany(questions);
             console.log(`-> Inserted 50 new questions for subject: ${subject.code}`);
