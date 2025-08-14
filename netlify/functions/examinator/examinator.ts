@@ -6,11 +6,12 @@ import { Subject } from "../src/models/Subject";
 import { TestAttempt } from "../src/models/TestAttempt";
 import { Question } from "../src/models/Question";
 import { verifyToken } from "../src/utils/auth";
+import bcrypt from "bcryptjs";
 
 // --- Helper Functions ---
 
 async function getStudentOverview(db: Db) {
-    const students = await db.collection<User>('users').find({ role: 'student' }, { projection: { password: 0 } }).toArray();
+    const students = await db.collection<User>('users').find({ role: 'student', archived: false }, { projection: { password: 0 } }).toArray();
     const subjects = await db.collection<Subject>('subjects').find().toArray();
     const allAttempts = await db.collection<TestAttempt>('test_attempts').find({}).toArray();
     return students.map(student => {
@@ -89,6 +90,87 @@ async function replaceQuestion(db: Db, subjectId: ObjectId, excludeIds: string[]
     return questions[0];
 }
 
+// --- New Student Management Helper Functions ---
+
+async function getAllStudents(db: Db, status?: string) {
+    let filter: any = { role: 'student' };
+    
+    if (status === 'active') {
+        filter.archived = false;
+    } else if (status === 'archived') {
+        filter.archived = true;
+    }
+    // If status is 'all' or undefined, no additional filtering needed
+    
+    const students = await db.collection<User>('users')
+        .find(filter, { projection: { password: 0 } })
+        .sort({ createdAt: -1 })
+        .toArray();
+    
+    return students.map(student => ({
+        userId: student._id,
+        username: student.username,
+        status: student.archived ? 'archived' : 'active',
+        createdAt: student.createdAt,
+        forcePasswordChange: student.forcePasswordChange
+    }));
+}
+
+async function createNewStudent(db: Db, username: string) {
+    // Check if username already exists
+    const existingUser = await db.collection<User>('users').findOne({ username });
+    if (existingUser) {
+        throw new Error("Username already exists");
+    }
+    
+    // Generate simple temporary password
+    const tempPassword = `${username}123`;
+    const hashedPassword = await bcrypt.hash(tempPassword, 10);
+    
+    const newStudent: User = {
+        username,
+        password: hashedPassword,
+        role: 'student',
+        createdAt: new Date(),
+        archived: false,
+        forcePasswordChange: true
+    };
+    
+    const result = await db.collection<User>('users').insertOne(newStudent);
+    
+    return {
+        userId: result.insertedId,
+        username: newStudent.username,
+        tempPassword
+    };
+}
+
+async function archiveStudent(db: Db, studentId: ObjectId) {
+    const result = await db.collection<User>('users').updateOne(
+        { _id: studentId, role: 'student' },
+        { $set: { archived: true } }
+    );
+    
+    if (result.matchedCount === 0) {
+        throw new Error("Student not found");
+    }
+    
+    return { message: "Student archived successfully" };
+}
+
+async function reactivateStudent(db: Db, studentId: ObjectId) {
+    const result = await db.collection<User>('users').updateOne(
+        { _id: studentId, role: 'student' },
+        { $set: { archived: false } }
+    );
+    
+    if (result.matchedCount === 0) {
+        throw new Error("Student not found");
+    }
+    
+    return { message: "Student reactivated successfully" };
+}
+
 // --- Main Handler ---
 
 const handler: Handler = async (event: HandlerEvent, context) => {
@@ -100,8 +182,17 @@ const handler: Handler = async (event: HandlerEvent, context) => {
     try {
         const { db } = await connectToDatabase();
         
+        // Parse the path to determine the endpoint
+        const pathParts = event.path.split('/').filter(p => p);
+        const isStudentManagement = pathParts.length >= 3 && pathParts[2] === 'students';
+        
+        if (isStudentManagement) {
+            // Handle student management endpoints
+            return await handleStudentManagement(db, event, pathParts);
+        }
+        
+        // Handle existing examiner endpoints
         if (event.httpMethod === "GET") {
-            const pathParts = event.path.split('/').filter(p => p);
             const studentId = pathParts.length > 2 ? pathParts[pathParts.length - 1] : null;
             const data = studentId ? await getStudentDetails(db, new ObjectId(studentId)) : await getStudentOverview(db);
             return { statusCode: 200, body: JSON.stringify(data) };
@@ -134,5 +225,84 @@ const handler: Handler = async (event: HandlerEvent, context) => {
         return { statusCode: 500, body: JSON.stringify({ error: errorMessage }) };
     }
 };
+
+// --- Student Management Handler ---
+
+async function handleStudentManagement(db: Db, event: HandlerEvent, pathParts: string[]) {
+    const studentId = pathParts.length > 3 ? pathParts[3] : null;
+    const action = pathParts.length > 4 ? pathParts[4] : null;
+    
+    try {
+        if (event.httpMethod === "GET" && pathParts.length === 3) {
+            // GET /api/examinator/students
+            const status = event.queryStringParameters?.status;
+            const students = await getAllStudents(db, status);
+            return { 
+                statusCode: 200, 
+                body: JSON.stringify(students),
+                headers: { "Content-Type": "application/json" }
+            };
+        }
+        
+        if (event.httpMethod === "POST" && pathParts.length === 3) {
+            // POST /api/examinator/students
+            const body = JSON.parse(event.body || '{}');
+            const { username } = body;
+            
+            if (!username) {
+                return { statusCode: 400, body: JSON.stringify({ error: "Username is required" }) };
+            }
+            
+            const result = await createNewStudent(db, username);
+            return { 
+                statusCode: 201, 
+                body: JSON.stringify(result),
+                headers: { "Content-Type": "application/json" }
+            };
+        }
+        
+        if (event.httpMethod === "PUT" && studentId && action) {
+            if (action === 'archive') {
+                // PUT /api/examinator/students/:studentId/archive
+                const result = await archiveStudent(db, new ObjectId(studentId));
+                return { 
+                    statusCode: 200, 
+                    body: JSON.stringify(result),
+                    headers: { "Content-Type": "application/json" }
+                };
+            }
+            
+            if (action === 'reactivate') {
+                // PUT /api/examinator/students/:studentId/reactivate
+                const result = await reactivateStudent(db, new ObjectId(studentId));
+                return { 
+                    statusCode: 200, 
+                    body: JSON.stringify(result),
+                    headers: { "Content-Type": "application/json" }
+                };
+            }
+        }
+        
+        return { statusCode: 404, body: JSON.stringify({ error: "Endpoint not found" }) };
+        
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : "Internal Server Error";
+        console.error("Error in student management:", error);
+        
+        if (errorMessage.includes("Username already exists")) {
+            return { 
+                statusCode: 409, 
+                body: JSON.stringify({ error: errorMessage }),
+                headers: { "Content-Type": "application/json" }
+            };
+        }
+        
+        return { 
+            statusCode: 500, 
+            body: JSON.stringify({ error: errorMessage }),
+            headers: { "Content-Type": "application/json" }
+        };
+    }
+}
 
 export { handler };

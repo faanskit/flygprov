@@ -7,4 +7,5 @@ export interface User {
     role: 'student' | 'examinator' | 'administrator';
     createdAt: Date;
     archived: boolean;
+    forcePasswordChange: boolean;
 }

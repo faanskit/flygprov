@@ -65,7 +65,7 @@
             background-color: #218838;
         }
         #logout-button {
-            display: block;
+            display: inline-block;
             margin-top: 1.5rem;
             padding: 0.5rem 1rem;
             background-color: #d32f2f;
@@ -75,8 +75,145 @@
             cursor: pointer;
             font-size: 0.9rem;
         }
+        
         #logout-button:hover {
             background-color: #c62828;
+        }
+        
+        .btn-change-password {
+            display: inline-block;
+            margin-top: 1.5rem;
+            margin-left: 1rem;
+            padding: 0.5rem 1rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .btn-change-password:hover {
+            background-color: #0056b3;
+        }
+        
+        /* Button container for better layout */
+        .button-container {
+            margin-top: 1.5rem;
+            text-align: right;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 0;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        
+        .modal-header {
+            background-color: #f8f9fa;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #dee2e6;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            color: #333;
+            font-size: 1.25rem;
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .warning-text {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 0.75rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+        }
+        
+        .form-group small {
+            color: #6c757d;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: block;
+        }
+        
+        .form-actions {
+            margin-top: 1.5rem;
+            text-align: right;
+        }
+        
+        #change-password-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        #change-password-btn:hover {
+            background-color: #0056b3;
+        }
+        
+        #change-password-btn:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 0.75rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+            border: 1px solid #f5c6cb;
         }
     </style>
 </head>
@@ -98,8 +235,43 @@
                 <!-- Raderna kommer att fyllas i av JavaScript -->
             </tbody>
         </table>
-        <button id="logout-button">Logga ut</button>
+        <div class="button-container">
+            <button id="change-password-btn-manual" class="btn-change-password">Ändra lösenord</button>
+            <div id="logout-button">Logga ut</div>
+        </div>
     </div>
+
+    <!-- Password Change Modal -->
+    <div id="password-change-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Ändra lösenord</h2>
+            </div>
+            <div class="modal-body">
+                <p class="warning-text">Du måste ändra ditt lösenord innan du kan fortsätta.</p>
+                <form id="password-change-form">
+                    <div class="form-group">
+                        <label for="current-password">Nuvarande lösenord:</label>
+                        <input type="password" id="current-password" name="current-password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password">Nytt lösenord:</label>
+                        <input type="password" id="new-password" name="new-password" required minlength="6">
+                        <small>Lösenordet måste vara minst 6 tecken långt.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">Bekräfta nytt lösenord:</label>
+                        <input type="password" id="confirm-password" name="confirm-password" required minlength="6">
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" id="change-password-btn">Ändra lösenord</button>
+                    </div>
+                </form>
+                <div id="password-change-error" class="error-message" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
     <script src="dist/dashboard.js"></script>
 </body>
 </html>

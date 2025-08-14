@@ -46,6 +46,7 @@ async function seedDatabase() {
         role: 'student',
         createdAt: new Date(),
         archived: false,
+        forcePasswordChange: false,
     };
     const studentResult = await usersCollection.insertOne(studentUser);
     const studentId = studentResult.insertedId;
@@ -58,6 +59,7 @@ async function seedDatabase() {
         role: 'examinator',
         createdAt: new Date(),
         archived: false,
+        forcePasswordChange: false,
     };
     await usersCollection.insertOne(examinatorUser);
     console.log(`Created examinator user.`);

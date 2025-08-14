@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hantera Studenter - Examinator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1>Hantera Studenter</h1>
+            <button id="logout-button" class="btn btn-danger">Logga ut</button>
+        </div>
+        
+        <!-- Navigation Menu -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light mt-3 mb-4">
+            <div class="container-fluid">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="examinator.html">Översikt</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="student-management.html">Hantera Studenter</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Status Filter -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <div class="btn-group" role="group" aria-label="Status filter">
+                    <input type="radio" class="btn-check" name="statusFilter" id="all" value="all" checked>
+                    <label class="btn btn-outline-primary" for="all">Alla</label>
+                    
+                    <input type="radio" class="btn-check" name="statusFilter" id="active" value="active">
+                    <label class="btn btn-outline-success" for="active">Aktiva</label>
+                    
+                    <input type="radio" class="btn-check" name="statusFilter" id="archived" value="archived">
+                    <label class="btn btn-outline-secondary" for="archived">Arkiverade</label>
+                </div>
+            </div>
+            <div class="col-md-6 text-end">
+                <button id="create-student-btn" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Skapa ny student
+                </button>
+            </div>
+        </div>
+
+        <!-- Students Table -->
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Användarnamn</th>
+                        <th>Status</th>
+                        <th>Skapad</th>
+                        <th>Lösenord ändrat</th>
+                        <th>Åtgärder</th>
+                    </tr>
+                </thead>
+                <tbody id="students-table-body">
+                    <!-- Students will be rendered here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div id="loading-spinner" class="text-center d-none">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Laddar...</span>
+            </div>
+        </div>
+
+        <!-- Error Container -->
+        <div id="error-container" class="alert alert-danger d-none mt-4" role="alert"></div>
+
+        <!-- Success Container -->
+        <div id="success-container" class="alert alert-success d-none mt-4" role="alert"></div>
+    </div>
+
+    <!-- Create Student Modal -->
+    <div class="modal fade" id="createStudentModal" tabindex="-1" aria-labelledby="createStudentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createStudentModalLabel">Skapa ny student</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="create-student-form">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Användarnamn</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                            <div class="form-text">Användarnamnet måste vara unikt.</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Avbryt</button>
+                    <button type="button" class="btn btn-primary" id="create-student-submit">Skapa student</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="successModalLabel">Student skapad!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="success-message"></div>
+                    <div class="alert alert-warning mt-3">
+                        <strong>Viktigt:</strong> Kopiera lösenordet och ge det till studenten. Det kommer inte att visas igen.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Stäng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationModalLabel">Bekräfta åtgärd</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="confirmation-message"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Avbryt</button>
+                    <button type="button" class="btn btn-primary" id="confirm-action-btn">Bekräfta</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    
+    <!-- Custom Script -->
+    <script src="dist/student-management.js"></script>
+</body>
+</html> 

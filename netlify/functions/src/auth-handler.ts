@@ -34,6 +34,13 @@ export async function login(body: string | null): Promise<{ token: string; user:
         throw error;
     }
 
+    // Check if user is archived
+    if (user.archived) {
+        const error: any = new Error("Account is archived and cannot be accessed");
+        error.statusCode = 403; // Forbidden
+        throw error;
+    }
+
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
     if (!isPasswordCorrect) {
