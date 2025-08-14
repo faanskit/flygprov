@@ -227,11 +227,3 @@ Administrator
 * Hanterar examinator-konton.  
 * Har tillgång till back-office verktyg för databashantering.  
 * Systemet ska automatiskt arkivera studenter som klarat alla nio delprov efter en viss tid.
-
-TODO
-Examinator, nytt krav:
-* **Provgranskning:** 
-  * Efter att studenten genomfört ett prov så ska examinatorn kunna kolla på det detaljerade resultatet, 
-      i princip samma vy som studenten ser på sin resultatsida. 
-  * Resultatsidan för examinatorn ska tala om ifall provet skickades in automatiskt eller av studenten.
-

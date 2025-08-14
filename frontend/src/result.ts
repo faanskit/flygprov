@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const resultSummary = document.getElementById('result-summary') as HTMLDivElement;
     const questionsReviewContainer = document.getElementById('questions-review-container') as HTMLDivElement;
     const backButton = document.getElementById('back-button') as HTMLAnchorElement;
+    const submissionInfoEl = document.getElementById('submission-info') as HTMLParagraphElement;
 
     // --- Initialization ---
     const urlParams = new URLSearchParams(window.location.search);
@@ -52,12 +53,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         const totalQuestions = data.detailedAnswers.length;
         resultSummary.innerHTML = `
             <h2>${data.passed ? 'Godkänd!' : 'Underkänd'}</h2>
-            <p>Du fick ${data.score} av ${totalQuestions} rätt.</p>
+            <p class="lead mb-0">Du fick ${data.score} av ${totalQuestions} rätt.</p>
         `;
         resultSummary.classList.add(data.passed ? 'passed' : 'failed');
 
         // Render submission info
-        const submissionInfoEl = document.getElementById('submission-info');
         if (submissionInfoEl) {
             if (data.submissionType === 'auto') {
                 submissionInfoEl.textContent = 'Provet lämnades in automatiskt eftersom tiden tog slut.';
@@ -71,26 +71,50 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Render question-by-question review
         questionsReviewContainer.innerHTML = data.detailedAnswers.map((answer: any, index: number) => {
             const { questionText, options, correctOptionIndex, selectedOptionIndex, isCorrect } = answer;
+            
+            const isAnswered = selectedOptionIndex !== null && selectedOptionIndex > -1;
+
+            let statusClass = '';
+            let statusIcon = '';
+
+            if (isCorrect) {
+                statusClass = 'correct';
+                statusIcon = '<i class="bi bi-check-circle-fill text-success"></i>';
+            } else if (isAnswered) {
+                statusClass = 'incorrect';
+                statusIcon = '<i class="bi bi-x-circle-fill text-danger"></i>';
+            } else {
+                statusClass = 'unanswered';
+                statusIcon = '<i class="bi bi-x-circle-fill text-danger"></i>';
+            }
+
+            let yourAnswerHtml = '';
+            if (isAnswered) {
+                const yourAnswerClass = isCorrect ? '' : 'your-choice-incorrect';
+                yourAnswerHtml = `<span class="answer-text ${yourAnswerClass}">${options[selectedOptionIndex]}</span>`;
+            } else {
+                yourAnswerHtml = `<span class="answer-text your-choice-unanswered">Inget svar angivet</span>`;
+            }
+
+            const correctAnswerHtml = `<span class="answer-text correct-answer-text">${options[correctOptionIndex]}</span>`;
 
             return `
-                <div class="question-review ${isCorrect ? 'correct' : 'incorrect'}">
-                    <h6>Fråga ${index + 1}</h6>
-                    <p class="fw-bold">${questionText}</p>
-                    <ul class="list-unstyled">
-                        ${options.map((opt: string, i: number) => {
-                            let classes = '';
-                            let labels = '';
-                            if (i === correctOptionIndex) {
-                                classes += 'correct-answer';
-                                labels += ' (Rätt svar)';
-                            }
-                            if (i === selectedOptionIndex) {
-                                if (!isCorrect) classes += ' text-danger';
-                                labels += ' (Ditt svar)';
-                            }
-                            return `<li class="${classes}">${opt}${labels}</li>`;
-                        }).join('')}
-                    </ul>
+                <div class="question-review ${statusClass}">
+                    <div class="question-header">
+                        ${statusIcon}
+                        <h6>Fråga ${index + 1}</h6>
+                    </div>
+                    <p class="question-text">${questionText}</p>
+                    <div class="answer-container">
+                        <div class="answer-column">
+                            <span class="column-title">Ditt svar</span>
+                            ${yourAnswerHtml}
+                        </div>
+                        <div class="answer-column">
+                            <span class="column-title">Rätt svar</span>
+                            ${correctAnswerHtml}
+                        </div>
+                    </div>
                 </div>
             `;
         }).join('');
