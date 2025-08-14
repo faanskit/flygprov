@@ -171,6 +171,41 @@ async function reactivateStudent(db: Db, studentId: ObjectId) {
     return { message: "Student reactivated successfully" };
 }
 
+async function deleteStudent(db: Db, studentId: ObjectId) {
+    // Optional: Check for related data and handle it (e.g., test attempts)
+    // For now, we'll just delete the user.
+    const result = await db.collection<User>('users').deleteOne(
+        { _id: studentId, role: 'student' }
+    );
+
+    if (result.deletedCount === 0) {
+        throw new Error("Student not found or already deleted");
+    }
+
+    return { message: "Student deleted permanently" };
+}
+
+async function resetStudentPassword(db: Db, studentId: ObjectId) {
+    const student = await db.collection<User>('users').findOne({ _id: studentId, role: 'student' });
+    if (!student) {
+        throw new Error("Student not found");
+    }
+
+    const tempPassword = `${student.username}123`;
+    const hashedPassword = await bcrypt.hash(tempPassword, 10);
+
+    const result = await db.collection<User>('users').updateOne(
+        { _id: studentId },
+        { $set: { password: hashedPassword, forcePasswordChange: true } }
+    );
+
+    if (result.matchedCount === 0) {
+        throw new Error("Student not found");
+    }
+
+    return { tempPassword };
+}
+
 // --- Main Handler ---
 
 const handler: Handler = async (event: HandlerEvent, context) => {
@@ -281,6 +316,26 @@ async function handleStudentManagement(db: Db, event: HandlerEvent, pathParts: s
                     headers: { "Content-Type": "application/json" }
                 };
             }
+
+            if (action === 'reset-password') {
+                // PUT /api/examinator/students/:studentId/reset-password
+                const result = await resetStudentPassword(db, new ObjectId(studentId));
+                return {
+                    statusCode: 200,
+                    body: JSON.stringify(result),
+                    headers: { "Content-Type": "application/json" }
+                };
+            }
+        }
+
+        if (event.httpMethod === "DELETE" && studentId) {
+            // DELETE /api/examinator/students/:studentId
+            const result = await deleteStudent(db, new ObjectId(studentId));
+            return {
+                statusCode: 200,
+                body: JSON.stringify(result),
+                headers: { "Content-Type": "application/json" }
+            };
         }
         
         return { statusCode: 404, body: JSON.stringify({ error: "Endpoint not found" }) };

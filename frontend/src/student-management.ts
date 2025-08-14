@@ -158,21 +158,7 @@ class StudentManagement {
             <td>${createdAt}</td>
             <td><span class="badge bg-${passwordClass}">${passwordStatus}</span></td>
             <td>
-                <div class="dropdown">
-                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-three-dots-vertical"></i>
-                    </button>
-                    <ul class="dropdown-menu">
-                        ${student.status === 'active' 
-                            ? `<li><a class="dropdown-item text-warning" href="#" data-action="archive" data-student-id="${student.userId}">
-                                   <i class="bi bi-archive"></i> Arkivera
-                               </a></li>`
-                            : `<li><a class="dropdown-item text-success" href="#" data-action="reactivate" data-student-id="${student.userId}">
-                                   <i class="bi bi-arrow-clockwise"></i> Återaktivera
-                               </a></li>`
-                        }
-                    </ul>
-                </div>
+                ${this.createActionMenu(student)}
             </td>
         `;
 
@@ -190,6 +176,34 @@ class StudentManagement {
         });
 
         return row;
+    }
+
+    private createActionMenu(student: Student): string {
+        const archiveOption = `<li><a class="dropdown-item text-warning" href="#" data-action="archive" data-student-id="${student.userId}"><i class="bi bi-archive"></i> Arkivera</a></li>`;
+        const reactivateOption = `<li><a class="dropdown-item text-success" href="#" data-action="reactivate" data-student-id="${student.userId}"><i class="bi bi-arrow-clockwise"></i> Återaktivera</a></li>`;
+        const resetPasswordOption = `<li><a class="dropdown-item" href="#" data-action="reset-password" data-student-id="${student.userId}"><i class="bi bi-key"></i> Återställ lösenord</a></li>`;
+        const deleteOption = `<li><a class="dropdown-item text-danger" href="#" data-action="delete" data-student-id="${student.userId}"><i class="bi bi-trash"></i> Ta bort permanent</a></li>`;
+
+        let options = '';
+        if (student.status === 'active') {
+            options += archiveOption;
+        } else {
+            options += reactivateOption;
+        }
+        options += resetPasswordOption;
+        options += '<li><hr class="dropdown-divider"></li>';
+        options += deleteOption;
+
+        return `
+            <div class="dropdown">
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-three-dots-vertical"></i>
+                </button>
+                <ul class="dropdown-menu">
+                    ${options}
+                </ul>
+            </div>
+        `;
     }
 
     private filterStudents(): void {
@@ -287,7 +301,7 @@ class StudentManagement {
 
             const result: CreateStudentResponse = await response.json();
             this.modals.createStudent.hide();
-            this.showSuccessModal(result);
+            this.showCreateStudentSuccess(result);
             this.loadStudents(); // Refresh the list
 
         } catch (error) {
@@ -301,13 +315,34 @@ class StudentManagement {
         }
     }
 
-    private showSuccessModal(result: CreateStudentResponse): void {
+    private showCreateStudentSuccess(result: CreateStudentResponse): void {
+        const successModalLabel = document.getElementById('successModalLabel');
         const successMessage = document.getElementById('success-message');
+        if (successModalLabel) {
+            successModalLabel.textContent = "Student skapad!";
+        }
         if (successMessage) {
             successMessage.innerHTML = `
                 <div class="alert alert-success">
                     <strong>Studenten '${result.username}' har skapats!</strong><br>
                     <strong>Temporärt lösenord:</strong> <code>${result.tempPassword}</code>
+                </div>
+            `;
+        }
+        this.modals.success.show();
+    }
+
+    private showPasswordResetSuccess(tempPassword: string): void {
+        const successModalLabel = document.getElementById('successModalLabel');
+        const successMessage = document.getElementById('success-message');
+        if (successModalLabel) {
+            successModalLabel.textContent = "Lösenord återställt!";
+        }
+        if (successMessage) {
+            successMessage.innerHTML = `
+                <div class="alert alert-success">
+                    <strong>Lösenordet har återställts!</strong><br>
+                    <strong>Nytt temporärt lösenord:</strong> <code>${tempPassword}</code>
                 </div>
             `;
         }
@@ -324,6 +359,12 @@ class StudentManagement {
         } else if (action === 'reactivate') {
             message = `Är du säker på att du vill återaktivera studenten "${username}"?`;
             actionFunction = () => this.reactivateStudent(studentId);
+        } else if (action === 'reset-password') {
+            message = `Är du säker på att du vill återställa lösenordet för "${username}"? Ett nytt temporärt lösenord kommer att genereras.`;
+            actionFunction = () => this.resetStudentPassword(studentId);
+        } else if (action === 'delete') {
+            message = `Är du helt säker på att du vill permanent ta bort studenten "${username}"? All data, inklusive provresultat, kommer att raderas för alltid. Denna åtgärd kan inte ångras.`;
+            actionFunction = () => this.deleteStudent(studentId);
         } else {
             return;
         }
@@ -439,6 +480,107 @@ class StudentManagement {
         } catch (error) {
             console.error('Error reactivating student:', error);
             const errorMessage = error instanceof Error ? error.message : 'Kunde inte återaktivera studenten.';
+            this.showError(errorMessage);
+        }
+    }
+
+    private async resetStudentPassword(studentId: string): Promise<void> {
+        try {
+            const token = localStorage.getItem('jwt_token');
+            if (!token) {
+                window.location.href = '/index.html';
+                return;
+            }
+
+            const response = await fetch(`/api/examinator/students/${studentId}/reset-password`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
+
+            if (response.status === 401) {
+                this.showError("Din session har gått ut. Logga in igen.");
+                localStorage.removeItem('jwt_token');
+                setTimeout(() => {
+                    window.location.href = '/index.html';
+                }, 2000);
+                return;
+            }
+
+            if (response.status === 403) {
+                this.showError("Du har inte behörighet att återställa lösenord.");
+                return;
+            }
+
+            if (response.status === 404) {
+                this.showError("Studenten kunde inte hittas.");
+                return;
+            }
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`HTTP ${response.status}: ${errorText || 'Okänt fel'}`);
+            }
+
+            const result = await response.json();
+            this.modals.confirmation.hide();
+            this.showPasswordResetSuccess(result.tempPassword);
+            this.loadStudents(); // Refresh the list
+
+        } catch (error) {
+            console.error('Error resetting password:', error);
+            const errorMessage = error instanceof Error ? error.message : 'Kunde inte återställa lösenordet.';
+            this.showError(errorMessage);
+        }
+    }
+
+    private async deleteStudent(studentId: string): Promise<void> {
+        try {
+            const token = localStorage.getItem('jwt_token');
+            if (!token) {
+                window.location.href = '/index.html';
+                return;
+            }
+
+            const response = await fetch(`/api/examinator/students/${studentId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
+
+            if (response.status === 401) {
+                this.showError("Din session har gått ut. Logga in igen.");
+                localStorage.removeItem('jwt_token');
+                setTimeout(() => {
+                    window.location.href = '/index.html';
+                }, 2000);
+                return;
+            }
+
+            if (response.status === 403) {
+                this.showError("Du har inte behörighet att ta bort studenter.");
+                return;
+            }
+
+            if (response.status === 404) {
+                this.showError("Studenten kunde inte hittas.");
+                return;
+            }
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`HTTP ${response.status}: ${errorText || 'Okänt fel'}`);
+            }
+
+            this.modals.confirmation.hide();
+            this.showSuccess('Studenten har tagits bort permanent.');
+            this.loadStudents(); // Refresh the list
+
+        } catch (error) {
+            console.error('Error deleting student:', error);
+            const errorMessage = error instanceof Error ? error.message : 'Kunde inte ta bort studenten.';
             this.showError(errorMessage);
         }
     }

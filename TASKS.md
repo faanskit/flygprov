@@ -9,7 +9,7 @@
 - [x] **Task 1.1.4**: Implement `PUT /api/examinator/students/:studentId/archive` endpoint for archiving students
 - [x] **Task 1.1.5**: Implement `PUT /api/examinator/students/:studentId/reactivate` endpoint for reactivating students
 - [x] **Task 1.1.6**: Implement `PUT /api/student/change-password` endpoint for password changes
-- [ ] **Task 1.1.7**: Implement `DELETE /api/examinator/students/:studentId` endpoint for removing students (LOW PRIORITY)
+- [x] **Task 1.1.7**: Implement `DELETE /api/examinator/students/:studentId` endpoint for removing students (LOW PRIORITY)
 
 #### **1.2 Backend Business Logic**
 - [x] **Task 1.2.1**: Implement simple password generation for temporary passwords (e.g., username123)
@@ -51,7 +51,7 @@
 - [x] **Task 2.4.2**: Implement reactivate student functionality with confirmation
 - [x] **Task 2.4.3**: Add visual indicators for active vs archived student status
 - [x] **Task 2.4.4**: Implement status filtering (active/archived/all)
-- [ ] **Task 2.4.5**: Implement remove student functionality with confirmation (LOW PRIORITY)
+- [x] **Task 2.4.5**: Implement remove student functionality with confirmation (LOW PRIORITY)
 
 #### **2.5 Student Password Change Interface**
 - [x] **Task 2.5.1**: Create password change modal/page for students
@@ -93,9 +93,9 @@
 ### **Phase 5: Documentation and Deployment**
 
 #### **5.1 Documentation**
-- [ ] **Task 5.1.1**: Update API documentation with new endpoints
-- [ ] **Task 5.1.2**: Create user manual for examiners
-- [ ] **Task 5.1.3**: Update technical specification document
+- [x] **Task 5.1.1**: Update API documentation with new endpoints
+- [x] **Task 5.1.2**: Create user manual for examiners
+- [x] **Task 5.1.3**: Update technical specification document
 
 #### **5.2 Testing and Quality Assurance**
 - [~] **Task 5.2.1**: Write unit tests for new backend functions

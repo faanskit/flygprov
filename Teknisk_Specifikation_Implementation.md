@@ -35,7 +35,8 @@ JSON
   "password": "String", // Hashed/krypterat
   "role": "String", // Enum: 'student', 'examinator', 'administrator'
   "createdAt": "Date",
-  "archived": "Boolean" // För att arkivera studenter 
+  "archived": "Boolean", // För att arkivera studenter 
+  "forcePasswordChange": "Boolean" // För att tvinga lösenordsbyte vid första inloggning
 }
 
 ```
@@ -126,6 +127,10 @@ JSON
 
 Definierar kommunikationen mellan frontend och backend.
 
+#### **3\. API Endpoints (Backend \- Netlify Functions)**
+
+Definierar kommunikationen mellan frontend och backend.
+
 * POST /api/auth/login  
   * **Body:** { username, password }  
   * **Svar:** { token, user: { username, role } }  
@@ -144,29 +149,27 @@ Definierar kommunikationen mellan frontend och backend.
   * **Funktion:** Tar emot studentens svar, antingen via knapptryckning eller när tiden löpt ut. Rättar provet och lagrar resultatet i  
      test\_attempts.  
   * **Svar:** { results: \[...\], score, passed }. Returnerar det fullständiga rättningsprotokollet.  
-* GET /api/examinator/students  
-  * **Auth:** Examinator  
-  * **Svar:** Lista över alla studenter.  
-* GET /api/examinator/students/:studentId/overview  
-  * **Auth:** Examinator  
-  * **Svar:** En översikt över en specifik students resultat och försök per ämne.  
-* POST /api/examinator/tests/prepare  
-  * **Auth:** Examinator  
-  * **Body:** { studentId, subjectId }  
-  * **Funktion:** Skapar ett utkast av ett prov med 20 slumpade frågor från valt ämne.  
-  * **Svar:** { preparedTestId, questions: \[...\] }.  
-* PUT /api/examinator/tests/:testId/replace-question  
-  * **Auth:** Examinator  
-  * **Body:** { questionToReplaceId }  
-  * **Funktion:** Byter ut en specifik fråga mot en ny slumpad från samma ämne.  
-  * **Svar:** { newQuestion: { ... } }  
-* POST /api/examinator/tests/:testId/finalize  
-  * **Auth:** Examinator  
-  * **Body:** { questionIds: \[...\] }  
-  * **Funktion:** Slutför skapandet av provet och sätter dess status till pending.  
-* PUT /api/examinator/tests/:testId/release  
-  * **Auth:** Examinator  
-  * **Funktion:** Ändrar status på provet från pending till released, vilket gör det synligt och startbart för studenten.
+* GET /api/examinator/students
+  * **Auth:** Examinator
+  * **Svar:** Lista över alla studenter. Kan filtreras med `?status=active` eller `?status=archived`.
+* POST /api/examinator/students
+  * **Auth:** Examinator
+  * **Body:** { username }
+  * **Svar:** { userId, username, tempPassword }
+  * **Funktion:** Skapar en ny student med ett temporärt lösenord.
+* PUT /api/examinator/students/:studentId/archive
+  * **Auth:** Examinator
+  * **Funktion:** Arkiverar en student.
+* PUT /api/examinator/students/:studentId/reactivate
+  * **Auth:** Examinator
+  * **Funktion:** Återaktiverar en student.
+* DELETE /api/examinator/students/:studentId
+  * **Auth:** Examinator
+  * **Funktion:** Tar bort en student permanent.
+* PUT /api/student/change-password
+  * **Auth:** Student
+  * **Body:** { oldPassword, newPassword }
+  * **Funktion:** Byter lösenord för den inloggade studenten.
 
 #### 
 
