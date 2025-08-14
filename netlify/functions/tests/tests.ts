@@ -12,6 +12,53 @@ const handleStartTest = async (db: Db, testId: string, studentId: ObjectId) => {
         return { statusCode: 404, body: "Test not found" };
     }
 
+    // Check if the student already has an unsubmitted attempt for this test
+    const existingAttempt = await db.collection<TestAttempt>('test_attempts').findOne({
+        testId: test._id,
+        studentId: studentId,
+    });
+    console.log('Existing attempt found:', existingAttempt);
+    // If an existing attempt is found, return error
+    if (existingAttempt) {
+        // Update the attempt in the database to stop further attempts
+        await db.collection<TestAttempt>('test_attempts').updateOne(
+            { _id: existingAttempt._id },
+            {
+                $set: {
+                    answers: [],
+                    passed: false,
+                    submissionType: 'auto',
+                    submittedAt: new Date(),
+                    endTime: new Date()
+                }
+            }
+        );
+
+    // await attemptsCollection.updateOne(
+    //     { _id: new ObjectId(attemptId) },
+    //     {
+    //         $set: {
+    //             answers: gradedAnswers,
+    //             score: score,
+    //             passed: passed,
+    //             endTime: new Date(),
+    //             submittedAt: new Date(),
+    //             submissionType: submissionType
+    //         }
+    //     }
+    // );
+        return {
+            statusCode: 400,
+            body: JSON.stringify({
+                error: "You already have an unsubmitted attempt for this test.",
+                attemptId: existingAttempt._id.toString(),
+                testName: test.name,
+                timeLimitMinutes: test.timeLimitMinutes
+            }),
+            headers: { "Content-Type": "application/json" }
+        };
+    }
+
     const questions = await db.collection<Question>('questions').find({
         _id: { $in: test.questionIds }
     }).toArray();
