@@ -178,9 +178,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             }
 
+            const statusText = 
+                item.status === 'locked' ? 'Låst' :
+                item.status === 'passed' ? 'Godkänd' :
+                item.status === 'available' ? 'Tillgänglig' :
+                item.status === 'in_progress' ? 'Pågående' : item.status;
+
             row.innerHTML = `
                 <td>${item.subject}</td>
-                <td><span class="status ${statusClass}">${item.status}</span></td>
+                <td><span class="status ${statusClass}">${statusText}</span></td>
                 <td>${item.attempts}</td>
                 <td>${item.bestScore || 'N/A'}</td>
                 ${actionCell}

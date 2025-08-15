@@ -39,10 +39,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                 } else if (subject.status !== 'passed') {
                     actionCell = `<td><button class="btn btn-success btn-sm create-test-btn" data-subject-id="${subject.subjectId}" data-subject-name="${subject.subjectName}" data-student-name="${data.student.username}">Skapa Prov</button></td>`;
                 }
-
+                console.log('Status: ' +  subject.status)
+                const statusText = 
+                    subject.status === 'locked' ? 'Låst' :
+                    subject.status === 'passed' ? 'Godkänd' :
+                    subject.status === 'assigned' ? 'Tilldelat' :
+                    subject.status === 'not_started' ? 'Inte Startat' :
+                    subject.status === 'in_progress' ? 'Pågående' : subject.status;
                 row.innerHTML = `
                     <td>${subject.subjectName}</td>
-                    <td><span class="status status-${subject.status}">${subject.status.replace('_', ' ')}</span></td>
+                    <td><span class="status status-${subject.status}">${statusText}</span></td>
                     <td>${subject.attemptsCount}</td>
                     <td>${subject.bestScore || 'N/A'}</td>
                     ${actionCell}
