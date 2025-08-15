@@ -215,11 +215,26 @@
             margin-top: 1rem;
             border: 1px solid #f5c6cb;
         }
+        .dashboard-header {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Luft mellan logga och rubrik */
+            margin-bottom: 1rem;
+        }
+
+        .logo {
+            height: 32px; /* Mindre storlek */
+            width: auto;
+            margin: 0;
+}
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Min Översikt</h1>
+        <div class="dashboard-header">
+            <img src="img/LOGGA_KFK_Web-5cm.jpg" alt="Kalmar Flygklubb" class="logo">
+            <h1>Min Översikt</h1>
+        </div>
         <p>Välkommen! Här är din status för de olika provdelarna.</p>
         <table>
             <thead>

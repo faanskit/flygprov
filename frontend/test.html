@@ -44,6 +44,10 @@
                 opacity: 0;
             }
         }
+        .logo {
+            max-width: 50px;
+            height: auto;
+        }
     </style>
 </head>
 <body>
@@ -54,7 +58,10 @@
 
         <div id="test-container" class="d-none">
             <div class="d-flex justify-content-between align-items-center mb-2">
-                <h2 id="test-name" class="mb-0"></h2>
+                <div class="d-flex align-items-center">
+                    <img src="img/LOGGA_KFK_Web-5cm.jpg" alt="Kalmar Flygklubb" class="logo me-3">
+                    <h2 id="test-name" class="mb-0"></h2>
+                </div>
                 <div id="timer" class="fs-4 fw-bold">--:--</div>
             </div>
             <p>Fråga <span id="question-number"></span> av 20</p>
