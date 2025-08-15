@@ -10,7 +10,10 @@
     <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center">
             <h1>Examinator-översikt</h1>
-            <button id="logout-button" class="btn btn-danger">Logga ut</button>
+            <div>
+                <button id="change-password-btn-manual" class="btn btn-secondary">Ändra lösenord</button>
+                <button id="logout-button" class="btn btn-danger">Logga ut</button>
+            </div>
         </div>
         
         <!-- Navigation Menu -->
@@ -43,6 +46,36 @@
         </table>
 
         <div id="error-container" class="alert alert-danger d-none mt-4" role="alert"></div>
+
+        <!-- Password Change Modal -->
+        <div class="modal" id="password-change-modal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Ändra lösenord</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p>Du måste ändra ditt lösenord innan du kan fortsätta.</p>
+                        <form id="password-change-form">
+                            <div class="mb-3">
+                                <label for="current-password" class="form-label">Nuvarande lösenord</label>
+                                <input type="password" class="form-control" id="current-password" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="new-password" class="form-label">Nytt lösenord</label>
+                                <input type="password" class="form-control" id="new-password" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="confirm-password" class="form-label">Bekräfta nytt lösenord</label>
+                                <input type="password" class="form-control" id="confirm-password" required>
+                            </div>
+                            <p id="password-change-error" class="text-danger" style="display: none;"></p>
+                            <button type="submit" id="change-password-btn" class="btn btn-primary">Ändra lösenord</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="dist/examinator.js"></script>
 </body>

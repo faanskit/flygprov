@@ -211,7 +211,10 @@ async function resetStudentPassword(db: Db, studentId: ObjectId) {
 
 const handler: Handler = async (event: HandlerEvent, context) => {
     const decodedToken = verifyToken(event);
-    if (!decodedToken || decodedToken.role !== 'examinator') {
+    if (!decodedToken) {
+        return { statusCode: 401, body: "Unauthorized" };
+    }
+    if (decodedToken.role !== 'examinator') {
         return { statusCode: 403, body: "Forbidden" };
     }
 
@@ -221,6 +224,36 @@ const handler: Handler = async (event: HandlerEvent, context) => {
         // Parse the path to determine the endpoint
         const pathParts = event.path.split('/').filter(p => p);
         const isStudentManagement = pathParts.length >= 3 && pathParts[2] === 'students';
+        const isChangePassword = pathParts.length >= 3 && pathParts[2] === 'change-password';
+
+        if (isChangePassword && event.httpMethod === 'PUT') {
+            const body = JSON.parse(event.body || '{}');
+            const { currentPassword, newPassword } = body;
+
+            if (!currentPassword || !newPassword) {
+                return { statusCode: 400, body: JSON.stringify({ error: "Current and new password are required." }) };
+            }
+
+            const userId = new ObjectId(decodedToken.userId);
+            const user = await db.collection<User>('users').findOne({ _id: userId });
+
+            if (!user || !user.password) {
+                return { statusCode: 404, body: JSON.stringify({ error: "User not found or password not set." }) };
+            }
+
+            const isMatch = await bcrypt.compare(currentPassword, user.password);
+            if (!isMatch) {
+                return { statusCode: 400, body: JSON.stringify({ error: "Incorrect current password." }) };
+            }
+
+            const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+            await db.collection<User>('users').updateOne(
+                { _id: userId },
+                { $set: { password: hashedNewPassword, forcePasswordChange: false } }
+            );
+
+            return { statusCode: 200, body: JSON.stringify({ message: "Password changed successfully." }) };
+        }
         
         if (isStudentManagement) {
             // Handle student management endpoints
@@ -230,8 +263,21 @@ const handler: Handler = async (event: HandlerEvent, context) => {
         // Handle existing examiner endpoints
         if (event.httpMethod === "GET") {
             const studentId = pathParts.length > 2 ? pathParts[pathParts.length - 1] : null;
-            const data = studentId ? await getStudentDetails(db, new ObjectId(studentId)) : await getStudentOverview(db);
-            return { statusCode: 200, body: JSON.stringify(data) };
+            
+            if (studentId) {
+                const data = await getStudentDetails(db, new ObjectId(studentId));
+                return { statusCode: 200, body: JSON.stringify(data) };
+            } else {
+                const overview = await getStudentOverview(db);
+                const user = await db.collection<User>('users').findOne({ _id: new ObjectId(decodedToken.userId) });
+                return { 
+                    statusCode: 200, 
+                    body: JSON.stringify({
+                        students: overview,
+                        forcePasswordChange: user?.forcePasswordChange || false
+                    }) 
+                };
+            }
         }
 
         if (event.httpMethod === "POST") {
