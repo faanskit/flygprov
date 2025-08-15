@@ -67,10 +67,10 @@ async function createTestSession(db: Db, subjectId: ObjectId) {
     if (!subject) throw new Error("Subject not found");
 
     const questions = await db.collection<Question>('questions').aggregate([
-        { $match: { subjectId: subjectId } },
+        { $match: { subjectId: subjectId, active: true } },
         { $sample: { size: 20 } }
     ]).toArray();
-    if (questions.length < 20) throw new Error(`Not enough questions in the database for subject ${subjectId}. Found only ${questions.length}.`);
+    if (questions.length < 20) throw new Error(`Not enough active questions in the database for subject ${subjectId}. Found only ${questions.length}.`);
     
     return { questions, subject };
 }
@@ -79,6 +79,7 @@ async function replaceQuestion(db: Db, subjectId: ObjectId, excludeIds: string[]
     const questions = await db.collection<Question>('questions').aggregate([
         { $match: { 
             subjectId: subjectId,
+            active: true,
             _id: { $nin: excludeIds.map(id => new ObjectId(id)) } // Exkludera befintliga frågor
         }},
         { $sample: { size: 1 } }

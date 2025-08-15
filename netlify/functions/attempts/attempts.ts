@@ -64,7 +64,6 @@ const handler: Handler = async (event: HandlerEvent) => {
         }
 
         // Kombinera användarens svar med frågetexten för enklare hantering i frontend
-        console.log("Result:", result);
         const detailedAnswers = result.answers.map((answer: any) => {
             const question = result.questionDetails.find((q: any) => q._id.equals(answer.questionIdObj));
             return {

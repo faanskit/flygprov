@@ -22,6 +22,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     const nextBtn = document.getElementById('next-btn') as HTMLButtonElement;
     const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
 
+    // --- Hjälpfunktioner ---
+    function shuffleArray(array: any[]): any[] {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    // NY FUNKTION: Slumpar alternativ och skapar en mappning.
+    function scrambleAndMapOptions(originalOptions: string[]): { shuffled: string[], mapping: number[] } {
+        // Skapar en array med ursprungliga index: [0, 1, 2, 3]
+        const originalIndices = originalOptions.map((_, i) => i);
+        
+        // Skapar en slumpad version av indexen
+        const scrambledIndices = shuffleArray([...originalIndices]);
+
+        // Använder den slumpade index-arrayen för att bygga den slumpade svarsalternativs-arrayen
+        const shuffledOptions = scrambledIndices.map(index => originalOptions[index]);
+
+        // Mappingen är den slumpade index-arrayen, den översätter det nya indexet till det gamla
+        return {
+            shuffled: shuffledOptions,
+            mapping: scrambledIndices
+        };
+    }
+
     // --- Initialization ---
     const urlParams = new URLSearchParams(window.location.search);
     const testId = urlParams.get('testId');
@@ -39,7 +66,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!response.ok) throw new Error(`Failed to fetch test: ${response.statusText}`);
         
         const data = await response.json();
-        questions = data.questions;
+        
+        // --- NY LOGIK: Slumpa svarsalternativ och lagra mappningen ---
+        questions = data.questions.map((q: any, index: number) => {
+            console.log(`Original Fråga ${index + 1}:`, q.questionText);
+            console.log(`Original Svarsalternativ:`, q.options);
+
+            const { shuffled, mapping } = scrambleAndMapOptions(q.options);
+            
+            console.log(`Slumpade Svarsalternativ:`, shuffled);
+            console.log(`Mappning (slumpat index -> original index):`, mapping);
+
+            return {
+                ...q,
+                shuffledOptions: shuffled,
+                mapping: mapping
+            };
+        });
+
         attemptId = data.attemptId;
         userAnswers = new Array(questions.length).fill(null);
         visitedQuestions = new Array(questions.length).fill(false);
@@ -68,11 +112,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             const secs = seconds % 60;
             timerEl.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 
-            // Varningar
-            if (seconds <= 300 && seconds > 60) { // 5 minuter
+            if (seconds <= 300 && seconds > 60) {
                 timerEl.classList.add('blinking');
             } else if (seconds <= 60) {
-                timerEl.classList.add('blinking', 'urgent'); // Både röd och blinkande
+                timerEl.classList.add('blinking', 'urgent');
             } else {
                 timerEl.classList.remove('blinking', 'urgent');
             }
@@ -95,11 +138,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         const question = questions[currentQuestionIndex];
         questionNumberEl.textContent = `${currentQuestionIndex + 1}`;
         
+        const optionsToRender = question.shuffledOptions;
+        
         questionCard.innerHTML = `
             <div class="card-body">
                 <h5 class="card-title">Fråga ${currentQuestionIndex + 1}</h5>
                 <p class="card-text">${question.questionText}</p>
-                ${question.options.map((option: string, i: number) => `
+                ${optionsToRender.map((option: string, i: number) => `
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="question-${question._id}" id="q-${question._id}-o-${i}" value="${i}" ${userAnswers[currentQuestionIndex] === i ? 'checked' : ''}>
                         <label class="form-check-label" for="q-${question._id}-o-${i}">${option}</label>
@@ -151,6 +196,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     function handleAnswerChange(event: Event) {
         const selectedOption = (event.target as HTMLInputElement).value;
         userAnswers[currentQuestionIndex] = parseInt(selectedOption, 10);
+        
+        console.log(`Användare valde index: ${userAnswers[currentQuestionIndex]} för fråga ${currentQuestionIndex + 1}`);
         renderProgressBar();
         updateNavButtons();
     }
@@ -162,15 +209,47 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        // Inaktivera alla knappar
         submitBtn.disabled = true;
         prevBtn.disabled = true;
         nextBtn.disabled = true;
+        
+        // --- NY LOGIK: "Unscramble" svaren innan de skickas till backend ---
+        const answersPayload = questions.map((q, index) => {
+            const selectedScrambledIndex = userAnswers[index];
+            let originalIndex = null;
 
-        const answersPayload = questions.map((q, index) => ({
-            questionId: q._id,
-            selectedOptionIndex: userAnswers[index]
-        }));
+            if (selectedScrambledIndex !== null) {
+                // Använd mappningen för att översätta det slumpade indexet
+                originalIndex = q.mapping[selectedScrambledIndex];
+            }
+            
+            return {
+                questionId: q._id,
+                selectedOptionIndex: originalIndex // Skicka det O-slumpade indexet till backend
+            };
+        });
+        
+        // --- FÖRBÄTTRAD LOGGNING FÖR PAYLOAD ---
+        console.log('--- Skickar in provet (Unscrambled) ---');
+        console.log('Totala frågor:', questions.length);
+        console.log('Provförsöks-ID (attemptId):', attemptId);
+        console.log('Användarens svar (payload):');
+
+        answersPayload.forEach((answer, index) => {
+            const question = questions[index];
+            const selectedOptionText = answer.selectedOptionIndex !== null
+                ? question.options[answer.selectedOptionIndex]
+                : 'Inget svar valt';
+            
+            console.log(
+                `\nFråga ${index + 1}:` +
+                `\n  - Fråge-ID: ${answer.questionId}` +
+                `\n  - Användarens valda index (original): ${answer.selectedOptionIndex}` +
+                `\n  - Användarens valda svar: "${selectedOptionText}"`
+            );
+        });
+        console.log('--- Slut på payload-logg ---');
+        // --- SLUT FÖRBÄTTRAD LOGGNING ---
 
         try {
             const response = await fetch(`/api/tests/${attemptId}/submit`, {
@@ -182,7 +261,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (!response.ok) throw new Error('Inlämningen misslyckades.');
             window.location.href = `/result.html?attemptId=${attemptId}`;
         } catch (error) {
-            console.error("Error submitting test:", error);
+            console.error("Ett fel uppstod vid inlämning:", error);
             showError("Ett fel uppstod vid inlämning. Försök igen.");
         }
     }

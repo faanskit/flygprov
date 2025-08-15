@@ -156,7 +156,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function renderTable(dashboardItems: any[], tests: any[]) {
-        console.log('Rendering dashboard table with items:', dashboardItems, 'and tests:', tests);
         if (!tableBody) return;
 
         tableBody.innerHTML = ''; // Rensa befintlig data

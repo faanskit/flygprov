@@ -45,7 +45,8 @@ async function seedAllQuestions() {
                 subjectId: subject._id!,
                 questionText: `Detta är fråga #${i} för ämnet ${subject.name}. Vad är det korrekta svaret?`,
                 options,
-                correctOptionIndex: correctIndex
+                correctOptionIndex: correctIndex,
+                active: true // Alla frågor är aktiva som standard
             });
             }
             await db.collection<Question>('questions').insertMany(questions);

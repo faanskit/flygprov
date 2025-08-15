@@ -56,6 +56,7 @@ async function main() {
             questionText: row.question.replace(/"/g, '').trim(),
             options,
             correctOptionIndex,
+            active: true // Alla frågor är aktiva som standard
         });
       })
       .on('end', async () => {
