@@ -742,6 +742,148 @@ class QuestionManagement {
     private hideMessages(): void { this.errorContainer.classList.add('d-none'); this.successContainer.classList.add('d-none'); }
 }
 
+class ImportManagement {
+    private apiEndpoint = '/api/admin-import';
+    private fileInput: HTMLInputElement;
+    private analyzeButton: HTMLButtonElement;
+    private resultsContainer: HTMLElement;
+    private summaryContainer: HTMLElement;
+    private previewContainer: HTMLElement;
+    private confirmButton: HTMLButtonElement;
+    private cancelButton: HTMLButtonElement;
+    private loadingSpinner: HTMLElement;
+    private errorContainer: HTMLElement;
+    private successContainer: HTMLElement;
+    private questionsToImport: any[] = [];
+
+    constructor() {
+        this.fileInput = document.getElementById('csv-file-input') as HTMLInputElement;
+        this.analyzeButton = document.getElementById('analyze-csv-btn') as HTMLButtonElement;
+        this.resultsContainer = document.getElementById('import-results-container')!;
+        this.summaryContainer = document.getElementById('import-summary')!;
+        this.previewContainer = document.getElementById('import-preview')!;
+        this.confirmButton = document.getElementById('confirm-import-btn') as HTMLButtonElement;
+        this.cancelButton = document.getElementById('cancel-import-btn') as HTMLButtonElement;
+        this.loadingSpinner = document.getElementById('import-loading-spinner')!;
+        this.errorContainer = document.getElementById('import-error-container')!;
+        this.successContainer = document.getElementById('import-success-container')!;
+
+        this.bindEvents();
+    }
+
+    private bindEvents(): void {
+        this.fileInput.addEventListener('change', () => {
+            this.analyzeButton.disabled = !this.fileInput.files || this.fileInput.files.length === 0;
+            this.resetView(false);
+        });
+
+        this.analyzeButton.addEventListener('click', () => this.analyzeFile());
+        this.confirmButton.addEventListener('click', () => this.executeImport());
+        this.cancelButton.addEventListener('click', () => this.resetView(true));
+    }
+
+    private analyzeFile(): void {
+        const file = this.fileInput.files?.[0];
+        if (!file) return;
+
+        this.showLoading(true);
+        this.hideMessages();
+        this.resultsContainer.classList.add('d-none');
+
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+            try {
+                const content = e.target?.result as string;
+                const token = localStorage.getItem('jwt_token');
+                const response = await fetch(`${this.apiEndpoint}/analyze`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'text/csv' },
+                    body: content
+                });
+
+                if (!response.ok) throw new Error(`HTTP ${response.status}: ${await response.text()}`);
+                
+                const result = await response.json();
+                this.questionsToImport = result.newQuestions;
+                this.displayResults(result.newQuestions, result.duplicatesCount);
+
+            } catch (error) {
+                this.showError(error instanceof Error ? error.message : 'Kunde inte analysera filen.');
+            } finally {
+                this.showLoading(false);
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    private displayResults(newQuestions: any[], duplicatesCount: number): void {
+        this.summaryContainer.textContent = `Hittade ${newQuestions.length} nya frågor och ${duplicatesCount} dubbletter.`;
+        
+        this.previewContainer.innerHTML = '';
+        if (newQuestions.length === 0) {
+            console.error("Inga nya frågor att importera.");
+            this.previewContainer.innerHTML = '<div class="list-group-item">Inga nya frågor att importera. Kontrollera att ämnet är korrekt och att filen innehåller giltiga frågor.</div>';
+            this.confirmButton.disabled = true;
+        } else {
+            newQuestions.slice(0, 10).forEach(q => { // Preview max 10 questions
+                const item = document.createElement('div');
+                item.className = 'list-group-item';
+                item.textContent = q.questionText;
+                this.previewContainer.appendChild(item);
+            });
+            if (newQuestions.length > 10) {
+                 this.previewContainer.innerHTML += `<div class="list-group-item text-muted">...och ${newQuestions.length - 10} till.</div>`;
+            }
+            this.confirmButton.disabled = false;
+        }
+        
+        this.resultsContainer.classList.remove('d-none');
+    }
+
+    private async executeImport(): Promise<void> {
+        this.showLoading(true);
+        this.confirmButton.disabled = true;
+        this.cancelButton.disabled = true;
+
+        try {
+            const token = localStorage.getItem('jwt_token');
+            const response = await fetch(`${this.apiEndpoint}/execute`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ questionsToImport: this.questionsToImport })
+            });
+
+            if (!response.ok) throw new Error(`HTTP ${response.status}: ${await response.text()}`);
+            
+            const result = await response.json();
+            this.showSuccess(`${result.insertedCount} frågor har importerats.`);
+            this.resetView(true);
+            // Optionally, refresh the question list if a subject is selected
+            // This requires some cross-component communication or a shared state manager
+        } catch (error) {
+            this.showError(error instanceof Error ? error.message : 'Importen misslyckades.');
+        } finally {
+            this.showLoading(false);
+            this.confirmButton.disabled = false;
+            this.cancelButton.disabled = false;
+        }
+    }
+
+    private resetView(clearFileInput: boolean): void {
+        if (clearFileInput) {
+            this.fileInput.value = '';
+            this.analyzeButton.disabled = true;
+        }
+        this.resultsContainer.classList.add('d-none');
+        this.hideMessages();
+    }
+
+    private showLoading(show: boolean): void { this.loadingSpinner.classList.toggle('d-none', !show); }
+    private showError(message: string): void { this.errorContainer.textContent = message; this.errorContainer.classList.remove('d-none'); }
+    private showSuccess(message: string): void { this.successContainer.textContent = message; this.successContainer.classList.remove('d-none'); }
+    private hideMessages(): void { this.errorContainer.classList.add('d-none'); this.successContainer.classList.add('d-none'); }
+}
+
 // Main Admin Panel Logic
 document.addEventListener('DOMContentLoaded', () => {
     const logoutButton = document.getElementById('logout-button');
@@ -763,5 +905,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize question management
     new QuestionManagement();
+
+    // Initialize import management
+    new ImportManagement();
 });
+
 
