@@ -1,4 +1,6 @@
 ### **NONE**
+Admin password change
+Seed script to reset admin
 
 **Problem:** NONE.
 
