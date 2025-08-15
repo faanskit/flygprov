@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adminpanel</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1>Adminpanel</h1>
+            <button id="logout-button" class="btn btn-danger">Logga ut</button>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <ul class="nav nav-tabs mt-4" id="adminTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="examiners-tab" data-bs-toggle="tab" data-bs-target="#examiners-panel" type="button" role="tab" aria-controls="examiners-panel" aria-selected="true">Hantera Examinatorer</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="students-tab" data-bs-toggle="tab" data-bs-target="#students-panel" type="button" role="tab" aria-controls="students-panel" aria-selected="false">Hantera Studenter</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="subjects-tab" data-bs-toggle="tab" data-bs-target="#subjects-panel" type="button" role="tab" aria-controls="subjects-panel" aria-selected="false">Hantera Ämnen</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="questions-tab" data-bs-toggle="tab" data-bs-target="#questions-panel" type="button" role="tab" aria-controls="questions-panel" aria-selected="false">Hantera Frågor</button>
+            </li>
+             <li class="nav-item" role="presentation">
+                <button class="nav-link" id="import-tab" data-bs-toggle="tab" data-bs-target="#import-panel" type="button" role="tab" aria-controls="import-panel" aria-selected="false">Importera Frågor</button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="adminTabContent">
+            <!-- Examiner Management Panel -->
+            <div class="tab-pane fade show active" id="examiners-panel" role="tabpanel" aria-labelledby="examiners-tab">
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <h4>Examinatorer</h4>
+                </div>
+                
+                <!-- Status Filter -->
+                <div class="row mb-3 mt-3">
+                    <div class="col-md-6">
+                        <div class="btn-group" role="group" aria-label="Examiner Status Filter">
+                            <input type="radio" class="btn-check" name="examinerStatusFilter" id="examinerAll" value="all" checked>
+                            <label class="btn btn-outline-primary" for="examinerAll">Alla</label>
+                            
+                            <input type="radio" class="btn-check" name="examinerStatusFilter" id="examinerActive" value="active">
+                            <label class="btn btn-outline-success" for="examinerActive">Aktiva</label>
+                            
+                            <input type="radio" class="btn-check" name="examinerStatusFilter" id="examinerArchived" value="archived">
+                            <label class="btn btn-outline-secondary" for="examinerArchived">Arkiverade</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <button id="create-examiner-btn" class="btn btn-primary">
+                            <i class="bi bi-plus-circle"></i> Skapa ny examinator
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Examiners Table -->
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Användarnamn</th>
+                                <th>Status</th>
+                                <th>Skapad</th>
+                                <th>Lösenord ändrat</th>
+                                <th>Åtgärder</th>
+                            </tr>
+                        </thead>
+                        <tbody id="examiners-table-body">
+                            <!-- Examiners will be rendered here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Loading Spinner -->
+                <div id="examiner-loading-spinner" class="text-center d-none">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Laddar...</span>
+                    </div>
+                </div>
+
+                <!-- Error Container -->
+                <div id="examiner-error-container" class="alert alert-danger d-none mt-4" role="alert"></div>
+
+                <!-- Success Container -->
+                <div id="examiner-success-container" class="alert alert-success d-none mt-4" role="alert"></div>
+            </div>
+
+            <!-- Student Management Panel -->
+            <div class="tab-pane fade" id="students-panel" role="tabpanel" aria-labelledby="students-tab">
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <h4>Studenter</h4>
+                </div>
+                
+                <!-- Status Filter -->
+                <div class="row mb-3 mt-3">
+                    <div class="col-md-6">
+                        <div class="btn-group" role="group" aria-label="Student Status Filter">
+                            <input type="radio" class="btn-check" name="studentStatusFilter" id="studentAll" value="all" checked>
+                            <label class="btn btn-outline-primary" for="studentAll">Alla</label>
+                            
+                            <input type="radio" class="btn-check" name="studentStatusFilter" id="studentActive" value="active">
+                            <label class="btn btn-outline-success" for="studentActive">Aktiva</label>
+                            
+                            <input type="radio" class="btn-check" name="studentStatusFilter" id="studentArchived" value="archived">
+                            <label class="btn btn-outline-secondary" for="studentArchived">Arkiverade</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <button id="create-student-btn" class="btn btn-primary">
+                            <i class="bi bi-plus-circle"></i> Skapa ny student
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Students Table -->
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Användarnamn</th>
+                                <th>Status</th>
+                                <th>Skapad</th>
+                                <th>Lösenord ändrat</th>
+                                <th>Åtgärder</th>
+                            </tr>
+                        </thead>
+                        <tbody id="students-table-body">
+                            <!-- Students will be rendered here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Loading Spinner -->
+                <div id="student-loading-spinner" class="text-center d-none">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Laddar...</span>
+                    </div>
+                </div>
+
+                <!-- Error Container -->
+                <div id="student-error-container" class="alert alert-danger d-none mt-4" role="alert"></div>
+
+                <!-- Success Container -->
+                <div id="student-success-container" class="alert alert-success d-none mt-4" role="alert"></div>
+            </div>
+
+            <!-- Subject Management Panel -->
+            <div class="tab-pane fade" id="subjects-panel" role="tabpanel" aria-labelledby="subjects-tab">
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <h4>Ämnen</h4>
+                    <button id="create-subject-btn" class="btn btn-primary">
+                        <i class="bi bi-plus-circle"></i> Skapa nytt ämne
+                    </button>
+                </div>
+
+                <div id="subject-loading-spinner" class="text-center mt-4 d-none">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Laddar...</span>
+                    </div>
+                </div>
+                <div id="subject-error-container" class="alert alert-danger d-none mt-4" role="alert"></div>
+                <div id="subject-success-container" class="alert alert-success d-none mt-4" role="alert"></div>
+
+                <div class="list-group mt-3" id="subjects-list">
+                    <!-- Subjects will be rendered here -->
+                </div>
+            </div>
+
+            <!-- Question Management Panel -->
+            <div class="tab-pane fade" id="questions-panel" role="tabpanel" aria-labelledby="questions-tab">
+                <div class="mt-4">
+                    <h4>Frågor</h4>
+                    <div class="row mt-3 align-items-end">
+                        <div class="col-md-4">
+                            <label for="subject-select" class="form-label">Välj Ämne</label>
+                            <select class="form-select" id="subject-select">
+                                <option selected disabled>Laddar ämnen...</option>
+                            </select>
+                        </div>
+                        <div class="col-md-5">
+                            <label for="question-filter" class="form-label">Filtrera Frågor</label>
+                            <input type="text" class="form-control" id="question-filter" placeholder="Sök efter text i frågan..." disabled>
+                        </div>
+                        <div class="col-md-3">
+                            <button id="create-question-btn" class="btn btn-primary w-100" disabled>
+                                <i class="bi bi-plus-circle"></i> Skapa ny fråga
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                             <label class="form-label">Statusfilter</label>
+                            <div class="btn-group" role="group" aria-label="Question Status Filter">
+                                <input type="radio" class="btn-check" name="questionStatusFilter" id="questionAll" value="all" checked>
+                                <label class="btn btn-outline-primary" for="questionAll">Alla</label>
+                                
+                                <input type="radio" class="btn-check" name="questionStatusFilter" id="questionActive" value="active">
+                                <label class="btn btn-outline-success" for="questionActive">Aktiva</label>
+                                
+                                <input type="radio" class="btn-check" name="questionStatusFilter" id="questionInactive" value="inactive">
+                                <label class="btn btn-outline-secondary" for="questionInactive">Inaktiva</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="question-loading-spinner" class="text-center mt-4 d-none">
+                        <div class="spinner-border" role="status"><span class="visually-hidden">Laddar...</span></div>
+                    </div>
+                    <div id="question-error-container" class="alert alert-danger d-none mt-4" role="alert"></div>
+                    <div id="question-success-container" class="alert alert-success d-none mt-4" role="alert"></div>
+
+                    <div class="mt-3" id="questions-list">
+                        <!-- Questions will be rendered here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Import Panel -->
+            <div class="tab-pane fade" id="import-panel" role="tabpanel" aria-labelledby="import-tab">
+                <p class="mt-3">Här kommer import av frågor att visas.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Create Examiner Modal -->
+    <div class="modal fade" id="createExaminerModal" tabindex="-1" aria-labelledby="createExaminerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createExaminerModalLabel">Skapa ny examinator</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="create-examiner-form">
+                        <div class="mb-3">
+                            <label for="examiner-username" class="form-label">Användarnamn</label>
+                            <input type="text" class="form-control" id="examiner-username" required>
+                            <div class="form-text">Användarnamnet måste vara unikt.</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Avbryt</button>
+                    <button type="button" class="btn btn-primary" id="create-examiner-submit">Skapa examinator</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create/Edit Question Modal -->
+    <div class="modal fade" id="editQuestionModal" tabindex="-1" aria-labelledby="editQuestionModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editQuestionModalLabel">Redigera Fråga</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="edit-question-form">
+                        <input type="hidden" id="question-id">
+                        <div class="mb-3">
+                            <label for="question-text" class="form-label">Frågetext</label>
+                            <textarea class="form-control" id="question-text" rows="3" required></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Svarsalternativ</label>
+                                <div class="input-group mb-2">
+                                    <div class="input-group-text">
+                                        <input class="form-check-input mt-0" type="radio" name="correctOption" value="0" aria-label="Radio button for following text input">
+                                    </div>
+                                    <input type="text" class="form-control" id="option-0" placeholder="Alternativ 1">
+                                </div>
+                                <div class="input-group mb-2">
+                                    <div class="input-group-text">
+                                        <input class="form-check-input mt-0" type="radio" name="correctOption" value="1" aria-label="Radio button for following text input">
+                                    </div>
+                                    <input type="text" class="form-control" id="option-1" placeholder="Alternativ 2">
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">&nbsp;</label>
+                                <div class="input-group mb-2">
+                                    <div class="input-group-text">
+                                        <input class="form-check-input mt-0" type="radio" name="correctOption" value="2" aria-label="Radio button for following text input">
+                                    </div>
+                                    <input type="text" class="form-control" id="option-2" placeholder="Alternativ 3">
+                                </div>
+                                <div class="input-group mb-2">
+                                    <div class="input-group-text">
+                                        <input class="form-check-input mt-0" type="radio" name="correctOption" value="3" aria-label="Radio button for following text input">
+                                    </div>
+                                    <input type="text" class="form-control" id="option-3" placeholder="Alternativ 4">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Avbryt</button>
+                    <button type="button" class="btn btn-primary" id="save-question-btn">Spara ändringar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Subject Modal -->
+    <div class="modal fade" id="createSubjectModal" tabindex="-1" aria-labelledby="createSubjectModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createSubjectModalLabel">Skapa nytt ämne</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="create-subject-form">
+                        <div class="mb-3">
+                            <label for="subject-name" class="form-label">Namn</label>
+                            <input type="text" class="form-control" id="subject-name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="subject-code" class="form-label">Kod</label>
+                            <input type="text" class="form-control" id="subject-code" required>
+                            <div class="form-text">En kort kod, t.ex. "POF". Måste vara unik.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="subject-description" class="form-label">Beskrivning (valfritt)</label>
+                            <textarea class="form-control" id="subject-description" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="subject-time-limit" class="form-label">Standardtidsgräns (minuter)</label>
+                            <input type="number" class="form-control" id="subject-time-limit" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Avbryt</button>
+                    <button type="button" class="btn btn-primary" id="create-subject-submit">Skapa ämne</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Student Modal -->
+    <div class="modal fade" id="createStudentModal" tabindex="-1" aria-labelledby="createStudentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createStudentModalLabel">Skapa ny student</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="create-student-form">
+                        <div class="mb-3">
+                            <label for="student-username" class="form-label">Användarnamn</label>
+                            <input type="text" class="form-control" id="student-username" required>
+                            <div class="form-text">Användarnamnet måste vara unikt.</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Avbryt</button>
+                    <button type="button" class="btn btn-primary" id="create-student-submit">Skapa student</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="successModalLabel">Klart!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="success-message"></div>
+                    <div class="alert alert-warning mt-3">
+                        <strong>Viktigt:</strong> Kopiera lösenordet och ge det till användaren. Det kommer inte att visas igen.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Stäng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationModalLabel">Bekräfta åtgärd</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="confirmation-message"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Avbryt</button>
+                    <button type="button" class="btn btn-danger" id="confirm-action-btn">Bekräfta</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script src="dist/admin.js"></script>
+</body>
+</html>

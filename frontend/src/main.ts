@@ -39,6 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => {
                     if (data.user.role === 'examinator') {
                         window.location.href = '/examinator.html';
+                    } else if (data.user.role === 'admin') {
+                        window.location.href = '/admin.html';
                     } else {
                         window.location.href = '/dashboard.html';
                     }
