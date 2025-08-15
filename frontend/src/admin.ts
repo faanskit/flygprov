@@ -235,6 +235,9 @@ class UserManagement {
         (document.getElementById('confirmation-message')!).textContent = selectedAction.message;
         (document.getElementById('confirm-action-btn')!).onclick = selectedAction.func;
         this.modals.confirmation.show();
+        setTimeout(() => {
+            (document.getElementById('confirm-action-btn') as HTMLButtonElement)?.focus();
+        }, 200);
     }
 
     private async performAction(method: 'PUT' | 'DELETE', url: string, successVerb: string): Promise<void> {
@@ -439,6 +442,9 @@ class SubjectManagement {
         (document.getElementById('confirmation-message')!).textContent = message;
         (document.getElementById('confirm-action-btn')!).onclick = () => this.performDelete(subjectId);
         this.modals.confirmation.show();
+        setTimeout(() => {
+            (document.getElementById('confirm-action-btn') as HTMLButtonElement)?.focus();
+        }, 200);
     }
 
     private async performDelete(subjectId: string): Promise<void> {
@@ -626,6 +632,9 @@ class QuestionManagement {
         (document.getElementById('confirmation-message')!).textContent = message;
         (document.getElementById('confirm-action-btn')!).onclick = () => this.performDeleteQuestion(questionId);
         this.modals.confirmation.show();
+        setTimeout(() => {
+            (document.getElementById('confirm-action-btn') as HTMLButtonElement)?.focus();
+        }, 200);
     }
 
     private async performDeleteQuestion(questionId: string): Promise<void> {
