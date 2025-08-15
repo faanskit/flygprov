@@ -309,8 +309,10 @@ class SubjectManagement {
     private successContainer: HTMLElement;
     private createButton: HTMLElement;
     private modals: any = {};
+    private questionManagement: QuestionManagement;
 
-    constructor() {
+    constructor(questionManagement: QuestionManagement) {
+        this.questionManagement = questionManagement;
         this.listContainer = document.getElementById('subjects-list')!;
         this.loadingSpinner = document.getElementById('subject-loading-spinner')!;
         this.errorContainer = document.getElementById('subject-error-container')!;
@@ -428,6 +430,7 @@ class SubjectManagement {
             this.modals.createSubject.hide();
             this.showSuccess('Ämnet har skapats.');
             this.loadSubjects();
+            this.questionManagement.loadSubjects();
 
         } catch (error) {
             this.showError(error instanceof Error ? error.message : 'Kunde inte skapa ämnet.');
@@ -460,6 +463,8 @@ class SubjectManagement {
             this.modals.confirmation.hide();
             this.showSuccess(`Ämnet och ${result.deletedQuestionsCount} tillhörande frågor har tagits bort.`);
             this.loadSubjects();
+            this.questionManagement.loadSubjects();
+            this.questionManagement.clearQuestions();
         } catch (error) {
             this.modals.confirmation.hide();
             this.showError(error instanceof Error ? error.message : 'Kunde inte ta bort ämnet.');
@@ -528,7 +533,7 @@ class QuestionManagement {
         });
     }
 
-    private async loadSubjects(): Promise<void> {
+    public async loadSubjects(): Promise<void> {
         try {
             const token = localStorage.getItem('jwt_token');
             const response = await fetch(this.subjectsApi, { headers: { 'Authorization': `Bearer ${token}` } });
@@ -548,7 +553,7 @@ class QuestionManagement {
         }
     }
 
-    private async loadQuestions(): Promise<void> {
+    public async loadQuestions(): Promise<void> {
         if (!this.currentSubjectId) return;
         this.showLoading(true);
         this.hideMessages();
@@ -625,6 +630,16 @@ class QuestionManagement {
                 if (action === 'delete') this.handleDeleteQuestion(id);
             });
         });
+    }
+
+    public clearQuestions(): void {
+        this.listContainer.innerHTML = '<p class="text-center text-muted mt-3">Välj ett ämne för att visa frågor.</p>';
+        this.questions = [];
+        this.subjectSelect.selectedIndex = 0;
+        this.currentSubjectId = null;
+        this.filterInput.value = '';
+        this.filterInput.disabled = true;
+        this.createButton.disabled = true;
     }
 
     private handleDeleteQuestion(questionId: string): void {
@@ -755,8 +770,10 @@ class ImportManagement {
     private errorContainer: HTMLElement;
     private successContainer: HTMLElement;
     private questionsToImport: any[] = [];
+    private questionManagement: QuestionManagement;
 
-    constructor() {
+    constructor(questionManagement: QuestionManagement) {
+        this.questionManagement = questionManagement;
         this.fileInput = document.getElementById('csv-file-input') as HTMLInputElement;
         this.analyzeButton = document.getElementById('analyze-csv-btn') as HTMLButtonElement;
         this.resultsContainer = document.getElementById('import-results-container')!;
@@ -858,8 +875,7 @@ class ImportManagement {
             const result = await response.json();
             this.showSuccess(`${result.insertedCount} frågor har importerats.`);
             this.resetView(true);
-            // Optionally, refresh the question list if a subject is selected
-            // This requires some cross-component communication or a shared state manager
+            this.questionManagement.loadQuestions();
         } catch (error) {
             this.showError(error instanceof Error ? error.message : 'Importen misslyckades.');
         } finally {
@@ -900,14 +916,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize user management for students
     new UserManagement('Student', '/api/admin-students');
 
-    // Initialize subject management
-    new SubjectManagement();
-
     // Initialize question management
-    new QuestionManagement();
+    const questionManagement = new QuestionManagement();
+
+    // Initialize subject management
+    new SubjectManagement(questionManagement);
 
     // Initialize import management
-    new ImportManagement();
+    new ImportManagement(questionManagement);
 });
-
-
