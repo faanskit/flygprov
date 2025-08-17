@@ -5,40 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Studentdetaljer - Flygprov</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 2rem;
-        }
-        .status {
-            padding: 0.25rem 0.5rem;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            text-transform: uppercase;
-        }
-        .status-passed { background-color: #e8f5e9; color: #2e7d32; }
-        .status-assigned { background-color: #e3f2fd; color: #1565c0; }
-        .status-in_progress { background-color: #c3f707; color: #5a642e; }
-        .status-not_started { background-color: #5a5a52; color: #e8f5e9; }
-        .logo {
-            max-width: 60px; /* lagom för att matcha rubriken */
-            height: auto;
-        }
-    </style>
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/src/main.css">
 </head>
 <body>
     <div class="container mt-5">
-        <a href="/examinator.html">&larr; Tillbaka till översikten</a>
-        <div class="d-flex align-items-center mt-3">
-            <img src="img/LOGGA_KFK_Web-5cm.jpg" alt="Kalmar Flygklubb" class="logo me-3">
-            <h1 id="student-name-header" class="mb-0"></h1>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="d-flex align-items-center student-details-header">
+                <img src="img/LOGGA_KFK_Web-5cm.jpg" alt="Kalmar Flygklubb" class="logo me-3">
+                <h1 id="student-name-header" class="mb-0">Detaljer för student</h1>
+            </div>
+            <a href="/examinator.html" class="btn btn-secondary">Tillbaka till översikten</a>
         </div>
         <p>Här är en översikt över studentens framsteg och provhistorik.</p>
-        
+                
         <table class="table mt-4">
             <thead>
                 <tr>
@@ -64,6 +44,8 @@
 
         <div id="error-container" class="alert alert-danger d-none mt-4" role="alert"></div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
     <script src="dist/student-details.js"></script>
 </body>
 </html>

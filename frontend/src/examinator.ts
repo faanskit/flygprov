@@ -1,11 +1,13 @@
+import { renderHeader } from './header';
+
 document.addEventListener('DOMContentLoaded', async () => {
+    renderHeader();
+
     const studentOverviewBody = document.getElementById('student-overview-body');
-    const logoutButton = document.getElementById('logout-button');
     const errorContainer = document.getElementById('error-container');
     const passwordChangeModal = document.getElementById('password-change-modal');
     const passwordChangeForm = document.getElementById('password-change-form') as HTMLFormElement;
-    const changePasswordBtn = document.getElementById('change-password-btn') as HTMLButtonElement;
-    const manualChangePasswordBtn = document.getElementById('change-password-btn-manual') as HTMLButtonElement;
+    const changePasswordSubmit = document.getElementById('change-password-submit') as HTMLButtonElement;
     const errorMessage = document.getElementById('password-change-error');
     const token = localStorage.getItem('jwt_token');
 
@@ -14,23 +16,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    if (logoutButton) {
-        logoutButton.addEventListener('click', () => {
-            localStorage.removeItem('jwt_token');
-            window.location.href = '/index.html';
-        });
-    }
-
     // Password change form submission
-    if (passwordChangeForm) {
-        passwordChangeForm.addEventListener('submit', handlePasswordChange);
-    }
-
-    // Manual password change button
-    if (manualChangePasswordBtn) {
-        manualChangePasswordBtn.addEventListener('click', () => {
-            showPasswordChangeModal();
-        });
+    if (passwordChangeForm && changePasswordSubmit) {
+        changePasswordSubmit.addEventListener('click', handlePasswordChange);
     }
 
     try {
@@ -50,7 +38,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Check if password change is required
         if (overviewData.forcePasswordChange) {
-            showPasswordChangeModal();
+            const modalEl = document.getElementById('password-change-modal');
+            const warningEl = document.getElementById('password-modal-warning');
+            if (modalEl) {
+                if(warningEl) warningEl.classList.remove('d-none');
+                const modal = (window as any).bootstrap.Modal.getOrCreateInstance(modalEl);
+                modal.show();
+            }
         }
         
         renderOverviewTable(overviewData.students);
@@ -90,29 +84,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    function showPasswordChangeModal() {
-        if (passwordChangeModal) {
-            passwordChangeModal.style.display = 'block';
-        }
-    }
-
-    function hidePasswordChangeModal() {
-        if (passwordChangeModal) {
-            passwordChangeModal.style.display = 'none';
-            // Clear form
-            if (passwordChangeForm) {
-                passwordChangeForm.reset();
-            }
-            if (errorMessage) {
-                errorMessage.style.display = 'none';
-            }
-        }
-    }
-
     async function handlePasswordChange(event: Event) {
         event.preventDefault();
         
-        if (!changePasswordBtn || !errorMessage) return;
+        if (!changePasswordSubmit || !errorMessage) return;
 
         const currentPassword = (document.getElementById('current-password') as HTMLInputElement).value;
         const newPassword = (document.getElementById('new-password') as HTMLInputElement).value;
@@ -132,8 +107,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // Disable button and show loading
-        changePasswordBtn.disabled = true;
-        changePasswordBtn.textContent = 'Ändrar lösenord...';
+        changePasswordSubmit.disabled = true;
+        changePasswordSubmit.textContent = 'Ändrar...';
 
         try {
             const response = await fetch('/api/examinator/change-password', {
@@ -160,18 +135,22 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             // Success - hide modal and refresh page
-            hidePasswordChangeModal();
+            const modalEl = document.getElementById('password-change-modal');
+            if (modalEl) {
+                const modal = (window as any).bootstrap.Modal.getInstance(modalEl);
+                modal?.hide();
+            }
             window.location.reload();
 
         } catch (error) {
             console.error('Error changing password:', error);
             const errorText = error instanceof Error ? error.message : 'Ett fel uppstod vid lösenordsändring';
             errorMessage.textContent = errorText;
-            errorMessage.style.display = 'block';
+            errorMessage.classList.remove('d-none');
         } finally {
             // Re-enable button
-            changePasswordBtn.disabled = false;
-            changePasswordBtn.textContent = 'Ändra lösenord';
+            changePasswordSubmit.disabled = false;
+            changePasswordSubmit.textContent = 'Spara ändringar';
         }
     }
 });

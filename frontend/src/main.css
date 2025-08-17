@@ -1,0 +1,575 @@
+/* Global styles for the application */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    background-color: #f4f4f4;
+}
+
+/* Custom container for specific pages - don't conflict with Bootstrap */
+.main-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+button, .btn {
+    display: inline-block;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+}
+
+button:hover, .btn:hover {
+    background-color: #0056b3;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+h1, h2 {
+    color: #333;
+}
+
+.result-heading {
+    color: white;
+}
+
+/* Login page specific styles */
+.login-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-container {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-container h1 {
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #555;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="number"] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#result {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 4px;
+    display: none;
+}
+
+#result.success {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    display: block;
+}
+
+#result.error {
+    background-color: #ffebee;
+    color: #c62828;
+    display: block;
+}
+
+.logo {
+    height: auto; /* Behåll proportioner */
+    display: block; /* Säkerställ att det är ett block-element */
+}
+
+/* Specifik stil för inloggningssidans logotyp */
+.login-container .logo {
+    margin: 0 auto 1rem auto;
+    max-width: 150px;
+}
+
+
+/* Dashboard specific styles */
+.dashboard-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1rem;
+}
+
+.dashboard-header .logo {
+    height: 32px;
+    width: auto;
+    margin: 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5rem;
+}
+
+th, td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #f9f9f9;
+}
+
+.status {
+    display: inline-block;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;       /* gör den helt pillrund */
+    font-size: 0.75rem;         /* lite mindre, mer badge-lik */
+    font-weight: 600;           /* tydlig text */
+    text-transform: uppercase;  /* konsekvent stil */
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+/* Statusfärger */
+.status-passed {
+    background-color: #e8f5e9;  /* ljusgrön bakgrund */
+    color: #2e7d32;             /* mörkgrön text */
+}
+
+.status-available,
+.status-assigned {
+    background-color: #e3f2fd;  /* ljusblå bakgrund */
+    color: #1565c0;             /* blå text */
+}
+
+.status-in_progress {
+    background-color: #fff8e1;  /* ljusgul bakgrund */
+    color: #ef6c00;             /* orange text */
+}
+
+.status-locked {
+    background-color: #fce4ec;  /* ljusrosa bakgrund */
+    color: #ad1457;             /* mörkrosa text */
+}
+
+.status-not_started {
+    background-color: #eeeeee;  /* ljusgrå bakgrund */
+    color: #616161;             /* mörkgrå text */
+}
+
+.btn-start {
+    padding: 0.4rem 0.8rem;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 0.9rem;
+    display: inline-block;
+}
+
+.btn-start:hover {
+    background-color: #218838;
+}
+
+.button-container {
+    margin-top: 1.5rem;
+    text-align: right;
+}
+
+.neutral-dropdown {
+    background: none;
+    border: none;
+    color: #000;
+}
+
+.neutral-dropdown:hover,
+.neutral-dropdown:focus,
+.neutral-dropdown:active,
+.neutral-dropdown.show {
+    background: none;
+    color: #000;
+}
+
+
+/* Modal Styles - Let Bootstrap handle modal behavior */
+/* Custom modal content styling only */
+.modal-content {
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.modal-header {
+    background-color: #f8f9fa;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #dee2e6;
+    border-radius: 8px 8px 0 0;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+/* Modal form input focus styles */
+.modal .form-group input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+}
+
+.modal .form-group small {
+    color: #6c757d;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+.warning-text {
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 0.75rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    border: 1px solid #ffeaa7;
+}
+
+.form-actions {
+    margin-top: 1.5rem;
+    text-align: right;
+}
+
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 0.75rem;
+    border-radius: 4px;
+    margin-top: 1rem;
+    border: 1px solid #f5c6cb;
+    display: none; /* Hidden by default */
+}
+
+.error-message.is-visible {
+    display: block;
+}
+
+/* Examinator page specific styles */
+.examinator-header .logo {
+    max-width: 60px;
+    height: auto;
+}
+
+/* Student management page specific styles */
+.student-management .table-responsive {
+    overflow: visible;
+}
+
+/* Student details page specific styles */
+.student-details-header .logo {
+    max-width:60px;
+    height: auto;
+}
+
+
+/* Test page specific styles */
+.test-header .logo {
+    max-width: 50px;
+    height: auto;
+}
+
+#progress-bar {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 1.5rem;
+}
+
+.progress-dash {
+    flex-grow: 1;
+    height: 8px;
+    background-color: #e0e0e0;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.progress-dash.answered {
+    background-color: #28a745; /* Grön */
+}
+
+.progress-dash.skipped {
+    background-color: #dc3545; /* Röd */
+}
+
+.progress-dash.current {
+    background-color: #0d6efd; /* Blå */
+    border: 2px solid #0056b3;
+    box-shadow: 0 0 5px rgba(13, 110, 253, 0.5);
+}
+
+.blinking {
+    animation: blinker 1s linear infinite;
+}
+
+.urgent {
+    background-color: #dc3545;
+    color: #ffffff;
+    padding: 0.25rem 0.5rem;
+    border-radius: 5px;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}
+
+/* Result page specific styles */
+.result-summary {
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border-radius: .5rem;
+    color: white;
+    font-weight: bold;
+}
+
+.result-summary.passed {
+    background-color: #2e7d32;
+}
+
+.result-summary.failed {
+    background-color: #c62828;
+}
+
+.result-summary h2 {
+    margin-bottom: 0;
+}
+
+.question-review {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 5px;
+    border: 1px solid #e0e0e0;
+    background-color: #fff;
+}
+
+.question-review.correct {
+    border-left: 5px solid #28a745;
+}
+
+.question-review.incorrect,
+.question-review.unanswered {
+    border-left: 5px solid #dc3545;
+}
+
+.question-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.question-header h6 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.question-header .bi {
+    font-size: 1.5rem;
+}
+
+.question-text {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+.answer-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 1.5rem;
+}
+
+.answer-column {
+    flex: 1;
+    min-width: 220px;
+}
+
+.column-title {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 0.35rem;
+}
+
+.answer-text {
+    color: #333;
+    font-size: 1rem;
+}
+
+.answer-text.correct-answer-text {
+    font-weight: bold;
+}
+
+.answer-text.your-choice-incorrect {
+    text-decoration: line-through;
+    color: #777;
+}
+
+.answer-text.your-choice-unanswered {
+    font-style: italic;
+    color: #777;
+}
+
+/* Admin page specific styles */
+.admin-page .table-responsive {
+    overflow: visible;
+}
+
+/* Create test page specific styles */
+.create-test-header .logo {
+    max-width: 60px;
+    height: auto;
+}
+
+/* Standard för alla radioknappar i btn-group */
+.btn-check + .btn-outline-secondary {
+    background-color: #6c757d; /* icke-vald: grå bakgrund */
+    color: #ffffff;            /* alltid vit text */
+    border-color: #6c757d;     /* matchande gräns */
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* När radioknappen är vald */
+.btn-check:checked + .btn-outline-secondary {
+    background-color: #0d6efd; /* vald: blå bakgrund */
+    color: #ffffff;             /* vit text */
+    border-color: #0d6efd;
+}
+
+/* Hover för icke-vald knapp */
+.btn-check + .btn-outline-secondary:hover {
+    background-color: #5a6268; /* lite mörkare grå på hover */
+    color: #ffffff;
+}
+
+
+/* Header styles */
+.app-header {
+    background-color: #ffffff;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header-left, .header-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.app-header .logo {
+    height: 40px;
+    width: auto;
+}
+
+#main-nav a {
+    text-decoration: none;
+    color: #333;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+#main-nav a:hover {
+    background-color: #f0f0f0;
+}
+
+#main-nav a.active {
+    font-weight: bold;
+    color: #0056b3;
+}
+
+.nav-role {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.user-name {
+    font-weight: 500;
+}
+
+.main-content {
+    padding: 2rem;
+}
+
+
+
+
+
+
+
+
+
+

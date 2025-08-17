@@ -1,3 +1,5 @@
+import { renderHeader } from './header';
+
 interface Student {
     userId: string;
     username: string;
@@ -31,15 +33,6 @@ class StudentManagement {
     }
 
     private bindEvents(): void {
-        // Logout button
-        const logoutButton = document.getElementById('logout-button');
-        if (logoutButton) {
-            logoutButton.addEventListener('click', () => {
-                localStorage.removeItem('jwt_token');
-                window.location.href = '/index.html';
-            });
-        }
-
         // Status filter buttons
         const filterButtons = document.querySelectorAll('input[name="statusFilter"]');
         filterButtons.forEach(button => {
@@ -195,16 +188,16 @@ class StudentManagement {
         options += deleteOption;
 
         return `
-            <div class="dropdown">
-                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-three-dots-vertical"></i>
-                </button>
-                <ul class="dropdown-menu">
-                    ${options}
-                </ul>
-            </div>
+        <div class="dropdown">
+            <button class="btn btn-sm dropdown-toggle neutral-dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-three-dots-vertical"></i>
+            </button>
+            <ul class="dropdown-menu">
+                ${options}
+            </ul>
+        </div>
         `;
-    }
+        }
 
     private filterStudents(): void {
         const rows = document.querySelectorAll('#students-table-body tr');
@@ -622,5 +615,6 @@ class StudentManagement {
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
+    renderHeader();
     new StudentManagement();
 }); 

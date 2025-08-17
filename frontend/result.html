@@ -5,114 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Provresultat - Flygprov</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-
-        .result-summary {
-            padding: 2rem;
-            margin-bottom: 2rem;
-            border-radius: .5rem;
-            color: white;
-        }
-
-        .result-summary.passed {
-            background-color: #2e7d32;
-        }
-
-        .result-summary.failed {
-            background-color: #c62828;
-        }
-
-        .result-summary h2 {
-            margin-bottom: 0;
-        }
-
-        /* --- Ny kort-design för frågor --- */
-        .question-review {
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            border-radius: 5px;
-            border: 1px solid #e0e0e0;
-            background-color: #fff;
-        }
-
-        .question-review.correct {
-            border-left: 5px solid #28a745;
-        }
-
-        .question-review.incorrect,
-        .question-review.unanswered {
-            border-left: 5px solid #dc3545;
-        }
-
-        .question-header {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-        }
-
-        .question-header h6 {
-            margin: 0;
-            font-size: 1.1rem;
-        }
-        
-        .question-header .bi {
-            font-size: 1.5rem;
-        }
-
-        .question-text {
-            font-weight: 500;
-            color: #333;
-            margin-bottom: 1.5rem;
-        }
-
-        /* --- Kolumn-layout för svar --- */
-        .answer-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            border-top: 1px solid #e0e0e0;
-            padding-top: 1.5rem;
-        }
-
-        .answer-column {
-            flex: 1;
-            min-width: 220px;
-        }
-
-        .column-title {
-            display: block;
-            font-size: 0.8rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            color: #666;
-            margin-bottom: 0.35rem;
-        }
-
-        .answer-text {
-            color: #333;
-            font-size: 1rem;
-        }
-
-        /* --- Visuell feedback på svarstext --- */
-        .answer-text.correct-answer-text {
-            font-weight: bold;
-        }
-
-        .answer-text.your-choice-incorrect {
-            text-decoration: line-through;
-            color: #777;
-        }
-
-        .answer-text.your-choice-unanswered {
-            font-style: italic;
-            color: #777;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/src/main.css">
 </head>
 <body>
     <div class="container mt-5">
@@ -138,6 +32,8 @@
             Ett fel uppstod.
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
     <script src="dist/result.js"></script>
 </body>
 </html>

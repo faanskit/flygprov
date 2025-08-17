@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Render summary
         const totalQuestions = data.detailedAnswers.length;
         resultSummary.innerHTML = `
-            <h2>${data.passed ? 'Godkänd!' : 'Underkänd'}</h2>
+            <h2 class="result-heading">${data.passed ? 'Godkänd!' : 'Underkänd'}</h2>
             <p class="lead mb-0">Du fick ${data.score} av ${totalQuestions} rätt.</p>
         `;
         resultSummary.classList.add(data.passed ? 'passed' : 'failed');

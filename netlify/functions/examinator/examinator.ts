@@ -214,7 +214,8 @@ const handler: Handler = async (event: HandlerEvent, context) => {
     if (!decodedToken) {
         return { statusCode: 401, body: "Unauthorized" };
     }
-    if (decodedToken.role !== 'examinator') {
+    
+    if (decodedToken.role !== 'examinator' && decodedToken.role !== 'administrator' && decodedToken.role !== 'admin') {
         return { statusCode: 403, body: "Forbidden" };
     }
 

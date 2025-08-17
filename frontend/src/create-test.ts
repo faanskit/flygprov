@@ -1,11 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
     const loadingEl = document.getElementById('loading');
     const containerEl = document.getElementById('create-test-container');
+    const testContentEl = document.getElementById('test-content');
     const subjectNameEl = document.getElementById('subject-name');
     const studentNameEl = document.getElementById('student-name');
     const testNameInput = document.getElementById('test-name') as HTMLInputElement;
     const questionListEl = document.getElementById('question-list');
-    const assignTestBtn = document.getElementById('assign-test-btn');
+    const assignTestBtn = document.getElementById('assign-test-btn') as HTMLButtonElement;
+    const backToStudentBtn = document.getElementById('back-to-student-btn') as HTMLAnchorElement;
     const errorContainer = document.getElementById('error-container');
     const successContainer = document.getElementById('success-container');
     const token = localStorage.getItem('jwt_token');
@@ -20,6 +22,10 @@ document.addEventListener('DOMContentLoaded', () => {
     } | null = null;
 
     // --- Initialisering ---
+    // Visa container direkt för att undvika problem med header-scriptet
+    if (containerEl) containerEl.classList.remove('d-none');
+    if (testContentEl) testContentEl.style.display = 'none'; // Göm innehållet tills vi är klara
+
     try {
         const storedData = sessionStorage.getItem('createTestData');
         if (!storedData) throw new Error("Ingen provdata hittades. Gå tillbaka och försök igen.");
@@ -39,11 +45,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         renderQuestionList(testData!.questions);
 
-        if (loadingEl) loadingEl.classList.add('d-none');
-        if (containerEl) containerEl.classList.remove('d-none');
+        // Sätt rätt länk på tillbaka-knappen
+        if (backToStudentBtn) {
+            backToStudentBtn.href = `/student-details.html?studentId=${testData!.studentId}`;
+        }
+
+        if (loadingEl) loadingEl.style.display = 'none'; // Göm laddaren
+        if (testContentEl) testContentEl.style.display = 'block'; // Visa innehållet
 
     } catch (error) {
         showError((error as Error).message);
+        if (loadingEl) loadingEl.style.display = 'none';
     }
 
     // --- Event Listeners ---
@@ -54,13 +66,21 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!questionListEl) return;
         questionListEl.innerHTML = '';
 
-        questions.forEach(q => {
+        questions.forEach((q, index) => {
             const item = document.createElement('div');
+            // Använder 'list-group-item' för konsekvent utseende
             item.className = 'list-group-item d-flex justify-content-between align-items-center';
             item.id = `question-${q._id}`;
+            
+            // Ny, renare HTML-struktur
             item.innerHTML = `
-                <span>${q.questionText}</span>
-                <button class="btn btn-sm btn-outline-secondary refresh-btn" data-question-id="${q._id}">&#x21bb;</button>
+                <div class="flex-grow-1 me-3">
+                    <span class="fw-bold me-2">${index + 1}.</span>
+                    ${q.questionText}
+                </div>
+                <button class="btn btn-sm btn-outline-primary refresh-btn" data-question-id="${q._id}" title="Byt ut fråga">
+                    <i class="bi bi-arrow-repeat"></i>
+                </button>
             `;
             questionListEl.appendChild(item);
         });
@@ -71,7 +91,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function handleRefreshClick(event: Event) {
-        const button = event.target as HTMLButtonElement;
+        // Använd currentTarget för att säkerställa att vi alltid får knappen,
+        // även om användaren klickar på ikonen inuti den.
+        const button = event.currentTarget as HTMLButtonElement;
         const questionIdToReplace = button.dataset.questionId;
         if (!questionIdToReplace || !testData) return;
 
@@ -107,6 +129,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             showError((error as Error).message);
+            // Återaktivera knappen även om det blir fel, så användaren kan försöka igen.
+            button.disabled = false;
         }
     }
 
@@ -148,11 +172,6 @@ document.addEventListener('DOMContentLoaded', () => {
             showSuccess(`Provet har tilldelats till ${testData.studentName}.`);
             sessionStorage.removeItem('createTestData');
             if (assignTestBtn) assignTestBtn.textContent = "Tilldelat!";
-
-            const navigationContainer = document.getElementById('navigation-container');
-            if (navigationContainer) {
-                navigationContainer.innerHTML = `<a href="/student-details.html?studentId=${testData.studentId}" class="btn btn-secondary">Tillbaka till studentens översikt</a>`;
-            }
 
         } catch (error) {
             showError((error as Error).message);

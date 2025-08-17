@@ -1,54 +1,101 @@
+// JWT-dekodningsfunktion (enkel implementering)
+function decodeJwt(token: string): any {
+    try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+
+        return JSON.parse(jsonPayload);
+    } catch (e) {
+        console.error("Failed to decode JWT:", e);
+        return null;
+    }
+}
+
+// Funktion för att hämta användarinformation
+export function getUser(): { username: string; role: 'student' | 'examinator' | 'admin' } | null {
+    const token = localStorage.getItem('jwt_token');
+    const username = localStorage.getItem('username'); // Hämta användarnamn från localStorage
+
+    if (!token || !username) {
+        localStorage.removeItem('jwt_token');
+        localStorage.removeItem('username');
+        return null;
+    }
+
+    const decoded = decodeJwt(token);
+    if (!decoded) {
+        localStorage.removeItem('jwt_token');
+        localStorage.removeItem('username');
+        return null;
+    }
+
+    return {
+        username: username, // Använd det sparade namnet
+        role: decoded.role
+    };
+}
+
+// Funktion för att logga ut
+export function logout(): void {
+    localStorage.removeItem('jwt_token');
+    localStorage.removeItem('username'); // Rensa även användarnamnet
+    window.location.href = '/index.html';
+}
+
+// Inloggningslogik
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('login-form');
-    const resultDiv = document.getElementById('result');
-    const usernameInput = document.getElementById('username') as HTMLInputElement;
-    const passwordInput = document.getElementById('password') as HTMLInputElement;
-
-    if (loginForm && resultDiv) {
-        loginForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
-
-            const username = usernameInput.value;
-            const password = passwordInput.value;
-
-            resultDiv.className = '';
-                        resultDiv.className = '';
-            resultDiv.textContent = '';
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = (document.getElementById('username') as HTMLInputElement).value;
+            const password = (document.getElementById('password') as HTMLInputElement).value;
+            const resultDiv = document.getElementById('result');
 
             try {
                 const response = await fetch('/api/auth', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ username, password }),
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
                 });
 
                 const data = await response.json();
 
-                if (!response.ok) {
-                    throw new Error(data.error || 'Något gick fel.');
-                }
-
-                resultDiv.className = 'success';
-                resultDiv.textContent = 'Inloggning lyckades! Omdirigerar...';
-                console.log('Token:', data.token);
-                
-                // Spara token och omdirigera baserat på roll
-                localStorage.setItem('jwt_token', data.token);
-                setTimeout(() => {
-                    if (data.user.role === 'examinator') {
-                        window.location.href = '/examinator.html';
-                    } else if (data.user.role === 'admin') {
-                        window.location.href = '/admin.html';
-                    } else {
-                        window.location.href = '/dashboard.html';
+                if (response.ok) {
+                    localStorage.setItem('jwt_token', data.token);
+                    localStorage.setItem('username', data.user.username); // Spara användarnamnet
+                    
+                    // Omdirigera baserat på roll
+                    const user = getUser();
+                    if (user) {
+                        switch (user.role) {
+                            case 'student':
+                                window.location.href = '/dashboard.html';
+                                break;
+                            case 'examinator':
+                                window.location.href = '/examinator.html';
+                                break;
+                            case 'admin':
+                                window.location.href = '/admin.html';
+                                break;
+                            default:
+                                window.location.href = '/index.html';
+                        }
                     }
-                }, 1000);
-
-            } catch (error: any) {
-                resultDiv.className = 'error';
-                resultDiv.textContent = `Fel: ${error.message}`;
+                } else {
+                    if (resultDiv) {
+                        resultDiv.textContent = data.error || 'Inloggning misslyckades';
+                        resultDiv.className = 'error';
+                    }
+                }
+            } catch (error) {
+                if (resultDiv) {
+                    resultDiv.textContent = 'Ett nätverksfel uppstod.';
+                    resultDiv.className = 'error';
+                }
             }
         });
     }

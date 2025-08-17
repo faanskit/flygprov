@@ -5,87 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Examinator Dashboard</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <style>
-.logo {
-    max-width: 60px; /* Mindre storlek så den matchar rubrikens höjd */
-    height: auto;
-}
-    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/src/main.css">
 </head>
 <body>
-    <div class="container mt-5">
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <div class="d-flex align-items-center">
-        <img src="img/LOGGA_KFK_Web-5cm.jpg" alt="Kalmar Flygklubb" class="logo me-3">
-        <h1 class="mb-0">Examinator-översikt</h1>
-    </div>
-    <div>
-        <button id="change-password-btn-manual" class="btn btn-secondary">Ändra lösenord</button>
-        <button id="logout-button" class="btn btn-danger">Logga ut</button>
-    </div>
-</div>
-        
-        <!-- Navigation Menu -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light mt-3 mb-4">
-            <div class="container-fluid">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="examinator.html">Översikt</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="student-management.html">Hantera Studenter</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-        
-        <p>Välkommen! Här är en översikt över studenternas framsteg.</p>
-        
-        <table class="table table-hover mt-4">
-            <thead>
-                <tr>
-                    <th>Student</th>
-                    <th>Framsteg</th>
-                    <th>Åtgärd</th>
-                </tr>
-            </thead>
-            <tbody id="student-overview-body">
-                <!-- Studentöversikt renderas här -->
-            </tbody>
-        </table>
+    <header id="app-header-placeholder"></header>
+    <main class="main-content">
+        <div class="container mt-5">
+            <p>Välkommen! Här är en översikt över studenternas framsteg.</p>
+            
+            <table class="table table-hover mt-4">
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Framsteg</th>
+                        <th>Åtgärd</th>
+                    </tr>
+                </thead>
+                <tbody id="student-overview-body">
+                    <!-- Studentöversikt renderas här -->
+                </tbody>
+            </table>
 
-        <div id="error-container" class="alert alert-danger d-none mt-4" role="alert"></div>
+            <div id="error-container" class="alert alert-danger d-none mt-4" role="alert"></div>
+        </div>
+    </main>
 
-        <!-- Password Change Modal -->
-        <div class="modal" id="password-change-modal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Ändra lösenord</h5>
-                    </div>
-                    <div class="modal-body">
-                        <p>Du måste ändra ditt lösenord innan du kan fortsätta.</p>
-                        <form id="password-change-form">
-                            <div class="mb-3">
-                                <label for="current-password" class="form-label">Nuvarande lösenord</label>
-                                <input type="password" class="form-control" id="current-password" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="new-password" class="form-label">Nytt lösenord</label>
-                                <input type="password" class="form-control" id="new-password" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="confirm-password" class="form-label">Bekräfta nytt lösenord</label>
-                                <input type="password" class="form-control" id="confirm-password" required>
-                            </div>
-                            <p id="password-change-error" class="text-danger" style="display: none;"></p>
-                            <button type="submit" id="change-password-btn" class="btn btn-primary">Ändra lösenord</button>
-                        </form>
-                    </div>
+    <!-- Standardized Password Change Modal -->
+    <div class="modal fade" id="password-change-modal" tabindex="-1" aria-labelledby="passwordChangeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="passwordChangeModalLabel">Ändra lösenord</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="password-modal-warning" class="warning-text d-none">Du måste ändra ditt lösenord innan du kan fortsätta.</p>
+                    <form id="password-change-form">
+                        <div class="mb-3">
+                            <label for="current-password" class="form-label">Nuvarande lösenord</label>
+                            <input type="password" class="form-control" id="current-password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="new-password" class="form-label">Nytt lösenord</label>
+                            <input type="password" class="form-control" id="new-password" required minlength="6">
+                            <small class="form-text text-muted">Minst 6 tecken.</small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirm-password" class="form-label">Bekräfta nytt lösenord</label>
+                            <input type="password" class="form-control" id="confirm-password" required minlength="6">
+                        </div>
+                    </form>
+                    <div id="password-change-error" class="alert alert-danger d-none mt-3"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Avbryt</button>
+                    <button type="button" class="btn btn-primary" id="change-password-submit">Spara ändringar</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
     <script src="dist/examinator.js"></script>
 </body>
 </html>

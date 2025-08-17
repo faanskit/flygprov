@@ -1,3 +1,5 @@
+import { renderHeader } from './header';
+
 // Represents a generic user in the system
 interface User {
     userId: string;
@@ -166,7 +168,9 @@ class UserManagement {
 
         return `
             <div class="dropdown">
-                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-three-dots-vertical"></i></button>
+                <button class="btn btn-sm dropdown-toggle neutral-dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-three-dots-vertical"></i>
+                </button>
                 <ul class="dropdown-menu">${options}</ul>
             </div>`;
     }
@@ -295,6 +299,9 @@ class UserManagement {
     }
 
     private showSuccessModal(title: string, message: string): void {
+        // Göm eventuella andra öppna modals först för att undvika konflikter
+        this.modals.confirmation.hide();
+        
         (document.getElementById('successModalLabel')!).textContent = title;
         (document.getElementById('success-message')!).innerHTML = message;
         this.modals.success.show();
@@ -902,13 +909,7 @@ class ImportManagement {
 
 // Main Admin Panel Logic
 document.addEventListener('DOMContentLoaded', () => {
-    const logoutButton = document.getElementById('logout-button');
-    if (logoutButton) {
-        logoutButton.addEventListener('click', () => {
-            localStorage.removeItem('jwt_token');
-            window.location.href = '/index.html';
-        });
-    }
+    renderHeader();
 
     // Initialize user management for examiners
     new UserManagement('Examiner', '/api/admin-examiners');
@@ -924,4 +925,74 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize import management
     new ImportManagement(questionManagement);
+
+    // Initialize password change handler
+    initializePasswordChangeHandler();
 });
+
+function initializePasswordChangeHandler() {
+    const submitButton = document.getElementById('change-password-submit') as HTMLButtonElement;
+    const passwordChangeForm = document.getElementById('password-change-form') as HTMLFormElement;
+    const errorContainer = document.getElementById('password-change-error');
+    const token = localStorage.getItem('jwt_token');
+
+    if (!submitButton || !passwordChangeForm || !errorContainer) {
+        return;
+    }
+
+    submitButton.addEventListener('click', async () => {
+        const currentPassword = (document.getElementById('current-password') as HTMLInputElement).value;
+        const newPassword = (document.getElementById('new-password') as HTMLInputElement).value;
+        const confirmPassword = (document.getElementById('confirm-password') as HTMLInputElement).value;
+
+        errorContainer.classList.add('d-none');
+
+        if (newPassword !== confirmPassword) {
+            errorContainer.textContent = 'De nya lösenorden matchar inte.';
+            errorContainer.classList.remove('d-none');
+            return;
+        }
+
+        if (newPassword.length < 6) {
+            errorContainer.textContent = 'Lösenordet måste vara minst 6 tecken långt.';
+            errorContainer.classList.remove('d-none');
+            return;
+        }
+
+        submitButton.disabled = true;
+
+        try {
+            const response = await fetch('/api/examinator/change-password', { // Using examinator endpoint for admin
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ currentPassword, newPassword })
+            });
+
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.error || 'Kunde inte byta lösenord.');
+            }
+
+            // Success
+            const modalEl = document.getElementById('password-change-modal');
+            if (modalEl) {
+                const modal = (window as any).bootstrap.Modal.getInstance(modalEl);
+                modal?.hide();
+            }
+            passwordChangeForm.reset();
+            // Show success message
+            window.location.reload();
+
+
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Ett okänt fel uppstod.';
+            errorContainer.textContent = errorMessage;
+            errorContainer.classList.remove('d-none');
+        } finally {
+            submitButton.disabled = false;
+        }
+    });
+}
