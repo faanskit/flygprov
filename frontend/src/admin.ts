@@ -914,6 +914,183 @@ class QuestionManagement {
     private hideMessages(): void { this.errorContainer.classList.add('d-none'); this.successContainer.classList.add('d-none'); }
 }
 
+class ImageManagement {
+    private imagesApi = '/api/images';
+    private adminImagesApi = '/api/admin-images';
+    private fileInput: HTMLInputElement;
+    private uploadButton: HTMLButtonElement;
+    private uploadSpinner: HTMLElement;
+    private galleryGrid: HTMLElement;
+    private loadingSpinner: HTMLElement;
+    private errorContainer: HTMLElement;
+    private successContainer: HTMLElement;
+    private confirmationModal: any;
+
+    private fileToUpload: { content: string, name: string, type: string } | null = null;
+
+    constructor() {
+        this.fileInput = document.getElementById('image-file-input') as HTMLInputElement;
+        this.uploadButton = document.getElementById('upload-image-btn') as HTMLButtonElement;
+        this.uploadSpinner = document.getElementById('upload-spinner') as HTMLElement;
+        this.galleryGrid = document.getElementById('image-gallery-grid') as HTMLElement;
+        this.loadingSpinner = document.getElementById('image-gallery-loading') as HTMLElement;
+        this.errorContainer = document.getElementById('image-gallery-error') as HTMLElement;
+        this.successContainer = document.getElementById('image-gallery-success') as HTMLElement;
+        this.confirmationModal = new (window as any).bootstrap.Modal(document.getElementById('confirmationModal'));
+
+        this.bindEvents();
+        this.loadImages();
+    }
+
+    private bindEvents(): void {
+        this.fileInput.addEventListener('change', () => this.prepareFile());
+        this.uploadButton.addEventListener('click', () => this.uploadFile());
+    }
+
+    private async loadImages(): Promise<void> {
+        this.showLoading(true);
+        this.hideMessages();
+        try {
+            const token = localStorage.getItem('jwt_token');
+            const response = await fetch(this.imagesApi, { headers: { 'Authorization': `Bearer ${token}` } });
+            if (!response.ok) throw new Error(`HTTP ${response.status}: ${await response.text()}`);
+            const images = await response.json();
+            this.renderGallery(images);
+        } catch (error) {
+            this.showError(error instanceof Error ? error.message : 'Kunde inte ladda bilder.');
+        } finally {
+            this.showLoading(false);
+        }
+    }
+
+    private renderGallery(images: any[]): void {
+        this.galleryGrid.innerHTML = '';
+        if (images.length === 0) {
+            this.galleryGrid.innerHTML = '<p class="text-center text-muted col-12">Inga bilder hittades.</p>';
+            return;
+        }
+        images.forEach(image => {
+            const col = document.createElement('div');
+            col.className = 'col';
+            col.innerHTML = `
+                <div class="card h-100">
+                    <img src="${image.thumbnailLink}" class="card-img-top" alt="${image.name}" style="aspect-ratio: 1 / 1; object-fit: cover;">
+                    <div class="card-body text-center">
+                        <button class="btn btn-sm btn-outline-danger" data-image-id="${image.id}" data-image-name="${image.name}">
+                            <i class="bi bi-trash"></i> Ta bort
+                        </button>
+                    </div>
+                </div>
+            `;
+            this.galleryGrid.appendChild(col);
+        });
+
+        this.galleryGrid.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const target = e.currentTarget as HTMLElement;
+                const imageId = target.dataset.imageId!;
+                const imageName = target.dataset.imageName!;
+                this.handleDelete(imageId, imageName);
+            });
+        });
+    }
+
+    private prepareFile(): void {
+        const file = this.fileInput.files?.[0];
+        if (!file) {
+            this.uploadButton.disabled = true;
+            this.fileToUpload = null;
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const result = e.target?.result as string;
+            // result is "data:image/jpeg;base64,...." - we need to split it
+            const base64Content = result.split(',')[1];
+            this.fileToUpload = {
+                content: base64Content,
+                name: file.name,
+                type: file.type
+            };
+            this.uploadButton.disabled = false;
+        };
+        reader.onerror = () => {
+            this.showError("Kunde inte läsa filen.");
+            this.uploadButton.disabled = true;
+            this.fileToUpload = null;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    private async uploadFile(): Promise<void> {
+        if (!this.fileToUpload) return;
+
+        this.uploadButton.disabled = true;
+        this.uploadSpinner.classList.remove('d-none');
+        this.hideMessages();
+
+        try {
+            const token = localStorage.getItem('jwt_token');
+            const response = await fetch(this.adminImagesApi, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    fileName: this.fileToUpload.name,
+                    fileContent: this.fileToUpload.content,
+                    mimeType: this.fileToUpload.type
+                })
+            });
+            if (!response.ok) throw new Error(`HTTP ${response.status}: ${await response.text()}`);
+            
+            this.showSuccess("Bilden har laddats upp!");
+            this.fileInput.value = ''; // Reset file input
+            this.fileToUpload = null;
+            this.loadImages(); // Refresh gallery
+        } catch (error) {
+            this.showError(error instanceof Error ? error.message : 'Uppladdningen misslyckades.');
+        } finally {
+            this.uploadSpinner.classList.add('d-none');
+        }
+    }
+
+    private handleDelete(imageId: string, imageName: string): void {
+        const message = `Är du säker på att du vill ta bort bilden "${imageName}"? Detta kan inte ångras.`;
+        (document.getElementById('confirmation-message')!).textContent = message;
+        (document.getElementById('confirm-action-btn')!).onclick = () => this.performDelete(imageId);
+        this.confirmationModal.show();
+    }
+
+    private async performDelete(imageId: string): Promise<void> {
+        this.confirmationModal.hide();
+        this.hideMessages();
+        try {
+            const token = localStorage.getItem('jwt_token');
+            const response = await fetch(`${this.adminImagesApi}/${imageId}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (response.status === 409) {
+                throw new Error("Bilden används av en eller flera frågor och kan inte tas bort.");
+            }
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${await response.text()}`);
+            }
+            
+            this.showSuccess("Bilden har tagits bort.");
+            this.loadImages(); // Refresh gallery
+        } catch (error) {
+            this.showError(error instanceof Error ? error.message : 'Kunde inte ta bort bilden.');
+        }
+    }
+
+    private showLoading(show: boolean): void { this.loadingSpinner.style.display = show ? 'block' : 'none'; }
+    private showError(message: string): void { this.errorContainer.textContent = message; this.errorContainer.classList.remove('d-none'); }
+    private showSuccess(message: string): void { this.successContainer.textContent = message; this.successContainer.classList.remove('d-none'); setTimeout(() => this.hideMessages(), 5000); }
+    private hideMessages(): void { this.errorContainer.classList.add('d-none'); this.successContainer.classList.add('d-none'); }
+}
+
 class ImportManagement {
     private apiEndpoint = '/api/admin-import';
     private fileInput: HTMLInputElement;
@@ -1075,6 +1252,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize import management
     new ImportManagement(questionManagement);
+
+    // Initialize image management
+    new ImageManagement();
 
     // Initialize password change handler
     initializePasswordChangeHandler();
