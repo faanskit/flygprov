@@ -46,6 +46,40 @@ const handler: Handler = async (event: HandlerEvent) => {
             return { statusCode: 201, body: JSON.stringify({ insertedId: result.insertedId }) };
         }
 
+        if (event.httpMethod === "PUT" && subjectId) {
+            const body = JSON.parse(event.body || '{}');
+            const { name, code, description, defaultTimeLimitMinutes } = body;
+
+            if (!name || !code || !defaultTimeLimitMinutes) {
+                return { statusCode: 400, body: JSON.stringify({ error: "Name, code, and defaultTimeLimitMinutes are required" }) };
+            }
+
+            const objectId = new ObjectId(subjectId);
+
+            // Check if another subject with the same code already exists
+            const existingSubject = await db.collection<Subject>('subjects').findOne({ code, _id: { $ne: objectId } });
+            if (existingSubject) {
+                return { statusCode: 409, body: JSON.stringify({ error: "Another subject with this code already exists" }) };
+            }
+
+            const updateDoc: Partial<Subject> = {
+                name,
+                code,
+                description: description || "",
+                defaultTimeLimitMinutes: Number(defaultTimeLimitMinutes)
+            };
+
+            const result = await db.collection<Subject>('subjects').updateOne(
+                { _id: objectId },
+                { $set: updateDoc }
+            );
+
+            if (result.matchedCount === 0) {
+                return { statusCode: 404, body: JSON.stringify({ error: "Subject not found" }) };
+            }
+            return { statusCode: 200, body: JSON.stringify({ message: "Subject updated successfully" }) };
+        }
+
         if (event.httpMethod === "DELETE" && subjectId) {
             const objectId = new ObjectId(subjectId);
 

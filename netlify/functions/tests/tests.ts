@@ -85,7 +85,7 @@ const handleStartTest = async (db: Db, testId: string, studentId: ObjectId) => {
             attemptId: attemptId,
             testName: test.name,
             timeLimitMinutes: test.timeLimitMinutes,
-            questions: questions.map(({ _id, questionText, options }) => ({ _id, questionText, options }))
+            questions: questions.map(({ _id, questionText, options, imageId }) => ({ _id, questionText, options, imageId }))
         }),
         headers: { "Content-Type": "application/json" }
     };

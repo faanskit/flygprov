@@ -139,19 +139,37 @@ document.addEventListener('DOMContentLoaded', async () => {
         questionNumberEl.textContent = `${currentQuestionIndex + 1}`;
         
         const optionsToRender = question.shuffledOptions;
+
+        // Find or create the content container
+        let questionContentEl = questionCard.querySelector('.card-body');
+        if (!questionContentEl) {
+            questionContentEl = document.createElement('div');
+            questionContentEl.className = 'card-body';
+            // Prepend it to keep it before the image container
+            questionCard.prepend(questionContentEl);
+        }
         
-        questionCard.innerHTML = `
-            <div class="card-body">
-                <h5 class="card-title">Fråga ${currentQuestionIndex + 1}</h5>
-                <p class="card-text">${question.questionText}</p>
-                ${optionsToRender.map((option: string, i: number) => `
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="question-${question._id}" id="q-${question._id}-o-${i}" value="${i}" ${userAnswers[currentQuestionIndex] === i ? 'checked' : ''}>
-                        <label class="form-check-label" for="q-${question._id}-o-${i}">${option}</label>
-                    </div>
-                `).join('')}
-            </div>
+        questionContentEl.innerHTML = `
+            <h5 class="card-title">Fråga ${currentQuestionIndex + 1}</h5>
+            <p class="card-text">${question.questionText}</p>
+            ${optionsToRender.map((option: string, i: number) => `
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="question-${question._id}" id="q-${question._id}-o-${i}" value="${i}" ${userAnswers[currentQuestionIndex] === i ? 'checked' : ''}>
+                    <label class="form-check-label" for="q-${question._id}-o-${i}">${option}</label>
+                </div>
+            `).join('')}
         `;
+
+        const imageContainer = document.getElementById('question-image-container') as HTMLDivElement;
+        const imageEl = document.getElementById('question-image') as HTMLImageElement;
+
+        if (question.imageId && imageContainer && imageEl) {
+            imageEl.src = `https://lh3.googleusercontent.com/d/${question.imageId}`;
+            imageContainer.style.display = 'block';
+        } else if (imageContainer) {
+            imageContainer.style.display = 'none';
+        }
+
         questionCard.querySelectorAll('input[type="radio"]').forEach(radio => {
             radio.addEventListener('change', handleAnswerChange);
         });

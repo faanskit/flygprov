@@ -316,6 +316,7 @@ class SubjectManagement {
     private successContainer: HTMLElement;
     private createButton: HTMLElement;
     private modals: any = {};
+    private subjects: any[] = []; // Cache for subjects
     private questionManagement: QuestionManagement;
 
     constructor(questionManagement: QuestionManagement) {
@@ -333,27 +334,20 @@ class SubjectManagement {
 
         this.initializeModals();
         this.bindEvents();
-        this.loadSubjects();
+        this.loadSubjects(); // Restore the call to load subjects
     }
 
     private initializeModals(): void {
-        this.modals.createSubject = new (window as any).bootstrap.Modal(document.getElementById('createSubjectModal'));
+        this.modals.subject = new (window as any).bootstrap.Modal(document.getElementById('subjectModal'));
         this.modals.confirmation = new (window as any).bootstrap.Modal(document.getElementById('confirmationModal'));
     }
 
     private bindEvents(): void {
-        this.createButton.addEventListener('click', () => {
-            (document.getElementById('create-subject-form') as HTMLFormElement).reset();
-            this.modals.createSubject.show();
-        });
-
-        const createSubmit = document.getElementById('create-subject-submit');
-        if (createSubmit) {
-            createSubmit.addEventListener('click', () => this.createSubject());
-        }
+        this.createButton.addEventListener('click', () => this.showSubjectModal());
+        document.getElementById('save-subject-btn')?.addEventListener('click', () => this.saveSubject());
     }
 
-    private async loadSubjects(): Promise<void> {
+    public async loadSubjects(): Promise<void> {
         this.showLoading(true);
         this.hideMessages();
 
@@ -365,8 +359,8 @@ class SubjectManagement {
 
             if (!response.ok) throw new Error(`HTTP ${response.status}: ${await response.text()}`);
             
-            const subjects = await response.json();
-            this.renderList(subjects);
+            this.subjects = await response.json();
+            this.renderList(this.subjects);
 
         } catch (error) {
             this.showError(error instanceof Error ? error.message : 'Kunde inte ladda ämnen.');
@@ -391,25 +385,64 @@ class SubjectManagement {
                     <p class="mb-1">${subject.description || 'Ingen beskrivning.'}</p>
                     <small>Tidsgräns: ${subject.defaultTimeLimitMinutes} minuter</small>
                 </div>
-                <button class="btn btn-sm btn-outline-danger" data-subject-id="${subject._id}" data-subject-name="${subject.name}">
-                    <i class="bi bi-trash"></i> Ta bort
-                </button>
+                <div>
+                    <button class="btn btn-sm btn-outline-secondary me-2" data-action="edit" data-subject-id="${subject._id}">
+                        <i class="bi bi-pencil"></i> Redigera
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" data-action="delete" data-subject-id="${subject._id}" data-subject-name="${subject.name}">
+                        <i class="bi bi-trash"></i> Ta bort
+                    </button>
+                </div>
             `;
             this.listContainer.appendChild(item);
         });
 
-        this.listContainer.querySelectorAll('button[data-subject-id]').forEach(button => {
+        this.listContainer.querySelectorAll('button[data-action]').forEach(button => {
             button.addEventListener('click', (e) => {
                 const target = e.currentTarget as HTMLElement;
+                const action = target.dataset.action;
                 const subjectId = target.dataset.subjectId!;
-                const subjectName = target.dataset.subjectName!;
-                this.handleDelete(subjectId, subjectName);
+                if (action === 'edit') {
+                    this.showSubjectModal(subjectId);
+                } else if (action === 'delete') {
+                    const subjectName = target.dataset.subjectName!;
+                    this.handleDelete(subjectId, subjectName);
+                }
             });
         });
     }
 
-    private async createSubject(): Promise<void> {
-        const form = document.getElementById('create-subject-form') as HTMLFormElement;
+    private showSubjectModal(subjectId?: string): void {
+        const form = document.getElementById('subject-form') as HTMLFormElement;
+        const modalLabel = document.getElementById('subjectModalLabel')!;
+        const saveButton = document.getElementById('save-subject-btn')!;
+        const subjectIdInput = document.getElementById('subject-id') as HTMLInputElement;
+
+        form.reset();
+        subjectIdInput.value = subjectId || '';
+
+        if (subjectId) {
+            const subject = this.subjects.find(s => s._id === subjectId);
+            if (!subject) {
+                this.showError("Kunde inte hitta ämnet att redigera.");
+                return;
+            }
+            modalLabel.textContent = 'Redigera Ämne';
+            saveButton.textContent = 'Spara ändringar';
+            (document.getElementById('subject-name') as HTMLInputElement).value = subject.name;
+            (document.getElementById('subject-code') as HTMLInputElement).value = subject.code;
+            (document.getElementById('subject-description') as HTMLTextAreaElement).value = subject.description;
+            (document.getElementById('subject-time-limit') as HTMLInputElement).value = subject.defaultTimeLimitMinutes;
+        } else {
+            modalLabel.textContent = 'Skapa Nytt Ämne';
+            saveButton.textContent = 'Skapa Ämne';
+        }
+        this.modals.subject.show();
+    }
+
+    private async saveSubject(): Promise<void> {
+        const subjectId = (document.getElementById('subject-id') as HTMLInputElement).value;
+        const form = document.getElementById('subject-form') as HTMLFormElement;
         const name = (form.querySelector('#subject-name') as HTMLInputElement).value;
         const code = (form.querySelector('#subject-code') as HTMLInputElement).value;
         const description = (form.querySelector('#subject-description') as HTMLTextAreaElement).value;
@@ -420,13 +453,17 @@ class SubjectManagement {
             return;
         }
 
-        const submitBtn = document.getElementById('create-subject-submit') as HTMLButtonElement;
+        const isEditing = !!subjectId;
+        const url = isEditing ? `${this.apiEndpoint}/${subjectId}` : this.apiEndpoint;
+        const method = isEditing ? 'PUT' : 'POST';
+
+        const submitBtn = document.getElementById('save-subject-btn') as HTMLButtonElement;
         submitBtn.disabled = true;
 
         try {
             const token = localStorage.getItem('jwt_token');
-            const response = await fetch(this.apiEndpoint, {
-                method: 'POST',
+            const response = await fetch(url, {
+                method,
                 headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, code, description, defaultTimeLimitMinutes })
             });
@@ -434,13 +471,13 @@ class SubjectManagement {
             if (response.status === 409) throw new Error('En ämneskod måste vara unik.');
             if (!response.ok) throw new Error(`HTTP ${response.status}: ${await response.text()}`);
 
-            this.modals.createSubject.hide();
-            this.showSuccess('Ämnet har skapats.');
-            this.loadSubjects();
+            this.modals.subject.hide();
+            this.showSuccess(`Ämnet har ${isEditing ? 'uppdaterats' : 'skapats'}.`);
+            await this.loadSubjects(); // Reload subjects to get fresh data
             this.questionManagement.loadSubjects();
 
         } catch (error) {
-            this.showError(error instanceof Error ? error.message : 'Kunde inte skapa ämnet.');
+            this.showError(error instanceof Error ? error.message : 'Kunde inte spara ämnet.');
         } finally {
             submitBtn.disabled = false;
         }
@@ -452,9 +489,6 @@ class SubjectManagement {
         (document.getElementById('confirmation-message')!).textContent = message;
         (document.getElementById('confirm-action-btn')!).onclick = () => this.performDelete(subjectId);
         this.modals.confirmation.show();
-        setTimeout(() => {
-            (document.getElementById('confirm-action-btn') as HTMLButtonElement)?.focus();
-        }, 200);
     }
 
     private async performDelete(subjectId: string): Promise<void> {
@@ -469,7 +503,7 @@ class SubjectManagement {
             const result = await response.json();
             this.modals.confirmation.hide();
             this.showSuccess(`Ämnet och ${result.deletedQuestionsCount} tillhörande frågor har tagits bort.`);
-            this.loadSubjects();
+            await this.loadSubjects();
             this.questionManagement.loadSubjects();
             this.questionManagement.clearQuestions();
         } catch (error) {
@@ -487,6 +521,7 @@ class SubjectManagement {
 class QuestionManagement {
     private questionsApi = '/api/admin-questions';
     private subjectsApi = '/api/admin-subjects';
+    private imagesApi = '/api/images';
     private subjectSelect: HTMLSelectElement;
     private filterInput: HTMLInputElement;
     private createButton: HTMLButtonElement;
@@ -496,8 +531,10 @@ class QuestionManagement {
     private successContainer: HTMLElement;
     private modals: any = {};
     private questions: any[] = [];
+    private availableImages: any[] = []; // Cache for available images
     private currentSubjectId: string | null = null;
     private currentStatusFilter: 'all' | 'active' | 'inactive' = 'all';
+    private currentSelectedImage: { id: string, thumbnailLink: string } | null = null;
 
     constructor() {
         this.subjectSelect = document.getElementById('subject-select') as HTMLSelectElement;
@@ -510,12 +547,13 @@ class QuestionManagement {
 
         this.initializeModals();
         this.bindEvents();
-        this.loadSubjects();
+        this.loadInitialData();
     }
 
     private initializeModals(): void {
         this.modals.editQuestion = new (window as any).bootstrap.Modal(document.getElementById('editQuestionModal'));
         this.modals.confirmation = new (window as any).bootstrap.Modal(document.getElementById('confirmationModal'));
+        this.modals.imageSelect = new (window as any).bootstrap.Modal(document.getElementById('imageSelectModal'));
     }
 
     private bindEvents(): void {
@@ -527,9 +565,7 @@ class QuestionManagement {
         });
 
         this.filterInput.addEventListener('input', () => this.renderQuestions());
-
         this.createButton.addEventListener('click', () => this.showEditModal());
-
         document.getElementById('save-question-btn')?.addEventListener('click', () => this.saveQuestion());
 
         document.querySelectorAll('input[name="questionStatusFilter"]').forEach(radio => {
@@ -538,6 +574,27 @@ class QuestionManagement {
                 this.renderQuestions();
             });
         });
+
+        document.getElementById('select-image-btn')?.addEventListener('click', () => this.openImageSelector());
+        document.getElementById('remove-image-btn')?.addEventListener('click', () => this.removeImage());
+        document.getElementById('confirm-image-select-btn')?.addEventListener('click', () => this.confirmImageSelection());
+    }
+
+    private async loadInitialData(): Promise<void> {
+        await this.loadSubjects();
+        await this.loadAvailableImages(); // Load images at startup
+    }
+
+    private async loadAvailableImages(): Promise<void> {
+        try {
+            const token = localStorage.getItem('jwt_token');
+            const response = await fetch(this.imagesApi, { headers: { 'Authorization': `Bearer ${token}` } });
+            if (!response.ok) throw new Error('Could not load images');
+            this.availableImages = await response.json();
+        } catch (error) {
+            console.error("Failed to load available images:", error);
+            // Non-critical error, the user can still select images, but previews on edit won't work.
+        }
     }
 
     public async loadSubjects(): Promise<void> {
@@ -602,23 +659,28 @@ class QuestionManagement {
         filteredQuestions.forEach(q => {
             const card = document.createElement('div');
             card.className = 'card mb-2';
-            const isActive = q.active !== false; // Consistent status check for rendering
+            const isActive = q.active !== false;
+
+            const image = this.availableImages.find(img => img.id === q.imageId);
+            const imageElement = image 
+                ? `<img src="${image.thumbnailLink}" alt="Frågebild" style="width: 60px; height: 60px; object-fit: cover; border-radius: 5px;">`
+                : (q.imageId ? `<div style="width: 60px; height: 60px;" class="d-flex align-items-center justify-content-center"><i class="bi bi-image-alt text-muted" style="font-size: 24px;"></i></div>` : '<div style="width: 60px;"></div>'); // Empty div for alignment
 
             card.innerHTML = `
-                <div class="card-body">
-                    <p class="card-text">${q.questionText}</p>
-                    <ul class="list-unstyled">
-                        ${q.options.map((opt: string, index: number) => `<li>${index === q.correctOptionIndex ? '<strong>' : ''}${opt}${index === q.correctOptionIndex ? '</strong>' : ''}</li>`).join('')}
-                    </ul>
-                    <div class="d-flex justify-content-between align-items-center">
+                <div class="card-body d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <p class="card-text mb-1">${q.questionText}</p>
                         <span class="badge bg-${isActive ? 'success' : 'secondary'}">${isActive ? 'Aktiv' : 'Inaktiv'}</span>
-                        <div>
-                            <button class="btn btn-sm btn-outline-secondary me-2" data-action="edit" data-question-id="${q._id}"><i class="bi bi-pencil"></i> Redigera</button>
-                            <button class="btn btn-sm btn-outline-${isActive ? 'warning' : 'success'} me-2" data-action="toggle" data-question-id="${q._id}" data-active="${isActive}">
-                                ${isActive ? 'Inaktivera' : 'Aktivera'}
-                            </button>
-                            <button class="btn btn-sm btn-outline-danger" data-action="delete" data-question-id="${q._id}"><i class="bi bi-trash"></i> Ta bort</button>
-                        </div>
+                    </div>
+                    <div class="mx-3">
+                        ${imageElement}
+                    </div>
+                    <div class="d-flex flex-shrink-0">
+                        <button class="btn btn-sm btn-outline-secondary me-2" data-action="edit" data-question-id="${q._id}"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-${isActive ? 'warning' : 'success'} me-2" data-action="toggle" data-question-id="${q._id}" data-active="${isActive}">
+                            ${isActive ? '<i class="bi bi-toggle-off"></i>' : '<i class="bi bi-toggle-on"></i>'}
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" data-action="delete" data-question-id="${q._id}"><i class="bi bi-trash"></i></button>
                     </div>
                 </div>
             `;
@@ -631,9 +693,7 @@ class QuestionManagement {
                 const action = target.dataset.action;
                 const id = target.dataset.questionId!;
                 if (action === 'edit') this.showEditModal(id);
-                if (action === 'toggle') {
-                    this.toggleQuestionStatus(id, target.dataset.active === 'true');
-                }
+                if (action === 'toggle') this.toggleQuestionStatus(id, target.dataset.active === 'true');
                 if (action === 'delete') this.handleDeleteQuestion(id);
             });
         });
@@ -654,9 +714,6 @@ class QuestionManagement {
         (document.getElementById('confirmation-message')!).textContent = message;
         (document.getElementById('confirm-action-btn')!).onclick = () => this.performDeleteQuestion(questionId);
         this.modals.confirmation.show();
-        setTimeout(() => {
-            (document.getElementById('confirm-action-btn') as HTMLButtonElement)?.focus();
-        }, 200);
     }
 
     private async performDeleteQuestion(questionId: string): Promise<void> {
@@ -667,7 +724,6 @@ class QuestionManagement {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (!response.ok) throw new Error(`HTTP ${response.status}: ${await response.text()}`);
-            
             this.modals.confirmation.hide();
             this.showSuccess(`Frågan har tagits bort.`);
             this.loadQuestions();
@@ -680,7 +736,9 @@ class QuestionManagement {
     private showEditModal(questionId?: string): void {
         const form = document.getElementById('edit-question-form') as HTMLFormElement;
         form.reset();
+        this.removeImage();
         (document.getElementById('question-id') as HTMLInputElement).value = questionId || '';
+        (document.getElementById('select-image-btn') as HTMLElement).classList.remove('d-none');
 
         const modalLabel = document.getElementById('editQuestionModalLabel')!;
         if (questionId) {
@@ -692,6 +750,21 @@ class QuestionManagement {
                     (document.getElementById(`option-${i}`) as HTMLInputElement).value = question.options[i] || '';
                 }
                 (form.querySelector(`input[name="correctOption"][value="${question.correctOptionIndex}"]`) as HTMLInputElement).checked = true;
+                
+                if (question.imageId) {
+                    const image = this.availableImages.find(img => img.id === question.imageId);
+                    if (image) {
+                        (document.getElementById('question-image-id') as HTMLInputElement).value = image.id;
+                        const previewContainer = document.getElementById('image-preview-container') as HTMLElement;
+                        const previewImg = document.getElementById('question-image-preview') as HTMLImageElement;
+                        previewImg.src = image.thumbnailLink;
+                        previewContainer.classList.remove('d-none');
+                        (document.getElementById('remove-image-btn') as HTMLElement).classList.remove('d-none');
+                    } else {
+                        // Image ID exists but image not found in cache (e.g., deleted from Drive)
+                        this.showError("Bilden som är kopplad till frågan kunde inte hittas. Den kan ha tagits bort.");
+                    }
+                }
             }
         } else {
             modalLabel.textContent = 'Skapa Ny Fråga';
@@ -701,6 +774,7 @@ class QuestionManagement {
 
     private async saveQuestion(): Promise<void> {
         const questionId = (document.getElementById('question-id') as HTMLInputElement).value;
+        const imageId = (document.getElementById('question-image-id') as HTMLInputElement).value;
         const questionText = (document.getElementById('question-text') as HTMLTextAreaElement).value;
         const options = [
             (document.getElementById('option-0') as HTMLInputElement).value,
@@ -717,19 +791,20 @@ class QuestionManagement {
 
         const url = questionId ? `${this.questionsApi}/${questionId}` : this.questionsApi;
         const method = questionId ? 'PUT' : 'POST';
-        const body = JSON.stringify({
+        const bodyPayload: any = {
             subjectId: this.currentSubjectId,
             questionText,
             options,
-            correctOptionIndex
-        });
+            correctOptionIndex,
+            imageId: imageId || null
+        };
 
         try {
             const token = localStorage.getItem('jwt_token');
             const response = await fetch(url, {
                 method,
                 headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-                body
+                body: JSON.stringify(bodyPayload)
             });
             if (!response.ok) throw new Error(`HTTP ${response.status}: ${await response.text()}`);
             
@@ -739,6 +814,81 @@ class QuestionManagement {
         } catch (error) {
             this.showError(error instanceof Error ? error.message : 'Kunde inte spara frågan.');
         }
+    }
+
+    private openImageSelector(): void {
+        this.modals.imageSelect.show();
+        this.renderImageSelector(this.availableImages);
+        this.currentSelectedImage = null;
+        (document.getElementById('confirm-image-select-btn') as HTMLButtonElement).disabled = true;
+    }
+
+    private renderImageSelector(images: any[]): void {
+        const grid = document.getElementById('image-select-grid')!;
+        const loading = document.getElementById('image-select-loading')!;
+        const error = document.getElementById('image-select-error')!;
+        
+        loading.style.display = 'none'; // Images are pre-loaded
+        error.classList.add('d-none');
+        grid.innerHTML = '';
+
+        if (images.length === 0) {
+            grid.innerHTML = '<p class="text-center col-12">Inga bilder hittades.</p>';
+            return;
+        }
+
+        images.forEach(image => {
+            const col = document.createElement('div');
+            col.className = 'col';
+            col.innerHTML = `
+                <div class="card h-100 image-select-card" data-image-id="${image.id}" data-thumbnail-link="${image.thumbnailLink}">
+                    <img src="${image.thumbnailLink}" class="card-img-top" alt="${image.name}">
+                    <div class="card-body">
+                        <p class="card-text small">${image.name}</p>
+                    </div>
+                </div>
+            `;
+            grid.appendChild(col);
+        });
+
+        grid.querySelectorAll('.image-select-card').forEach(card => {
+            card.addEventListener('click', (e) => this.handleImageSelection(e));
+        });
+    }
+
+    private handleImageSelection(event: Event): void {
+        const card = (event.currentTarget as HTMLElement);
+        document.querySelectorAll('.image-select-card.selected').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        this.currentSelectedImage = {
+            id: card.dataset.imageId!,
+            thumbnailLink: card.dataset.thumbnailLink!
+        };
+        (document.getElementById('confirm-image-select-btn') as HTMLButtonElement).disabled = false;
+    }
+
+    private confirmImageSelection(): void {
+        if (!this.currentSelectedImage) return;
+
+        (document.getElementById('question-image-id') as HTMLInputElement).value = this.currentSelectedImage.id;
+        const previewContainer = document.getElementById('image-preview-container') as HTMLElement;
+        const previewImg = document.getElementById('question-image-preview') as HTMLImageElement;
+        
+        previewImg.src = this.currentSelectedImage.thumbnailLink;
+        previewContainer.classList.remove('d-none');
+        (document.getElementById('remove-image-btn') as HTMLElement).classList.remove('d-none');
+
+        this.modals.imageSelect.hide();
+    }
+
+    private removeImage(): void {
+        (document.getElementById('question-image-id') as HTMLInputElement).value = '';
+        const previewContainer = document.getElementById('image-preview-container') as HTMLElement;
+        const previewImg = document.getElementById('question-image-preview') as HTMLImageElement;
+        
+        previewImg.src = '';
+        previewContainer.classList.add('d-none');
+        (document.getElementById('remove-image-btn') as HTMLElement).classList.add('d-none');
     }
 
     private async toggleQuestionStatus(questionId: string, currentStatus: boolean): Promise<void> {

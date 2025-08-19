@@ -341,6 +341,19 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="mb-3">
+                            <label class="form-label">Bild</label>
+                            <input type="hidden" id="question-image-id">
+                            <div id="image-preview-container" class="mb-2 d-none">
+                                <img id="question-image-preview" src="" alt="Förhandsgranskning av bild" style="max-width: 100px; max-height: 100px; border-radius: 5px;">
+                            </div>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" id="select-image-btn">
+                                <i class="bi bi-image"></i> Välj bild
+                            </button>
+                            <button type="button" class="btn btn-outline-danger btn-sm d-none" id="remove-image-btn">
+                                <i class="bi bi-trash"></i> Ta bort bild
+                            </button>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -351,16 +364,44 @@
         </div>
     </div>
 
-    <!-- Create Subject Modal -->
-    <div class="modal fade" id="createSubjectModal" tabindex="-1" aria-labelledby="createSubjectModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+    <!-- Image Selection Modal -->
+    <div class="modal fade" id="imageSelectModal" tabindex="-1" aria-labelledby="imageSelectModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="createSubjectModalLabel">Skapa nytt ämne</h5>
+                    <h5 class="modal-title" id="imageSelectModalLabel">Välj en bild</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="create-subject-form">
+                    <div id="image-select-loading" class="text-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Laddar bilder...</span>
+                        </div>
+                    </div>
+                    <div id="image-select-error" class="alert alert-danger d-none"></div>
+                    <div id="image-select-grid" class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3">
+                        <!-- Image thumbnails will be rendered here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Avbryt</button>
+                    <button type="button" class="btn btn-primary" id="confirm-image-select-btn" disabled>Välj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create/Edit Subject Modal -->
+    <div class="modal fade" id="subjectModal" tabindex="-1" aria-labelledby="subjectModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="subjectModalLabel">Skapa nytt ämne</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="subject-form">
+                        <input type="hidden" id="subject-id">
                         <div class="mb-3">
                             <label for="subject-name" class="form-label">Namn</label>
                             <input type="text" class="form-control" id="subject-name" required>
@@ -382,7 +423,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Avbryt</button>
-                    <button type="button" class="btn btn-primary" id="create-subject-submit">Skapa ämne</button>
+                    <button type="button" class="btn btn-primary" id="save-subject-btn">Skapa ämne</button>
                 </div>
             </div>
         </div>

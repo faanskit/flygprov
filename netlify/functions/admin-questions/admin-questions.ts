@@ -33,7 +33,7 @@ const handler: Handler = async (event: HandlerEvent) => {
         // POST /api/admin-questions
         if (event.httpMethod === "POST") {
             const body = JSON.parse(event.body || '{}');
-            const { subjectId, questionText, options, correctOptionIndex } = body;
+            const { subjectId, questionText, options, correctOptionIndex, imageId } = body; // Added imageId
 
             if (!subjectId || !questionText || !options || options.length !== 4 || correctOptionIndex === undefined) {
                 return { statusCode: 400, body: JSON.stringify({ error: "Missing required fields for question creation." }) };
@@ -44,7 +44,8 @@ const handler: Handler = async (event: HandlerEvent) => {
                 questionText,
                 options,
                 correctOptionIndex,
-                active: true // Questions are active by default
+                active: true, // Questions are active by default
+                ...(imageId && { imageId }) // Conditionally add imageId
             };
 
             const result = await db.collection<Question>('questions').insertOne(newQuestion);
@@ -54,13 +55,14 @@ const handler: Handler = async (event: HandlerEvent) => {
         // PUT /api/admin-questions/:questionId
         if (event.httpMethod === "PUT" && questionId) {
             const body = JSON.parse(event.body || '{}');
-            const { questionText, options, correctOptionIndex, active } = body;
+            const { questionText, options, correctOptionIndex, active, imageId } = body; // Added imageId
 
             const updateDoc: Partial<Question> = {};
             if (questionText) updateDoc.questionText = questionText;
             if (options) updateDoc.options = options;
             if (correctOptionIndex !== undefined) updateDoc.correctOptionIndex = correctOptionIndex;
             if (active !== undefined) updateDoc.active = active;
+            if (imageId !== undefined) updateDoc.imageId = imageId; // Add imageId to update object
 
             const result = await db.collection<Question>('questions').updateOne(
                 { _id: new ObjectId(questionId) },

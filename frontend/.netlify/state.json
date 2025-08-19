@@ -1,20 +1,21 @@
 {
 	"geolocation": {
 		"data": {
-			"city": "Karlskrona",
+			"city": "Virsbo Bruk",
 			"country": {
 				"code": "SE",
 				"name": "Sweden"
 			},
 			"subdivision": {
-				"code": "K",
-				"name": "Blekinge County"
+				"code": "U",
+				"name": "Västmanland County"
 			},
 			"timezone": "Europe/Stockholm",
-			"latitude": 56.1625,
-			"longitude": 15.5801,
-			"postalCode": "371 92"
+			"latitude": 59.8672,
+			"longitude": 16.0405,
+			"postalCode": "737 61"
 		},
-		"timestamp": 1755438710122
-	}
+		"timestamp": 1755539539861
+	},
+	"siteId": "454d1573-9461-4eb7-8093-06349f98003e"
 }
