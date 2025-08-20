@@ -6,6 +6,7 @@ import { Question } from "../src/models/Question";
 
 const handler: Handler = async (event: HandlerEvent) => {
     const decodedToken = verifyToken(event);
+    console.log("Decoded Token:", decodedToken);
     if (!decodedToken || decodedToken.role !== 'admin') {
         return { statusCode: 403, body: JSON.stringify({ error: "Forbidden: Admin access required" }) };
     }

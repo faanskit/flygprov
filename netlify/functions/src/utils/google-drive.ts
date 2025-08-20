@@ -100,3 +100,22 @@ export async function deleteImage(fileId: string) {
         throw new Error(`Failed to trash image from Google Drive: ${error.message}`);
     }
 }
+
+// Add to existing exports
+export async function searchImageByName(filename: string): Promise<string | null> {
+    const driveClient = await getAuthenticatedClient();
+    try {
+        const res = await driveClient.files.list({
+            corpora: 'drive',
+            driveId: SHARED_DRIVE_ID,
+            q: `name='${filename}' and '${FOLDER_ID}' in parents and mimeType contains 'image/' and trashed=false`,
+            includeItemsFromAllDrives: true,
+            supportsAllDrives: true,
+            fields: 'files(id)',
+        });
+        return res.data.files?.[0]?.id || null;
+    } catch (error) {
+        console.error(`Error searching for image '${filename}' on Google Drive:`, error);
+        throw new Error(`Failed to search for image '${filename}' on Google Drive.`);
+    }
+}

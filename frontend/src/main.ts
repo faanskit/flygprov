@@ -82,6 +82,83 @@ async function handleCredentialResponse(response: any) {
     }
 }
 
+export function showSelectImageModal(onSelect: (id: string, url: string) => void) {
+    const modalEl = document.getElementById("imageSelectModal") as HTMLElement;
+    const modal = new (window as any).bootstrap.Modal(modalEl);
+
+    // Reset state
+    const grid = document.getElementById("image-select-grid")!;
+    const loading = document.getElementById("image-select-loading")!;
+    const errorContainer = document.getElementById("image-select-error")!;
+    const confirmBtn = document.getElementById("confirm-image-select-btn") as HTMLButtonElement;
+    confirmBtn.disabled = true;
+
+    grid.innerHTML = "";
+    errorContainer.classList.add("d-none");
+    loading.classList.remove("d-none");
+    
+    // Hämta token (justera om du använder annan lagring!)
+    const token = localStorage.getItem("jwt_token");
+    console.log("Token:", token);
+
+    // Hämta bilder från backend
+    fetch("/api/images", {
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+        }
+    })
+        .then(res => res.json())
+        .then(images => {
+            loading.classList.add("d-none");
+            grid.innerHTML = "";
+
+            images.forEach((img: any) => {
+                console.log("Image:", img);
+                const col = document.createElement("div");
+                col.className = "col";
+
+                const thumb = document.createElement("div");
+                thumb.className = "card image-thumbnail";
+                thumb.dataset.id = img.id;
+                thumb.dataset.url = img.thumbnailLink;
+
+                thumb.innerHTML = `
+                    <img src="${img.thumbnailLink}" class="card-img-top" alt="${img.name}">
+                `;
+                console.log("Thumbnail:", thumb);
+
+                thumb.addEventListener("click", () => {
+                    grid.querySelectorAll(".image-thumbnail").forEach(el => el.classList.remove("selected"));
+                    thumb.classList.add("selected");
+                    confirmBtn.disabled = false;
+                });
+
+                col.appendChild(thumb);
+                grid.appendChild(col);
+            });
+        })
+        .catch(err => {
+            loading.classList.add("d-none");
+            errorContainer.textContent = "Kunde inte ladda bilder.";
+            errorContainer.classList.remove("d-none");
+            console.error(err);
+        });
+
+    // När användaren bekräftar
+    confirmBtn.onclick = () => {
+        const selected = grid.querySelector(".image-thumbnail.selected") as HTMLElement;
+        if (!selected) return;
+
+        const id = selected.dataset.id!;
+        const url = selected.dataset.url!;
+        onSelect(id, url);
+        modal.hide();
+    };
+
+    modal.show();
+}
+
 // Exponera funktionen globalt så att Google-biblioteket kan anropa den
 (window as any).handleCredentialResponse = handleCredentialResponse;
 

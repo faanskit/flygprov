@@ -1,4 +1,5 @@
 import { renderHeader } from './header';
+import { showSelectImageModal } from "./main";
 
 // Represents a generic user in the system
 interface User {
@@ -1151,6 +1152,10 @@ class ImportManagement {
     private successContainer: HTMLElement;
     private questionsToImport: any[] = [];
     private questionManagement: QuestionManagement;
+    private existingImages: Record<string, string> = {};
+    private newImagesNeeded: string[] = [];
+    private imageHandlingSection: HTMLElement;
+    private unhandledImages: Set<string> = new Set();
 
     constructor(questionManagement: QuestionManagement) {
         this.questionManagement = questionManagement;
@@ -1164,7 +1169,10 @@ class ImportManagement {
         this.loadingSpinner = document.getElementById('import-loading-spinner')!;
         this.errorContainer = document.getElementById('import-error-container')!;
         this.successContainer = document.getElementById('import-success-container')!;
-
+        this.imageHandlingSection = document.getElementById('image-handling-section')!;
+        if (!this.imageHandlingSection) {
+            console.error('Image handling section not found in DOM');
+        }
         this.bindEvents();
     }
 
@@ -1202,8 +1210,9 @@ class ImportManagement {
                 
                 const result = await response.json();
                 this.questionsToImport = result.newQuestions;
+                this.existingImages = result.existingImages;
+                this.newImagesNeeded = result.newImagesNeeded;
                 this.displayResults(result.newQuestions, result.duplicatesCount);
-
             } catch (error) {
                 this.showError(error instanceof Error ? error.message : 'Kunde inte analysera filen.');
             } finally {
@@ -1214,8 +1223,7 @@ class ImportManagement {
     }
 
     private displayResults(newQuestions: any[], duplicatesCount: number): void {
-        this.summaryContainer.textContent = `Hittade ${newQuestions.length} nya frågor och ${duplicatesCount} dubbletter.`;
-        
+        this.summaryContainer.textContent = `Hittade ${newQuestions.length} nya frågor och ${duplicatesCount} dubbletter. ${Object.keys(this.existingImages).length} befintliga bilder, ${this.newImagesNeeded.length} nya behövs.`;        
         this.previewContainer.innerHTML = '';
         if (newQuestions.length === 0) {
             console.error("Inga nya frågor att importera.");
@@ -1235,8 +1243,124 @@ class ImportManagement {
         }
         
         this.resultsContainer.classList.remove('d-none');
+
+        // Image handling section
+        this.imageHandlingSection.innerHTML = '';
+        this.imageHandlingSection.classList.add('d-none');
+        this.unhandledImages.clear();
+
+        const questionsWithImages = newQuestions.filter(q => q.imageName);
+        if (questionsWithImages.length > 0) {
+            this.imageHandlingSection.classList.remove('d-none');
+            // Group by unique image name for efficiency
+            const imageMap = new Map<string, any[]>();
+            questionsWithImages.forEach(q => {
+                const list = imageMap.get(q.imageName) || [];
+                list.push(q);
+                imageMap.set(q.imageName, list);
+            });
+
+            imageMap.forEach((questions, imageName) => {
+                this.unhandledImages.add(imageName);
+                const item = document.createElement('div');
+                item.className = 'list-group-item d-flex justify-content-between align-items-center';
+                item.innerHTML = `
+                    <div>
+                        <strong>Bild: ${imageName}</strong><br>
+                        <small>Används i ${questions.length} fråga${questions.length > 1 ? 'r' : ''}: 
+                        ${questions.map(q => q.questionText).slice(0, 2).join(', ')}${questions.length > 2 ? '...' : ''}</small>
+                    </div>
+                    <div>
+                        ${this.existingImages[imageName] ? `<button class="btn btn-sm btn-primary me-2 link-existing" data-image="${imageName}">Koppla till identifierad</button>` : ''}
+                        <button class="btn btn-sm btn-secondary me-2 select-image" data-image="${imageName}">Välj från systemet</button>
+                        <input type="file" class="d-none upload-input" accept="image/*" data-image="${imageName}">
+                        <button class="btn btn-sm btn-success upload-new" data-image="${imageName}">Ladda upp ny...</button>
+                    </div>
+                `;
+                this.imageHandlingSection.appendChild(item);
+            });
+
+            // Event listeners
+            (this.imageHandlingSection.querySelectorAll('.link-existing') as NodeListOf<HTMLElement>).forEach(btn => {
+                btn.addEventListener('click', () => this.handleLinkExisting(btn.dataset.image!));
+            });
+            (this.imageHandlingSection.querySelectorAll('.select-image') as NodeListOf<HTMLElement>).forEach(btn => {
+                btn.addEventListener('click', () => this.handleSelectImage(btn.dataset.image!));
+            });
+            (this.imageHandlingSection.querySelectorAll('.upload-new') as NodeListOf<HTMLElement>).forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const input = btn.parentElement!.querySelector('.upload-input') as HTMLInputElement;
+                    input.click();
+                });
+            });
+            (this.imageHandlingSection.querySelectorAll('.upload-input') as NodeListOf<HTMLInputElement>).forEach(input => {
+                input.addEventListener('change', (e) => this.handleUploadNew(input.dataset.image!, e));
+            });
+        }
+
+        this.updateImportButton();
     }
 
+    private handleLinkExisting(imageName: string) {
+        const imageId = this.existingImages[imageName];
+        this.assignImageToQuestions(imageName, imageId);
+        this.markImageHandled(imageName);
+    }
+
+    private async handleSelectImage(imageName: string) {
+        showSelectImageModal((id: string, url: string) => {
+            this.assignImageToQuestions(imageName, id);
+            this.markImageHandled(imageName);
+        });
+    }
+
+    private async handleUploadNew(imageName: string, event: Event) {
+        const file = (event.target as HTMLInputElement).files?.[0];
+        if (!file) return;
+
+        try {
+            const toBase64 = (file: File) => new Promise<string>((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve((reader.result as string).split(',')[1]);
+                reader.onerror = error => reject(error);
+            });
+
+            const fileContent = await toBase64(file);
+            const response = await fetch('/api/admin-images', {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fileName: file.name, fileContent, mimeType: file.type }),
+            });
+
+            if (!response.ok) throw new Error(`HTTP ${response.status}: ${await response.text()}`);
+            const { id } = await response.json();
+            this.assignImageToQuestions(imageName, id);
+            this.markImageHandled(imageName);
+        } catch (error) {
+            this.showError(error instanceof Error ? error.message : 'Kunde inte ladda upp bilden.');
+        }
+    }
+
+    private assignImageToQuestions(imageName: string, imageId: string) {
+        this.questionsToImport = this.questionsToImport.map(q =>
+            q.imageName === imageName ? { ...q, imageId, imageName: undefined } : q
+        );
+    }
+
+    private markImageHandled(imageName: string) {
+        this.unhandledImages.delete(imageName);
+        const item = this.imageHandlingSection.querySelector(`[data-image="${imageName}"]`)?.closest('.list-group-item');
+        if (item) {
+            item.classList.add('bg-success', 'text-white');
+            item.querySelector('div:last-child')!.innerHTML = '<span class="badge bg-light text-dark">Klar</span>';
+        }
+        this.updateImportButton();
+    }
+
+    private updateImportButton() {
+        this.confirmButton.disabled = this.questionsToImport.length === 0 || this.unhandledImages.size > 0;
+    }
     private async executeImport(): Promise<void> {
         this.showLoading(true);
         this.confirmButton.disabled = true;

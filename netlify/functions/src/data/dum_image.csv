@@ -1,0 +1,4 @@
+code,question,option_1,option_2,option_3,option_4,correct_option,active,image
+DUM,"Om en katt kunde cykla på en sandlåda, skulle den välja skor eller en robot?",Kanske,Sött,Umami,Ja,2,True,
+DUM,"Vad krupet?",Katt,Hund,Fågel,Orm,4,True,snake.png
+DUM,"Detta är ett...","Ett flygplan","Stålmannen","En raket","Två helikoptrar",2,True,superman.jpg
