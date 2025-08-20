@@ -4,6 +4,7 @@ import connectToDatabase from "../src/database";
 import { User } from "../src/models/User";
 import { verifyToken } from "../src/utils/auth";
 import bcrypt from "bcryptjs";
+import { auth } from "google-auth-library";
 
 // --- Helper Functions for Examiner Management ---
 
@@ -22,6 +23,8 @@ async function getAllExaminers(db: Db, status?: string) {
         .toArray();
     
     return examiners.map(examiner => ({
+        authMethod: 'local', // Assuming all examiners use local auth
+        email: undefined, // Examiners don't have email in this context
         userId: examiner._id,
         username: examiner.username,
         status: examiner.archived ? 'archived' : 'active',
@@ -42,6 +45,7 @@ async function createNewExaminer(db: Db, username: string) {
     const newExaminer: User = {
         username,
         password: hashedPassword,
+        authMethod: 'local',
         role: 'examinator',
         createdAt: new Date(),
         archived: false,

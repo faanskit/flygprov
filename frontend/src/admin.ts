@@ -4,6 +4,8 @@ import { renderHeader } from './header';
 interface User {
     userId: string;
     username: string;
+    email?: string;
+    authMethod: 'local' | 'google';
     status: 'active' | 'archived';
     createdAt: string;
     forcePasswordChange: boolean;
@@ -13,6 +15,8 @@ interface User {
 interface CreateUserResponse {
     userId: string;
     username: string;
+    email?: string;
+    authMethod: 'local' | 'google';
     tempPassword: string;
 }
 
@@ -72,11 +76,37 @@ class UserManagement {
         this.createButton.addEventListener('click', () => {
             this.showCreateUserModal();
         });
+        // Lyssna på klick på hela tabellen
+        this.tableBody.addEventListener('click', (e) => {
+            const target = e.target as HTMLElement;
+            const button = target.closest('.dropdown-item');
+            if (button) {
+                const action = button.classList.contains('archive-user') ? 'archive' :
+                            button.classList.contains('delete-user') ? 'delete' :
+                            button.classList.contains('reset-password') ? 'reset-password' : null;
+                const userId = (button as HTMLElement).dataset.userId;
+
+                if (action && userId) {
+                    const row = button.closest('tr');
+                    const username = row?.querySelector('td:first-child')?.textContent || '';
+                    this.handleAction(action, userId, username);
+                }
+            }
+        });
 
         const createSubmit = document.getElementById(`create-${this.userType.toLowerCase()}-submit`);
         if (createSubmit) {
             createSubmit.addEventListener('click', () => {
                 this.createUser();
+            });
+        }
+        // Lägg till event listener för authMethod-toggle
+        const authSelect = document.getElementById('authMethod') as HTMLSelectElement;
+        if (authSelect) {
+            authSelect.addEventListener('change', (e) => {
+                const value = (e.target as HTMLSelectElement).value;
+                document.getElementById('localFields')?.classList.toggle('d-none', value !== 'local');
+                document.getElementById('googleFields')?.classList.toggle('d-none', value !== 'google');
             });
         }
     }
@@ -92,6 +122,7 @@ class UserManagement {
                 return;
             }
 
+            console.log(`Loading ${this.userType}s from ${this.apiEndpoint}...`);
             const response = await fetch(this.apiEndpoint, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -109,6 +140,7 @@ class UserManagement {
             if (!response.ok) throw new Error(`HTTP ${response.status}: ${await response.text()}`);
 
             this.users = await response.json();
+            console.log(`${this.userType}s loaded:`, this.users);
             this.renderTable();
             this.filterUsers();
 
@@ -123,7 +155,7 @@ class UserManagement {
     private renderTable(): void {
         this.tableBody.innerHTML = '';
         if (this.users.length === 0) {
-            this.tableBody.innerHTML = `<tr><td colspan="5" class="text-center">Inga ${this.userType.toLowerCase()}er hittades.</td></tr>`;
+            this.tableBody.innerHTML = `<tr><td colspan="7" class="text-center">Inga ${this.userType.toLowerCase()}er hittades.</td></tr>`;
             return;
         }
         this.users.forEach(user => this.tableBody.appendChild(this.createRow(user)));
@@ -136,33 +168,25 @@ class UserManagement {
         const passwordStatus = user.forcePasswordChange ? 'Nej' : 'Ja';
         const passwordClass = user.forcePasswordChange ? 'warning' : 'success';
         const createdAt = new Date(user.createdAt).toLocaleDateString('sv-SE');
-
+    
         row.innerHTML = `
             <td>${user.username}</td>
             <td><span class="badge bg-${statusClass}">${statusText}</span></td>
             <td>${createdAt}</td>
             <td><span class="badge bg-${passwordClass}">${passwordStatus}</span></td>
+            <td>${user.email || 'N/A'}</td>
+            <td>${user.authMethod}</td>
             <td>${this.createActionMenu(user)}</td>
         `;
-
-        row.querySelectorAll('[data-action]').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const action = (link as HTMLElement).dataset.action;
-                const userId = (link as HTMLElement).dataset.userId;
-                if (action && userId) {
-                    this.handleAction(action, userId, user.username);
-                }
-            });
-        });
         return row;
     }
 
+    // Lägg till createActionMenu (saknas i din kod – lägg till hela metoden efter createRow)
     private createActionMenu(user: User): string {
-        const archiveOption = `<li><a class="dropdown-item text-warning" href="#" data-action="archive" data-user-id="${user.userId}"><i class="bi bi-archive"></i> Arkivera</a></li>`;
-        const reactivateOption = `<li><a class="dropdown-item text-success" href="#" data-action="reactivate" data-user-id="${user.userId}"><i class="bi bi-arrow-clockwise"></i> Återaktivera</a></li>`;
-        const resetPasswordOption = `<li><a class="dropdown-item" href="#" data-action="reset-password" data-user-id="${user.userId}"><i class="bi bi-key"></i> Återställ lösenord</a></li>`;
-        const deleteOption = `<li><a class="dropdown-item text-danger" href="#" data-action="delete" data-user-id="${user.userId}"><i class="bi bi-trash"></i> Ta bort permanent</a></li>`;
+        const archiveOption = `<li><a class="dropdown-item text-warning archive-user" href="#" data-user-id="${user.userId}"><i class="bi bi-archive me-2"></i> Arkivera</a></li>`;
+        const reactivateOption = `<li><a class="dropdown-item text-success archive-user" href="#" data-user-id="${user.userId}"><i class="bi bi-arrow-clockwise me-2"></i> Återaktivera</a></li>`;
+        const resetPasswordOption = user.authMethod === 'local' ? `<li><a class="dropdown-item reset-password" href="#" data-user-id="${user.userId}"><i class="bi bi-key me-2"></i> Återställ lösenord</a></li>` : '';
+        const deleteOption = `<li><a class="dropdown-item text-danger delete-user" href="#" data-user-id="${user.userId}"><i class="bi bi-trash me-2"></i> Ta bort permanent</a></li>`;
 
         let options = (user.status === 'active' ? archiveOption : reactivateOption) + resetPasswordOption + '<li><hr class="dropdown-divider"></li>' + deleteOption;
 
@@ -192,9 +216,22 @@ class UserManagement {
     }
 
     private async createUser(): Promise<void> {
-        const usernameInput = document.getElementById(`${this.userType.toLowerCase()}-username`) as HTMLInputElement;
-        const username = usernameInput.value.trim();
-        if (!username || username.length < 3) return;
+        const authMethod = (document.getElementById('authMethod') as HTMLSelectElement).value as 'local' | 'google';
+        let username = '';
+        let email = '';
+        if (authMethod === 'local') {
+           username = (document.getElementById(`new-${this.userType.toLowerCase()}-username`) as HTMLInputElement).value.trim();
+           if (!username) {
+               alert('Användarnamn krävs för local autentisering.');
+               return;
+           }
+       } else {
+           email = (document.getElementById(`new-${this.userType.toLowerCase()}-email`) as HTMLInputElement).value.trim();
+           if (!email) {
+               alert('Email krävs för Google autentisering.');
+               return;
+            }
+        }
 
         const submitBtn = document.getElementById(`create-${this.userType.toLowerCase()}-submit`) as HTMLButtonElement;
         const originalText = submitBtn.textContent;
@@ -206,15 +243,24 @@ class UserManagement {
             const response = await fetch(this.apiEndpoint, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username })
+                body: JSON.stringify({ username, authMethod, email })
             });
 
             if (response.status === 409) throw new Error('Användarnamnet finns redan.');
             if (!response.ok) throw new Error(`HTTP ${response.status}: ${await response.text()}`);
 
-            const result: CreateUserResponse = await response.json();
+            const data: CreateUserResponse = await response.json();
             this.modals.createUser.hide();
-            this.showSuccessModal(`${this.userType} skapad!`, `<strong>${this.userType}en '${result.username}' har skapats!</strong><br><strong>Temporärt lösenord:</strong> <code>${result.tempPassword}</code>`);
+
+            let successText;
+            if (authMethod === 'local' && data.tempPassword) {
+                // Använd showSuccessModal för lokala användare för att visa temporärt lösenord
+                this.showSuccessModal('Ny användare skapad', `Användare: ${data.username}<br>Temporärt lösenord: <strong>${data.tempPassword}</strong>`);
+            } else {
+                // Använd showSuccess för Google-användare
+                this.showSuccess(`Ny Google-${this.userType.toLowerCase()} skapad: ${data.email || data.username}`);
+            }
+
             this.loadUsers();
 
         } catch (error) {

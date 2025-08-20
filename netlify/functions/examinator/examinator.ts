@@ -131,6 +131,7 @@ async function createNewStudent(db: Db, username: string) {
     const newStudent: User = {
         username,
         password: hashedPassword,
+        authMethod: 'local',
         role: 'student',
         createdAt: new Date(),
         archived: false,

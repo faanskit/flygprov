@@ -17,6 +17,7 @@
     "@netlify/functions": "^2.6.0",
     "bcryptjs": "^2.4.3",
     "date-fns": "^4.1.0",
+    "google-auth-library": "^10.2.1",
     "googleapis": "^156.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.5.0",

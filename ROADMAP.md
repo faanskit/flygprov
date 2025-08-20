@@ -1,3 +1,23 @@
+# Roadmap
+## Overview
+### Functionality
+* Seed script to reset admin
+* Seed initialize the system from scratch
+* Use Google Auth to login
+  -- Detailed requirements does not exist
+* Add name and surname for students (Depends on Google Auth to login)
+  -- Detailed requirements does not exist
+
+### Improvements
+* TBA
+
+### Documentation
+* Document system management
+* Updated the README.md
+* Create a owner and user manuals
+
+
+## Detailed Description
 ### **Seed script to reset admin**
 
 **Problem:** If the admin password is lost, there is no way to reset it.

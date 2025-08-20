@@ -45,6 +45,45 @@ export function logout(): void {
     window.location.href = '/index.html';
 }
 
+// Hantera Google-inloggningssvar
+async function handleCredentialResponse(response: any) {
+    const res = await fetch("/.netlify/functions/google-auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ credential: response.credential })
+    });
+
+    if (res.ok) {
+        const data = await res.json();
+        console.log("Inloggning lyckades:", data);
+        localStorage.setItem("jwt_token", data.jwt); // vår egen server-jwt
+        localStorage.setItem('username', data.name);
+        
+        // Använd befintlig logik för omdirigering
+        const user = getUser();
+        if (user) {
+            switch (user.role) {
+                case 'student':
+                    window.location.href = '/dashboard.html';
+                    break;
+                case 'examinator':
+                    window.location.href = '/examinator.html';
+                    break;
+                case 'admin':
+                    window.location.href = '/admin.html';
+                    break;
+                default:
+                    window.location.href = '/index.html';
+            }
+        }
+    } else {
+        alert("Inloggningen misslyckades");
+    }
+}
+
+// Exponera funktionen globalt så att Google-biblioteket kan anropa den
+(window as any).handleCredentialResponse = handleCredentialResponse;
+
 // Inloggningslogik
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('login-form');

@@ -72,6 +72,8 @@
                                     <th>Status</th>
                                     <th>Skapad</th>
                                     <th>Lösenord ändrat</th>
+                                    <th>Email</th>
+                                    <th>Auth Metod</th>
                                     <th>Åtgärder</th>
                                 </tr>
                             </thead>
@@ -131,6 +133,8 @@
                                     <th>Status</th>
                                     <th>Skapad</th>
                                     <th>Lösenord ändrat</th>
+                                    <th>Email</th>
+                                    <th>Auth Metod</th>
                                     <th>Åtgärder</th>
                                 </tr>
                             </thead>
@@ -475,13 +479,21 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="create-student-form">
-                        <div class="mb-3">
-                            <label for="student-username" class="form-label">Användarnamn</label>
-                            <input type="text" class="form-control" id="student-username" required>
-                            <div class="form-text">Användarnamnet måste vara unikt.</div>
-                        </div>
-                    </form>
+                    <div class="mb-3">
+                        <label for="authMethod" class="form-label">Autentiseringsmetod</label>
+                        <select id="authMethod" class="form-select">
+                            <option value="google">Google</option>
+                            <option value="local">Username/Password</option>
+                        </select>
+                    </div>
+                    <div id="localFields" class="mb-3 d-none">
+                        <label for="new-student-username" class="form-label">Användarnamn</label>
+                        <input type="text" class="form-control" id="new-student-username" placeholder="Användarnamnet måste vara unikt.">
+                    </div>
+                    <div id="googleFields" class="mb-3">
+                        <label for="new-student-email" class="form-label">Google Email</label>
+                        <input type="email" class="form-control" id="new-student-email" placeholder="exempel@gmail.com">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Avbryt</button>

@@ -600,12 +600,34 @@ tr:hover {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
+.g_id_signin {
+    margin-top: 1rem;
+}
 
+.login-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch; /* Detta är den nya, viktiga egenskapen */
+    gap: 1rem;
+    margin-top: 1rem;
+}
 
+.login-button {
+    /* Ta bort den hårdkodade höjden */
+    width: 190px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    /* Lägg till flexbox-egenskaper för att knappen ska fylla sin container */
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+}
 
-
-
-
-
-
-
+/* Denna container ser till att Googles iframe är korrekt innesluten */
+.google-button-container {
+    height: auto; /* Låt containern anpassa sig efter Googles innehåll */
+    display: flex;
+    align-items: center;
+}

@@ -24,28 +24,45 @@ async function getAllStudents(db: Db, status?: string) {
     return students.map(student => ({
         userId: student._id,
         username: student.username,
+        email: student.email,
+        authMethod: student.authMethod,
         status: student.archived ? 'archived' : 'active',
         createdAt: student.createdAt,
         forcePasswordChange: student.forcePasswordChange
     }));
 }
 
-async function createNewStudent(db: Db, username: string) {
-    const existingUser = await db.collection<User>('users').findOne({ username });
-    if (existingUser) {
-        throw new Error("Username already exists");
-    }
-    
-    const tempPassword = `${username}123`;
-    const hashedPassword = await bcrypt.hash(tempPassword, 10);
-    
+async function createNewStudent(db: Db, username: string, authMethod: 'local' | 'google', email?: string) {
+    if (authMethod === 'google') {
+        if (!email) throw new Error("Email is required for Google users");
+        const existing = await db.collection<User>('users').findOne({ email });
+        if (existing) throw new Error("Email already exists");
+        username = email;  // Sätt username till email för enkelhet (kan anpassas)
+    } else {
+        const existingUser = await db.collection<User>('users').findOne({ username });
+        if (existingUser) {
+            throw new Error("Username already exists");
+        }
+    }    
+    let tempPassword: string | undefined;
+    let hashedPassword: string | undefined;
+    let forcePasswordChange = false;
+    if (authMethod === 'local') {
+        tempPassword = `${username}123`;
+        hashedPassword = await bcrypt.hash(tempPassword, 10);
+        forcePasswordChange = true;
+    }    
+
     const newStudent: User = {
         username,
+        email,
         password: hashedPassword,
         role: 'student',
+        authMethod,
+        googleSub: undefined,  // Sätts vid första Google-login
         createdAt: new Date(),
         archived: false,
-        forcePasswordChange: true
+        forcePasswordChange,
     };
     
     const result = await db.collection<User>('users').insertOne(newStudent);
@@ -53,6 +70,8 @@ async function createNewStudent(db: Db, username: string) {
     return {
         userId: result.insertedId,
         username: newStudent.username,
+        email: newStudent.email,
+        authMethod: newStudent.authMethod,
         tempPassword
     };
 }
@@ -86,6 +105,7 @@ async function deleteStudent(db: Db, studentId: ObjectId) {
 async function resetStudentPassword(db: Db, studentId: ObjectId) {
     const student = await db.collection<User>('users').findOne({ _id: studentId, role: 'student' });
     if (!student) throw new Error("Student not found");
+    if (student.authMethod !== 'local') throw new Error("Cannot reset password for Google users");
 
     const tempPassword = `${student.username}123`;
     const hashedPassword = await bcrypt.hash(tempPassword, 10);
@@ -119,9 +139,12 @@ const handler: Handler = async (event: HandlerEvent) => {
         }
         
         if (event.httpMethod === "POST") {
-            const { username } = JSON.parse(event.body || '{}');
-            if (!username) return { statusCode: 400, body: JSON.stringify({ error: "Username is required" }) };
-            const result = await createNewStudent(db, username);
+            const { username, authMethod, email } = JSON.parse(event.body || '{}');
+            // if (!username) return { statusCode: 400, body: JSON.stringify({ error: "Username is required" }) };
+            if (!authMethod || (authMethod === 'local' && !username) || (authMethod === 'google' && !email)) {
+                return { statusCode: 400, body: JSON.stringify({ error: "Missing required fields" }) };
+            }            
+            const result = await createNewStudent(db, username, authMethod, email);
             return { statusCode: 201, body: JSON.stringify(result) };
         }
         

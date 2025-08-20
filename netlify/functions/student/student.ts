@@ -131,6 +131,7 @@ const handler: Handler = async (event: HandlerEvent, context) => {
     }
 
     const decodedToken = verifyToken(event);
+    console.log("Decoded Token:", decodedToken);
     if (!decodedToken || decodedToken.role !== 'student') {
         return { statusCode: 401, body: "Unauthorized" };
     }

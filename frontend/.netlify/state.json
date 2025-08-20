@@ -1,21 +1,21 @@
 {
 	"geolocation": {
 		"data": {
-			"city": "Virsbo Bruk",
+			"city": "Ekerö",
 			"country": {
 				"code": "SE",
 				"name": "Sweden"
 			},
 			"subdivision": {
-				"code": "U",
-				"name": "Västmanland County"
+				"code": "AB",
+				"name": "Stockholm County"
 			},
 			"timezone": "Europe/Stockholm",
-			"latitude": 59.8672,
-			"longitude": 16.0405,
-			"postalCode": "737 61"
+			"latitude": 59.2917,
+			"longitude": 17.8194,
+			"postalCode": "178 37"
 		},
-		"timestamp": 1755539539861
+		"timestamp": 1755660243711
 	},
 	"siteId": "454d1573-9461-4eb7-8093-06349f98003e"
 }

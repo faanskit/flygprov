@@ -4,7 +4,15 @@ import type { HandlerEvent } from "@netlify/functions";
 const JWT_SECRET = process.env.JWT_SECRET;
 
 export interface DecodedToken {
+    sub: string; // Google-kompatibel, samma som userId
     userId: string;
+    username?: string; //Google-användare har inte username
+    email?: string; // Google-användare har email
+    name?: string; // fullständigt namn
+    given_name?: string; // förnamn
+    family_name?: string; // efternamn
+    picture?: string; // profilbild URL
+    authMethod: 'local' | 'google';
     role: string;
     iat: number;
     exp: number;

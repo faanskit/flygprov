@@ -43,6 +43,7 @@ async function seedDatabase() {
     const studentUser: User = {
         username: 'student',
         password: studentPassword,
+        authMethod: 'local',
         role: 'student',
         createdAt: new Date(),
         archived: false,
@@ -56,6 +57,7 @@ async function seedDatabase() {
     const examinatorUser: User = {
         username: 'examinator',
         password: examinatorPassword,
+        authMethod: 'local',
         role: 'examinator',
         createdAt: new Date(),
         archived: false,

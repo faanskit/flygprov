@@ -30,10 +30,7 @@ async function getAuthenticatedClient(): Promise<drive_v3.Drive> {
 
 export async function listImageFiles() {
     const driveClient = await getAuthenticatedClient();
-    console.log("Listing image files from Google Drive...");
     try {
-        console.log(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, REFRESH_TOKEN);
-        console.log(SHARED_DRIVE_ID, FOLDER_ID);
         const res = await driveClient.files.list({
             corpora: "drive",
             driveId: SHARED_DRIVE_ID,

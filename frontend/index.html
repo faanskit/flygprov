@@ -6,6 +6,7 @@
     <title>Flygprov - Logga in</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
     <link rel="stylesheet" href="/src/main.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body class="login-body">
     <div class="login-container">
@@ -20,8 +21,28 @@
                 <label for="password">Lösenord</label>
                 <input type="password" id="password" name="password" required>
             </div>
-            <button type="submit">Logga in</button>
         </form>
+
+        <div class="login-actions">
+            <button type="submit" form="login-form" class="login-button">Logga in</button>
+            <div class="google-button-container">
+                <div id="g_id_onload"
+                    data-client_id="814349018710-8gkih5noo5gq39qhaqf6sess25oedg8o.apps.googleusercontent.com"
+                    data-callback="handleCredentialResponse"
+                    data-auto_prompt="false">
+                </div>
+                
+                <div class="g_id_signin"
+                    data-type="standard"
+                    data-size="large"
+                    data-theme="outline"
+                    data-text="signin_with"
+                    data-shape="rect"
+                    data-logo_alignment="left">
+                </div>
+            </div>
+        </div>
+        
         <div id="result"></div>
     </div>
     <script src="dist/main.js"></script>

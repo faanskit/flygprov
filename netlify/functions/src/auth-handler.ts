@@ -50,10 +50,23 @@ export async function login(body: string | null): Promise<{ token: string; user:
     }
 
     const token = jwt.sign(
-        { userId: user._id, role: user.role },
+        {
+            sub: user._id.toString(),  // Google-kompatibel, samma som userId
+            userId: user._id.toString(),  // För befintlig kod
+            username: user.username,
+            role: user.role,
+            email: user.email,
+            authMethod: user.authMethod
+        },
         JWT_SECRET,
-        { expiresIn: '8h' } // Token is valid for 8 hours
+        { expiresIn: "1h" }
     );
+
+    // const token = jwt.sign(
+    //     { userId: user._id, role: user.role },
+    //     JWT_SECRET,
+    //     { expiresIn: '8h' } // Token is valid for 8 hours
+    // );
 
     return {
         token,
