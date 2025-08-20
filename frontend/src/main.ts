@@ -15,7 +15,7 @@ function decodeJwt(token: string): any {
 }
 
 // Funktion för att hämta användarinformation
-export function getUser(): { username: string; role: 'student' | 'examinator' | 'admin' } | null {
+export function getUser(): { username: string; role: 'student' | 'examinator' | 'admin'; authMethod: string } | null {
     const token = localStorage.getItem('jwt_token');
     const username = localStorage.getItem('username'); // Hämta användarnamn från localStorage
 
@@ -33,8 +33,9 @@ export function getUser(): { username: string; role: 'student' | 'examinator' | 
     }
 
     return {
-        username: username, // Använd det sparade namnet
-        role: decoded.role
+        username: username,
+        role: decoded.role,
+        authMethod: decoded.authMethod
     };
 }
 
@@ -57,7 +58,7 @@ async function handleCredentialResponse(response: any) {
         const data = await res.json();
         console.log("Inloggning lyckades:", data);
         localStorage.setItem("jwt_token", data.jwt); // vår egen server-jwt
-        localStorage.setItem('username', data.name);
+        localStorage.setItem('username', data.username);
         
         // Använd befintlig logik för omdirigering
         const user = getUser();

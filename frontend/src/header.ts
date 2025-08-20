@@ -19,7 +19,9 @@ const renderHeader = () => {
             </div>
             <div class="header-right">
                 <span class="user-name">${user.username}</span>
-                <button id="change-password-header-btn" class="btn btn-secondary btn-sm">Ändra lösenord</button>
+                ${user.authMethod === "google" ? "" : `
+                    <button id="change-password-header-btn" class="btn btn-secondary btn-sm">Ändra lösenord</button>
+                `}
                 <button id="logout-button-header" class="btn btn-danger btn-sm">Logga ut</button>
             </div>
         </div>

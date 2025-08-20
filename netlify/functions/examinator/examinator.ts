@@ -112,6 +112,7 @@ async function getAllStudents(db: Db, status?: string) {
         userId: student._id,
         username: student.username,
         status: student.archived ? 'archived' : 'active',
+        authMethod: student.authMethod,
         createdAt: student.createdAt,
         forcePasswordChange: student.forcePasswordChange
     }));

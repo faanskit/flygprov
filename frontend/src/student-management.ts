@@ -4,6 +4,7 @@ interface Student {
     userId: string;
     username: string;
     status: 'active' | 'archived';
+    authMethod: 'local' | 'google';
     createdAt: string;
     forcePasswordChange: boolean;
 }
@@ -183,7 +184,9 @@ class StudentManagement {
         } else {
             options += reactivateOption;
         }
-        options += resetPasswordOption;
+        if(student.authMethod !== 'google') {
+            options += resetPasswordOption;
+        }
         options += '<li><hr class="dropdown-divider"></li>';
         options += deleteOption;
 

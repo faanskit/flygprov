@@ -66,7 +66,7 @@ export const handler: Handler = async (event) => {
     // 4. Returnera JWT till frontend
     return {
       statusCode: 200,
-      body: JSON.stringify({ jwt: serverJwt }),
+      body: JSON.stringify({ jwt: serverJwt, username: payload.given_name}),
     };
   } catch (err) {
     console.error("Google Auth Error:", err);
