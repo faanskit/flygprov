@@ -1267,7 +1267,7 @@ class ImportManagement {
                 item.innerHTML = `
                     <div>
                         <strong>Bild: ${imageName}</strong><br>
-                        <small>Används i ${questions.length} fråga${questions.length > 1 ? 'r' : ''}: 
+                        <small>Används i ${questions.length} fråg${questions.length > 1 ? 'or' : 'a'}: 
                         ${questions.map(q => q.questionText).slice(0, 2).join(', ')}${questions.length > 2 ? '...' : ''}</small>
                     </div>
                     <div>
