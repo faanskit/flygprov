@@ -123,7 +123,6 @@ class UserManagement {
                 return;
             }
 
-            console.log(`Loading ${this.userType}s from ${this.apiEndpoint}...`);
             const response = await fetch(this.apiEndpoint, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -141,7 +140,6 @@ class UserManagement {
             if (!response.ok) throw new Error(`HTTP ${response.status}: ${await response.text()}`);
 
             this.users = await response.json();
-            console.log(`${this.userType}s loaded:`, this.users);
             this.renderTable();
             this.filterUsers();
 
