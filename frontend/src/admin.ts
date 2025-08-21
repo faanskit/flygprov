@@ -993,7 +993,6 @@ class ImageManagement {
         if (imagesTabLink) {
             imagesTabLink.addEventListener('shown.bs.tab', () => {
                 if (!this.imagesLoaded) {
-                    console.log('Bilder-tabben visas, laddar bilder...');
                     this.loadImages();
                     this.imagesLoaded = true;
                 }
@@ -1001,33 +1000,11 @@ class ImageManagement {
             // Kontrollera om Bilder-tabben är aktiv vid laddning
             const isImagesTabActive = document.querySelector('#images-panel')?.classList.contains('active');
             if (isImagesTabActive) {
-                console.log('Bilder-tabben är aktiv vid laddning, laddar bilder...');
                 this.loadImages();
                 this.imagesLoaded = true;
             }
         } else {
-            console.warn('Kunde inte hitta Bilder-tabben för lazy-load. Försökte: button[data-bs-target="#images-panel"]');
-            console.log('Aktuella tabbar i DOM:', Array.from(document.querySelectorAll('.nav-link')).map(el => el.getAttribute('data-bs-target')));
-            // Försök igen efter en kort fördröjning
-            setTimeout(() => {
-                const retryTabLink = document.querySelector('button[data-bs-target="#images-panel"]') as HTMLElement;
-                if (retryTabLink && !this.imagesLoaded) {
-                    console.log('Hittade Bilder-tabben efter fördröjning, binder event...');
-                    retryTabLink.addEventListener('shown.bs.tab', () => {
-                        if (!this.imagesLoaded) {
-                            console.log('Bilder-tabben visas, laddar bilder...');
-                            this.loadImages();
-                            this.imagesLoaded = true;
-                        }
-                    });
-                    const isImagesTabActive = document.querySelector('#images-panel')?.classList.contains('active');
-                    if (isImagesTabActive) {
-                        console.log('Bilder-tabben är aktiv vid fördröjning, laddar bilder...');
-                        this.loadImages();
-                        this.imagesLoaded = true;
-                    }
-                }
-            }, 100);
+            console.error('Kunde inte hitta Bilder-tabben (button[data-bs-target="#images-panel"]). Bilder laddas inte förrän tabben aktiveras.');
         }
     }
 
@@ -1063,7 +1040,7 @@ class ImageManagement {
             col.className = 'col';
             col.innerHTML = `
                 <div class="card h-100">
-                    <img src="${image.thumbnailLink}" class="card-img-top" alt="${image.name}" style="aspect-ratio: 1 / 1; object-fit: cover;">
+                    <img src="${image.thumbnailLink}" class="card-img-top" alt="${image.name}" style="aspect-ratio: 1 / 1; object-fit: cover;" loading="lazy">                    
                     <div class="card-body text-center">
                         <button class="btn btn-sm btn-outline-danger" data-image-id="${image.id}" data-image-name="${image.name}">
                             <i class="bi bi-trash"></i> Ta bort
