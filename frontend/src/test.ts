@@ -69,13 +69,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         // --- NY LOGIK: Slumpa svarsalternativ och lagra mappningen ---
         questions = data.questions.map((q: any, index: number) => {
-            console.log(`Original Fråga ${index + 1}:`, q.questionText);
-            console.log(`Original Svarsalternativ:`, q.options);
-
             const { shuffled, mapping } = scrambleAndMapOptions(q.options);
-            
-            console.log(`Slumpade Svarsalternativ:`, shuffled);
-            console.log(`Mappning (slumpat index -> original index):`, mapping);
 
             return {
                 ...q,
@@ -102,7 +96,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // --- Timer ---
     function startTimer(minutes: number) {
-        console.log(`Starting timer for ${minutes} minutes`);
         let seconds = minutes * 60;
         
         timerInterval = window.setInterval(() => {
@@ -215,7 +208,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const selectedOption = (event.target as HTMLInputElement).value;
         userAnswers[currentQuestionIndex] = parseInt(selectedOption, 10);
         
-        console.log(`Användare valde index: ${userAnswers[currentQuestionIndex]} för fråga ${currentQuestionIndex + 1}`);
         renderProgressBar();
         updateNavButtons();
     }
@@ -247,27 +239,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             };
         });
         
-        // --- FÖRBÄTTRAD LOGGNING FÖR PAYLOAD ---
-        console.log('--- Skickar in provet (Unscrambled) ---');
-        console.log('Totala frågor:', questions.length);
-        console.log('Provförsöks-ID (attemptId):', attemptId);
-        console.log('Användarens svar (payload):');
-
         answersPayload.forEach((answer, index) => {
             const question = questions[index];
             const selectedOptionText = answer.selectedOptionIndex !== null
                 ? question.options[answer.selectedOptionIndex]
                 : 'Inget svar valt';
             
-            console.log(
-                `\nFråga ${index + 1}:` +
-                `\n  - Fråge-ID: ${answer.questionId}` +
-                `\n  - Användarens valda index (original): ${answer.selectedOptionIndex}` +
-                `\n  - Användarens valda svar: "${selectedOptionText}"`
-            );
         });
-        console.log('--- Slut på payload-logg ---');
-        // --- SLUT FÖRBÄTTRAD LOGGNING ---
 
         try {
             const response = await fetch(`/api/tests/${attemptId}/submit`, {

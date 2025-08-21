@@ -39,7 +39,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 } else if (subject.status !== 'passed') {
                     actionCell = `<td><button class="btn btn-success btn-sm create-test-btn" data-subject-id="${subject.subjectId}" data-subject-name="${subject.subjectName}" data-student-name="${data.student.username}">Skapa Prov</button></td>`;
                 }
-                console.log('Status: ' +  subject.status)
                 const statusText = 
                     subject.status === 'locked' ? 'Låst' :
                     subject.status === 'passed' ? 'Godkänd' :

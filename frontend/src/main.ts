@@ -56,7 +56,6 @@ async function handleCredentialResponse(response: any) {
 
     if (res.ok) {
         const data = await res.json();
-        console.log("Inloggning lyckades:", data);
         localStorage.setItem("jwt_token", data.jwt); // vår egen server-jwt
         localStorage.setItem('username', data.username);
         
@@ -99,7 +98,6 @@ export function showSelectImageModal(onSelect: (id: string, url: string) => void
     
     // Hämta token (justera om du använder annan lagring!)
     const token = localStorage.getItem("jwt_token");
-    console.log("Token:", token);
 
     // Hämta bilder från backend
     fetch("/api/images", {
@@ -114,7 +112,6 @@ export function showSelectImageModal(onSelect: (id: string, url: string) => void
             grid.innerHTML = "";
 
             images.forEach((img: any) => {
-                console.log("Image:", img);
                 const col = document.createElement("div");
                 col.className = "col";
 
@@ -126,7 +123,6 @@ export function showSelectImageModal(onSelect: (id: string, url: string) => void
                 thumb.innerHTML = `
                     <img src="${img.thumbnailLink}" class="card-img-top" alt="${img.name}">
                 `;
-                console.log("Thumbnail:", thumb);
 
                 thumb.addEventListener("click", () => {
                     grid.querySelectorAll(".image-thumbnail").forEach(el => el.classList.remove("selected"));

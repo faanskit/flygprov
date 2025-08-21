@@ -17,7 +17,6 @@ const handleStartTest = async (db: Db, testId: string, studentId: ObjectId) => {
         testId: test._id,
         studentId: studentId,
     });
-    console.log('Existing attempt found:', existingAttempt);
     // If an existing attempt is found, return error
     if (existingAttempt) {
         // Update the attempt in the database to stop further attempts
