@@ -215,7 +215,13 @@ class UserManagement {
     }
 
     private async createUser(): Promise<void> {
-        const authMethod = (document.getElementById('authMethod') as HTMLSelectElement).value as 'local' | 'google';
+        let authMethod: 'local' | 'google' = 'local';
+        if( this.userType == 'Examiner'){
+            authMethod = 'local';
+        }
+        else {
+            authMethod = (document.getElementById('authMethod') as HTMLSelectElement).value as 'local' | 'google';
+        }
         let username = '';
         let email = '';
         if (authMethod === 'local') {
@@ -344,12 +350,29 @@ class UserManagement {
     }
 
     private showSuccessModal(title: string, message: string): void {
-        // Göm eventuella andra öppna modals först för att undvika konflikter
-        this.modals.confirmation.hide();
-        
         (document.getElementById('successModalLabel')!).textContent = title;
         (document.getElementById('success-message')!).innerHTML = message;
         this.modals.success.show();
+        
+        // Add explicit click handlers for close buttons after modal is shown
+        setTimeout(() => {
+            const modalElement = document.getElementById('successModal');
+            if (modalElement) {
+                // Remove any existing listeners and add fresh ones
+                modalElement.querySelectorAll('[data-bs-dismiss="modal"]').forEach(button => {
+                    // Clone the button to remove all existing event listeners
+                    const newButton = button.cloneNode(true) as HTMLElement;
+                    button.parentNode?.replaceChild(newButton, button);
+                    
+                    // Add fresh click handler
+                    newButton.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        this.modals.success.hide();
+                    });
+                });
+            }
+        }, 100);
     }
 }
 
