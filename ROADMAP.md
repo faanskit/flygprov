@@ -1,12 +1,7 @@
 # Roadmap
 ## Overview
 ### Functionality
-* Seed script to reset admin
-* Seed initialize the system from scratch
-* Use Google Auth to login
-  -- Detailed requirements does not exist
-* Add name and surname for students (Depends on Google Auth to login)
-  -- Detailed requirements does not exist
+* TBA
 
 ### Improvements
 * TBA
@@ -18,76 +13,6 @@
 
 
 ## Detailed Description
-### **Seed script to reset admin**
-
-**Problem:** If the admin password is lost, there is no way to reset it.
-
-#### **1.1 Create script to reset admin**
-* In netlify/functions/src there are multiple supporting scripts, all started via netlify run 
-  as per netlify/functions/paackage.json:
-
-    Seed the system from start:
-    "db:seed": "dotenv -e ../../.env ts-node src/seed.ts",
-    
-    Seed sample tests into the system
-    "db:seed:tests": "dotenv -e ../../.env ts-node src/seed-tests.ts",
-    
-    Seed questions from a CSV into the system
-    "db:seed:pof": "dotenv -e ../../.env ts-node src/seed-questions.ts src/data/flight_principles_questions_balanced_120.csv",
-    
-    Reset the user student to basics
-    "db:reset:student": "dotenv -e ../../.env ts-node src/reset-student.ts"
-
-  - Create a new script src/reset-admin.ts based on reset-student.ts that sets the password of the user "admin" to "password"
-  - Add it to package.json as "db:reset:admin"
-
-#### **1.2 Systemprocess**
-* N/A
-
-#### **1.3 Konfiguration**
-* N/A
-
-#### **1.4 API Endpoints (Backend)**
-* N/A
-
-
-### **Seed initialize the system from scratch**
-
-**Problem:** If we have to set-up the system from scratch, we don't have a full srcipt for it.
-
-#### **2.1 Create scrip to initalite the databases**
-* In netlify/functions/src there are multiple supporting scripts, all started via netlify run 
-  as per netlify/functions/paackage.json:
-
-    Seed the system from start:
-    "db:seed": "dotenv -e ../../.env ts-node src/seed.ts",
-    
-    Seed sample tests into the system
-    "db:seed:tests": "dotenv -e ../../.env ts-node src/seed-tests.ts",
-    
-    Seed questions from a CSV into the system
-    "db:seed:pof": "dotenv -e ../../.env ts-node src/seed-questions.ts src/data/flight_principles_questions_balanced_120.csv",
-    
-    Reset the user student to basics
-    "db:reset:student": "dotenv -e ../../.env ts-node src/reset-student.ts"
-  
-  - Check so that the system is not already created, and if so stop the operation
-  - Create a script src/intialize-system.ts based on seed.ts that:
-    -- Creates a database called "flygprov"
-    -- In that database, creates collections: questions, subjects, test_attempts, tests, users
-    -- Populates the nine subjects, in collection "subjects", as per this list:
-        LAW, Luftfartsrätt, Omfattar nationella och internationella luftfartsregler, 45 minuter
-        AGK, Allmän luftfartygskunskap, Omfattar tekniska aspekter av luftfartyg och deras system, 35 minuter
-        FPP, Genomförande och planering av flygningar, Omfattar planering och genomförande av flygningar inklusive ruttplanering och bränsleberäkningar, 95 minuter
-        HPL, Människans prestationsförmåga, Omfattar fysiologiska och psykologiska faktorer som påverkar pilotens prestation, 30 minuter
-        MET, Meteorologi, Omfattar väderfenomen och deras påverkan på flygning, 45 minuter
-        NAV, Navigering, Omfattar principer och tekniker för flygnavigering, 65 minuter
-        OPS, Operativa förfaranden, Omfattar rutiner och procedurer för säker flygning, 30 minuter
-        POF, Flygningens grundprinciper, Omfattar aerodynamik och flygplans prestanda, 45 minuter
-        COM, Kommunikation, Omfattar radiokommunikation och flygledningsprocedurer, 30 minuter
-    -- Creates the user "admin" with password "password":
-
-  - Add it to package.json as "db:initiatize:system"
 
 ### **Document system management**
 
@@ -98,34 +23,87 @@
   - Set-up a MongoDb account and obtain the MONGO_URI
   - Set-up a Netlify account
   - Set-up a Github account
-  - Clone the flyprov repository
+  - Clone the flyprov repository from https://github.com/faanskit/flygprov
   - Create Netllify project and connect it to Github
+  - Create Refresh token using this script:
+      // google.js
+      const { google } = require("googleapis");
+      const readline = require("readline");
+
+      // Ersätt med dina egna värden från Google Cloud Console
+      const CLIENT_ID = "YOUR_ID.apps.googleusercontent.com";
+      const CLIENT_SECRET = "YOUR_SECRET";
+      const REDIRECT_URI = "http://localhost:8888/api/oauth2callback"; 
+
+      const oauth2Client = new google.auth.OAuth2(
+        CLIENT_ID,
+        CLIENT_SECRET,
+        REDIRECT_URI
+      );
+
+      // Tillåt bara filåtkomst/skapande i Drive
+      const SCOPES = [
+        "https://www.googleapis.com/auth/drive.file",
+        "https://www.googleapis.com/auth/drive.readonly"
+      ];
+
+      // Full drive access
+      // const SCOPES = [
+      //   "https://www.googleapis.com/auth/drive",
+      // ];
+
+
+      // Steg 1: Skapa en auth-URL
+      const url = oauth2Client.generateAuthUrl({
+        access_type: "offline", // Viktigt för att få refresh_token
+        prompt: "consent",       // Tvinga fram en refresh_token första gången
+        scope: SCOPES,
+      });
+
+      console.log("Öppna denna URL i din webbläsare:\n", url);
+
+      // Steg 2: Klistra in koden du får från Google
+      const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+      rl.question("Klistra in koden här: ", async (code) => {
+        try {
+          const { tokens } = await oauth2Client.getToken(code);
+          console.log("\n✅ Refresh token (spara denna i Netlify env):\n", tokens.refresh_token);
+        } catch (err) {
+          console.error("Fel vid hämtning av tokens:", err);
+        }
+        rl.close();
+      });
+
+
+
   - Configure the environment variables in Netlify:
-  -- MONGO_URI
-  -- JWT_SECRET 
-  -- GRACE_PERIOD_DAYS 
+    .--------------------------------------------------------------------------------------.
+    |                                Environment variables                                 |
+    |--------------------------------------------------------------------------------------|
+    |           Key           |                       Value                        | Scope |
+    |-------------------------|----------------------------------------------------|-------|
+    | GOOGLE_CLIENT_ID        | ************************************************** | All   |
+    | GOOGLE_CLIENT_SECRET    | ************************************************** | All   |
+    | GOOGLE_REFRESH_TOKEN    | ************************************************** | All   |
+    | GOOGLE_SHARED_DRIVE_ID  | ************************************************** | All   |
+    | GOOGLE_SHARED_FOLDER_ID | ************************************************** | All   |
+    | GRACE_PERIOD_DAYS       | ************************************************** | All   |
+    | JWT_SECRET              | ************************************************** | All   |
+    | MONGO_DB_NAME           | ************************************************** | All   |
+    | MONGO_URI               | ************************************************** | All   |
+    '--------------------------------------------------------------------------------------'
+
   - Create a .env file from .env.example
   - Install Netlify CLI
   - Run the setup comment: npm run db:initiatize:system -w netlify/functions
   - Inform admin and default password
   - Login as admin to create examiners
 
+
 #### **3.2 Create documentation on system setup**
 * Create SYSTEM_OPERATION.md that documents the how to operate the system
-    Seed the system from start (do not use):
-    "db:seed": "dotenv -e ../../.env ts-node src/seed.ts",
-    
-    Seed sample tests into the system:
-    "db:seed:tests": "dotenv -e ../../.env ts-node src/seed-tests.ts",
-    
-    Seed questions from a CSV into the system:
-    "db:seed:pof": "dotenv -e ../../.env ts-node src/seed-questions.ts src/data/flight_principles_questions_balanced_120.csv",
-    
-    Reset the user student to basics:
-    "db:reset:student": "dotenv -e ../../.env ts-node src/reset-student.ts"
-    
     Reset the admin password:
-    "db:reset:admin": "dotenv -e ../../.env ts-node src/reset-admin.ts"
+    npm run db:reset:admin -w netlify/functions
 
 
 ### **Updated the README.md**

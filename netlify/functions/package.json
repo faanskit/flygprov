@@ -8,7 +8,9 @@
     "db:seed": "dotenv -e ../../.env ts-node src/seed.ts",
     "db:seed:tests": "dotenv -e ../../.env ts-node src/seed-tests.ts",
     "db:seed:pof": "dotenv -e ../../.env ts-node src/seed-questions.ts src/data/flight_principles_questions_balanced_120.csv",
-    "db:reset:student": "dotenv -e ../../.env ts-node src/reset-student.ts"
+    "db:reset:student": "dotenv -e ../../.env ts-node src/reset-student.ts",
+    "db:reset:admin": "dotenv -e ../../.env ts-node src/reset-admin.ts",
+    "db:initiatize:system": "dotenv -e ../../.env ts-node src/initialize-system.ts"
   },
   "keywords": [],
   "author": "",
