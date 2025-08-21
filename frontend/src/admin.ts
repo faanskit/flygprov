@@ -962,6 +962,7 @@ class QuestionManagement {
 }
 
 class ImageManagement {
+    private imagesLoaded: boolean = false;
     private imagesApi = '/api/images';
     private adminImagesApi = '/api/admin-images';
     private fileInput: HTMLInputElement;
@@ -986,7 +987,48 @@ class ImageManagement {
         this.confirmationModal = new (window as any).bootstrap.Modal(document.getElementById('confirmationModal'));
 
         this.bindEvents();
-        this.loadImages();
+
+        // Lägg till lazy-load för Bilder-tabben
+        const imagesTabLink = document.querySelector('button[data-bs-target="#images-panel"]') as HTMLElement;
+        if (imagesTabLink) {
+            imagesTabLink.addEventListener('shown.bs.tab', () => {
+                if (!this.imagesLoaded) {
+                    console.log('Bilder-tabben visas, laddar bilder...');
+                    this.loadImages();
+                    this.imagesLoaded = true;
+                }
+            });
+            // Kontrollera om Bilder-tabben är aktiv vid laddning
+            const isImagesTabActive = document.querySelector('#images-panel')?.classList.contains('active');
+            if (isImagesTabActive) {
+                console.log('Bilder-tabben är aktiv vid laddning, laddar bilder...');
+                this.loadImages();
+                this.imagesLoaded = true;
+            }
+        } else {
+            console.warn('Kunde inte hitta Bilder-tabben för lazy-load. Försökte: button[data-bs-target="#images-panel"]');
+            console.log('Aktuella tabbar i DOM:', Array.from(document.querySelectorAll('.nav-link')).map(el => el.getAttribute('data-bs-target')));
+            // Försök igen efter en kort fördröjning
+            setTimeout(() => {
+                const retryTabLink = document.querySelector('button[data-bs-target="#images-panel"]') as HTMLElement;
+                if (retryTabLink && !this.imagesLoaded) {
+                    console.log('Hittade Bilder-tabben efter fördröjning, binder event...');
+                    retryTabLink.addEventListener('shown.bs.tab', () => {
+                        if (!this.imagesLoaded) {
+                            console.log('Bilder-tabben visas, laddar bilder...');
+                            this.loadImages();
+                            this.imagesLoaded = true;
+                        }
+                    });
+                    const isImagesTabActive = document.querySelector('#images-panel')?.classList.contains('active');
+                    if (isImagesTabActive) {
+                        console.log('Bilder-tabben är aktiv vid fördröjning, laddar bilder...');
+                        this.loadImages();
+                        this.imagesLoaded = true;
+                    }
+                }
+            }, 100);
+        }
     }
 
     private bindEvents(): void {
@@ -1285,7 +1327,7 @@ class ImportManagement {
                 btn.addEventListener('click', () => this.handleLinkExisting(btn.dataset.image!));
             });
             (this.imageHandlingSection.querySelectorAll('.select-image') as NodeListOf<HTMLElement>).forEach(btn => {
-                btn.addEventListener('click', () => this.handleSelectImage(btn.dataset.image!));
+                btn.addEventListener('click', () => this.handleSelectImage(btn.dataset.image!)); // HERE
             });
             (this.imageHandlingSection.querySelectorAll('.upload-new') as NodeListOf<HTMLElement>).forEach(btn => {
                 btn.addEventListener('click', () => {
