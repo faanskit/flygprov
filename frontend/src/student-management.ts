@@ -3,6 +3,7 @@ import { renderHeader } from './header';
 interface Student {
     userId: string;
     username: string;
+    email?: string;
     status: 'active' | 'archived';
     authMethod: 'local' | 'google';
     createdAt: string;
@@ -12,7 +13,9 @@ interface Student {
 interface CreateStudentResponse {
     userId: string;
     username: string;
-    tempPassword: string;
+    email?: string;
+    authMethod: 'local' | 'google';
+    tempPassword?: string;
 }
 
 class StudentManagement {
@@ -60,12 +63,44 @@ class StudentManagement {
             });
         }
 
-        // Username input validation
+        // Form input validation and toggling
+        const authProviderSelect = document.getElementById('auth-provider') as HTMLSelectElement;
+        if (authProviderSelect) {
+            authProviderSelect.addEventListener('change', () => {
+                this.toggleAuthFields();
+                this.validateForm();
+            });
+        }
+
         const usernameInput = document.getElementById('username') as HTMLInputElement;
         if (usernameInput) {
-            usernameInput.addEventListener('input', () => {
-                this.validateUsername(usernameInput.value);
-            });
+            usernameInput.addEventListener('input', () => this.validateForm());
+        }
+
+        const emailInput = document.getElementById('google-email') as HTMLInputElement;
+        if (emailInput) {
+            emailInput.addEventListener('input', () => this.validateForm());
+        }
+    }
+
+    private toggleAuthFields(): void {
+        const authProviderSelect = document.getElementById('auth-provider') as HTMLSelectElement;
+        const usernameGroup = document.getElementById('username-group');
+        const googleEmailGroup = document.getElementById('google-email-group');
+
+        if (authProviderSelect && usernameGroup && googleEmailGroup) {
+            const selectedProvider = authProviderSelect.value;
+            if (selectedProvider === 'google') {
+                usernameGroup.classList.add('d-none');
+                googleEmailGroup.classList.remove('d-none');
+                (document.getElementById('username') as HTMLInputElement).required = false;
+                (document.getElementById('google-email') as HTMLInputElement).required = true;
+            } else { // local
+                usernameGroup.classList.remove('d-none');
+                googleEmailGroup.classList.add('d-none');
+                (document.getElementById('username') as HTMLInputElement).required = true;
+                (document.getElementById('google-email') as HTMLInputElement).required = false;
+            }
         }
     }
 
@@ -141,8 +176,12 @@ class StudentManagement {
         
         const statusClass = student.status === 'active' ? 'success' : 'secondary';
         const statusText = student.status === 'active' ? 'Aktiv' : 'Arkiverad';
-        const passwordStatus = student.forcePasswordChange ? 'Nej' : 'Ja';
-        const passwordClass = student.forcePasswordChange ? 'warning' : 'success';
+        let passwordStatus = 'Google';
+        let passwordClass = 'info';
+        if (student.authMethod === 'local'){
+            passwordStatus = student.forcePasswordChange ? 'Nej' : 'Ja';
+            passwordClass = student.forcePasswordChange ? 'warning' : 'success';
+        }
         
         const createdAt = new Date(student.createdAt).toLocaleDateString('sv-SE');
 
@@ -227,29 +266,59 @@ class StudentManagement {
         if (form) {
             form.reset();
         }
+        const authProviderSelect = document.getElementById('auth-provider') as HTMLSelectElement;
+        if (authProviderSelect) {
+            authProviderSelect.value = 'google';
+        }
+        this.toggleAuthFields();
+        this.validateForm();
         this.modals.createStudent.show();
     }
 
-    private validateUsername(username: string): boolean {
+    private validateForm(): void {
+        const authMethod = (document.getElementById('auth-provider') as HTMLSelectElement).value;
+        const username = (document.getElementById('username') as HTMLInputElement).value.trim();
+        const email = (document.getElementById('google-email') as HTMLInputElement).value.trim();
         const submitBtn = document.getElementById('create-student-submit') as HTMLButtonElement;
-        const isValid = username.length >= 3 && username.length <= 20;
-        
+
+        let isValid = false;
+        if (authMethod === 'local') {
+            isValid = username.length >= 3 && username.length <= 20;
+        } else { // google
+            isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
         if (submitBtn) {
             submitBtn.disabled = !isValid;
         }
-        
-        return isValid;
     }
 
     private async createStudent(): Promise<void> {
+        const authMethod = (document.getElementById('auth-provider') as HTMLSelectElement).value as 'local' | 'google';
         const usernameInput = document.getElementById('username') as HTMLInputElement;
-        const username = usernameInput.value.trim();
+        const emailInput = document.getElementById('google-email') as HTMLInputElement;
 
-        if (!username || !this.validateUsername(username)) {
-            return;
+        let username = '';
+        let email = '';
+        let body: { username: string, authMethod: 'local' | 'google', email?: string };
+
+        if (authMethod === 'local') {
+            username = usernameInput.value.trim();
+            if (!(username.length >= 3 && username.length <= 20)) {
+                this.showError('Användarnamnet måste vara mellan 3 och 20 tecken.');
+                return;
+            }
+            body = { username, authMethod };
+        } else { // google
+            email = emailInput.value.trim();
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                this.showError('Ange en giltig e-postadress.');
+                return;
+            }
+            username = email;
+            body = { username, authMethod, email };
         }
 
-        // Show loading state on submit button
         const submitBtn = document.getElementById('create-student-submit') as HTMLButtonElement;
         const originalText = submitBtn.textContent;
         submitBtn.disabled = true;
@@ -268,11 +337,11 @@ class StudentManagement {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ username })
+                body: JSON.stringify(body)
             });
 
             if (response.status === 409) {
-                this.showError('Användarnamnet finns redan. Välj ett annat.');
+                this.showError('Användarnamnet eller e-postadressen finns redan. Välj en annan.');
                 return;
             }
 
@@ -298,14 +367,13 @@ class StudentManagement {
             const result: CreateStudentResponse = await response.json();
             this.modals.createStudent.hide();
             this.showCreateStudentSuccess(result);
-            this.loadStudents(); // Refresh the list
+            this.loadStudents();
 
         } catch (error) {
             console.error('Error creating student:', error);
             const errorMessage = error instanceof Error ? error.message : 'Kunde inte skapa studenten.';
             this.showError(errorMessage);
         } finally {
-            // Restore submit button
             submitBtn.disabled = false;
             submitBtn.textContent = originalText;
         }
@@ -314,16 +382,31 @@ class StudentManagement {
     private showCreateStudentSuccess(result: CreateStudentResponse): void {
         const successModalLabel = document.getElementById('successModalLabel');
         const successMessage = document.getElementById('success-message');
+        const importantBox = document.querySelector('#successModal .alert-warning');
+
         if (successModalLabel) {
             successModalLabel.textContent = "Student skapad!";
         }
-        if (successMessage) {
-            successMessage.innerHTML = `
-                <div class="alert alert-success">
-                    <strong>Studenten '${result.username}' har skapats!</strong><br>
-                    <strong>Temporärt lösenord:</strong> <code>${result.tempPassword}</code>
-                </div>
-            `;
+        console.log('Create student result:', result);
+
+        if (successMessage && importantBox) {
+            if (result.authMethod === 'local' && result.tempPassword) {
+                successMessage.innerHTML = `
+                    <div class="alert alert-success">
+                        <strong>Studenten '${result.username}' har skapats!</strong><br>
+                        <strong>Temporärt lösenord:</strong> <code>${result.tempPassword}</code>
+                    </div>
+                `;
+                importantBox.classList.remove('d-none');
+            } else {
+                successMessage.innerHTML = `
+                    <div class="alert alert-success">
+                        <strong>Google-studenten '${result.email || result.username}' har skapats!</strong><br>
+                        Studenten kan nu logga in med sitt Google-konto.
+                    </div>
+                `;
+                importantBox.classList.add('d-none');
+            }
         }
         this.modals.success.show();
     }
@@ -331,16 +414,19 @@ class StudentManagement {
     private showPasswordResetSuccess(tempPassword: string): void {
         const successModalLabel = document.getElementById('successModalLabel');
         const successMessage = document.getElementById('success-message');
+        const importantBox = document.querySelector('#successModal .alert-warning');
+
         if (successModalLabel) {
             successModalLabel.textContent = "Lösenord återställt!";
         }
-        if (successMessage) {
+        if (successMessage && importantBox) {
             successMessage.innerHTML = `
                 <div class="alert alert-success">
                     <strong>Lösenordet har återställts!</strong><br>
                     <strong>Nytt temporärt lösenord:</strong> <code>${tempPassword}</code>
                 </div>
             `;
+            (importantBox as HTMLElement).classList.remove('d-none');
         }
         this.modals.success.show();
     }

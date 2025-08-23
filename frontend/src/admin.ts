@@ -245,6 +245,9 @@ class UserManagement {
 
         try {
             const token = localStorage.getItem('jwt_token');
+            const body = { username, authMethod, email };
+
+            console.log('Creating student with data:', body);
             const response = await fetch(this.apiEndpoint, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },

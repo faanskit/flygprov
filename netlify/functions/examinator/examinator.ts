@@ -118,25 +118,39 @@ async function getAllStudents(db: Db, status?: string) {
     }));
 }
 
-async function createNewStudent(db: Db, username: string) {
+async function createNewStudent(db: Db, username: string, authMethod: 'local' | 'google', email?: string) {
     // Check if username already exists
-    const existingUser = await db.collection<User>('users').findOne({ username });
-    if (existingUser) {
-        throw new Error("Username already exists");
-    }
-    
-    // Generate simple temporary password
-    const tempPassword = `${username}123`;
-    const hashedPassword = await bcrypt.hash(tempPassword, 10);
-    
+    if (authMethod === 'google') {
+        if (!email) throw new Error("Email is required for Google users");
+        const existing = await db.collection<User>('users').findOne({ email });
+        if (existing) throw new Error("Email already exists");
+        username = email;  // Sätt username till email för enkelhet (kan anpassas)
+    } else {
+        const existingUser = await db.collection<User>('users').findOne({ username });
+        if (existingUser) {
+            throw new Error("Username already exists");
+        }
+    }    
+
+    let tempPassword: string | undefined;
+    let hashedPassword: string | undefined;
+    let forcePasswordChange = false;
+    if (authMethod === 'local') {
+        // Generate simple temporary password
+        tempPassword = `${username}123`;
+        hashedPassword = await bcrypt.hash(tempPassword, 10);
+        forcePasswordChange = true;
+    }    
+
     const newStudent: User = {
         username,
         password: hashedPassword,
-        authMethod: 'local',
         role: 'student',
+        authMethod,
+        googleSub: undefined,  // Sätts vid första Google-login
         createdAt: new Date(),
         archived: false,
-        forcePasswordChange: true
+        forcePasswordChange
     };
     
     const result = await db.collection<User>('users').insertOne(newStudent);
@@ -144,6 +158,8 @@ async function createNewStudent(db: Db, username: string) {
     return {
         userId: result.insertedId,
         username: newStudent.username,
+        email: newStudent.email,
+        authMethod: newStudent.authMethod,
         tempPassword
     };
 }
@@ -332,13 +348,13 @@ async function handleStudentManagement(db: Db, event: HandlerEvent, pathParts: s
         if (event.httpMethod === "POST" && pathParts.length === 3) {
             // POST /api/examinator/students
             const body = JSON.parse(event.body || '{}');
-            const { username } = body;
+            const { username, authMethod, email } = body;
             
             if (!username) {
                 return { statusCode: 400, body: JSON.stringify({ error: "Username is required" }) };
             }
             
-            const result = await createNewStudent(db, username);
+            const result = await createNewStudent(db, username, authMethod, email);
             return { 
                 statusCode: 201, 
                 body: JSON.stringify(result),

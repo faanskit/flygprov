@@ -80,9 +80,20 @@
                 <div class="modal-body">
                     <form id="create-student-form">
                         <div class="mb-3">
+                            <label for="auth-provider" class="form-label">Autentiseringsmetod</label>
+                            <select class="form-select" id="auth-provider" name="auth-provider">
+                                <option value="google" selected>Google</option>
+                                <option value="local">Lokal</option>
+                            </select>
+                        </div>
+                        <div class="mb-3" id="username-group">
                             <label for="username" class="form-label">Användarnamn</label>
                             <input type="text" class="form-control" id="username" name="username" required>
                             <div class="form-text">Användarnamnet måste vara unikt.</div>
+                        </div>
+                        <div class="mb-3 d-none" id="google-email-group">
+                            <label for="google-email" class="form-label">Google E-post</label>
+                            <input type="email" class="form-control" id="google-email" name="google-email">
                         </div>
                     </form>
                 </div>
