@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
             item.innerHTML = `
                 <div class="flex-grow-1 me-3">
                     <span class="fw-bold me-2">${index + 1}.</span>
-                    ${q.questionText}
+                    <b>(${q.questionId})</b> ${q.questionText}
                 </div>
                 <button class="btn btn-sm btn-outline-primary refresh-btn" data-question-id="${q._id}" title="Byt ut fråga">
                     <i class="bi bi-arrow-repeat"></i>

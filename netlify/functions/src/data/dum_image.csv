@@ -1,5 +1,5 @@
-code,question,option_1,option_2,option_3,option_4,correct_option,active,image
-DUM,"Om en katt kunde cykla på en sandlåda, skulle den välja skor eller en robot?",Kanske,Sött,Umami,Ja,2,True,
-DUM,"Vad krupet?",Katt,Hund,Fågel,Orm,4,True,snake.png
-DUM,"Detta är ett...","Ett flygplan","Stålmannen","En raket","Två helikoptrar",2,True,superman.jpg
-DUM,"Killen har..","Ett S på magen","Ett X på magen","Ett S på ryggen","Fem S på magen",2,True,superman.jpg
+code,qid,question,option_1,option_2,option_3,option_4,correct_option,active,image
+DUM,999,"Om en katt kunde cykla på en sandlåda, skulle den välja skor eller en robot?",Kanske,Sött,Umami,Ja,2,True,
+DUM,998,"Vad krupet?",Katt,Hund,Fågel,Orm,4,True,snake.png
+DUM,997,"Detta är ett...","Ett flygplan","Stålmannen","En raket","Två helikoptrar",2,True,superman.jpg
+DUM,996,"Killen har..","Ett S på magen","Ett X på magen","Ett S på ryggen","Fem S på magen",2,True,superman.jpg

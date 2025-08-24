@@ -15,7 +15,7 @@ const handler: Handler = async (event: HandlerEvent) => {
     try {
         const { db } = await connectToDatabase();
         const pathParts = event.path.split('/').filter(p => p);
-        const questionId = pathParts.length > 2 ? pathParts[2] : null;
+        const questionObjectId = pathParts.length > 2 ? pathParts[2] : null;
 
         // GET /api/admin-questions?subjectId=...
         if (event.httpMethod === "GET") {
@@ -33,15 +33,16 @@ const handler: Handler = async (event: HandlerEvent) => {
         // POST /api/admin-questions
         if (event.httpMethod === "POST") {
             const body = JSON.parse(event.body || '{}');
-            const { subjectId, questionText, options, correctOptionIndex, imageId } = body; // Added imageId
+            const { subjectId, questionText, questionId, options, correctOptionIndex, imageId } = body; // Added imageId
 
-            if (!subjectId || !questionText || !options || options.length !== 4 || correctOptionIndex === undefined) {
+            if (!subjectId || !questionText || !questionId || !options || options.length !== 4 || correctOptionIndex === undefined) {
                 return { statusCode: 400, body: JSON.stringify({ error: "Missing required fields for question creation." }) };
             }
 
             const newQuestion: Question = {
                 subjectId: new ObjectId(subjectId),
                 questionText,
+                questionId,
                 options,
                 correctOptionIndex,
                 active: true, // Questions are active by default
@@ -52,20 +53,21 @@ const handler: Handler = async (event: HandlerEvent) => {
             return { statusCode: 201, body: JSON.stringify({ insertedId: result.insertedId }) };
         }
 
-        // PUT /api/admin-questions/:questionId
-        if (event.httpMethod === "PUT" && questionId) {
+        // PUT /api/admin-questions/:questionObjectId
+        if (event.httpMethod === "PUT" && questionObjectId) {
             const body = JSON.parse(event.body || '{}');
-            const { questionText, options, correctOptionIndex, active, imageId } = body; // Added imageId
+            const { questionText, questionId, options, correctOptionIndex, active, imageId } = body; // Added imageId
 
             const updateDoc: Partial<Question> = {};
             if (questionText) updateDoc.questionText = questionText;
+            if (questionId) updateDoc.questionId = questionId;
             if (options) updateDoc.options = options;
             if (correctOptionIndex !== undefined) updateDoc.correctOptionIndex = correctOptionIndex;
             if (active !== undefined) updateDoc.active = active;
             if (imageId !== undefined) updateDoc.imageId = imageId; // Add imageId to update object
 
             const result = await db.collection<Question>('questions').updateOne(
-                { _id: new ObjectId(questionId) },
+                { _id: new ObjectId(questionObjectId) },
                 { $set: updateDoc }
             );
 
@@ -75,9 +77,9 @@ const handler: Handler = async (event: HandlerEvent) => {
             return { statusCode: 200, body: JSON.stringify({ message: "Question updated successfully" }) };
         }
 
-        // DELETE /api/admin-questions/:questionId
-        if (event.httpMethod === "DELETE" && questionId) {
-            const result = await db.collection<Question>('questions').deleteOne({ _id: new ObjectId(questionId) });
+        // DELETE /api/admin-questions/:questionObjectId
+        if (event.httpMethod === "DELETE" && questionObjectId) {
+            const result = await db.collection<Question>('questions').deleteOne({ _id: new ObjectId(questionObjectId) });
 
             if (result.deletedCount === 0) {
                 return { statusCode: 404, body: JSON.stringify({ error: "Question not found" }) };

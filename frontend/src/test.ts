@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         
         questionContentEl.innerHTML = `
-            <h5 class="card-title">Fråga ${currentQuestionIndex + 1}</h5>
+            <h5 class="card-title">Fråga ${currentQuestionIndex + 1} (${question.questionId}):</h5>
             <p class="card-text">${question.questionText}</p>
             ${optionsToRender.map((option: string, i: number) => `
                 <div class="form-check">

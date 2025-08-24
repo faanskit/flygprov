@@ -33,19 +33,6 @@ const handleStartTest = async (db: Db, testId: string, studentId: ObjectId) => {
             }
         );
 
-    // await attemptsCollection.updateOne(
-    //     { _id: new ObjectId(attemptId) },
-    //     {
-    //         $set: {
-    //             answers: gradedAnswers,
-    //             score: score,
-    //             passed: passed,
-    //             endTime: new Date(),
-    //             submittedAt: new Date(),
-    //             submissionType: submissionType
-    //         }
-    //     }
-    // );
         return {
             statusCode: 400,
             body: JSON.stringify({
@@ -84,7 +71,7 @@ const handleStartTest = async (db: Db, testId: string, studentId: ObjectId) => {
             attemptId: attemptId,
             testName: test.name,
             timeLimitMinutes: test.timeLimitMinutes,
-            questions: questions.map(({ _id, questionText, options, imageId }) => ({ _id, questionText, options, imageId }))
+            questions: questions.map(({ _id, questionId, questionText, options, imageId }) => ({ _id, questionId, questionText, options, imageId }))
         }),
         headers: { "Content-Type": "application/json" }
     };

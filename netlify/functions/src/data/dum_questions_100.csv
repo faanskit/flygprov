@@ -1,101 +1,101 @@
-code,question,option_1,option_2,option_3,option_4,correct_option,active
-DUM,"Om en katt kunde cykla på en sandlåda, skulle den välja skor eller en robot?",Kanske,Sött,Umami,Ja,2,True
-DUM,Har en papegoja fler lampa på sommaren eller när det regnar?,Surprise,Brun,Kanske,Långsamt,1,True
-DUM,Vilken smak har orange glass?,Nej,Umami,Lycka,Kanske,2,True
-DUM,Är det farligare att möta en arg enhörning eller att äta stekt vattenmelon?,Umami,Salt,Fiskig,Långsamt,3,True
-DUM,Har en papegoja fler penna på sommaren eller när det regnar?,Pajig,Långsamt,Fiskig,Solkatt,3,True
-DUM,"Om en kanin kunde sjunga på Molnet, skulle den välja pannkakor eller en tårta?",Brun,Solkatt,Salt,Bubblig,1,True
-DUM,"Om en lampa kunde prata, vilket ord skulle den säga först?",Bubblig,Salt,Fiskig,Ja,3,True
-DUM,Är det farligare att möta ett vampyrfår eller att äta stekt vattenmelon?,Dimma,Ja,Surprise,Pajig,1,True
-DUM,Är det snabbare att hoppa genom en sandlåda eller att simma över glass?,Pajig,Glittrig,Salt,Smärta,4,True
-DUM,Har en flodhäst fler bil på sommaren eller när det regnar?,Kanske,Surprise,Ja,Umami,2,True
-DUM,Är det farligare att möta ett disco-troll eller att äta stekt vattenmelon?,Solkatt,Pajig,Umami,Glittrig,4,True
-DUM,"Om du ser en lila flodhäst dansa, vad ska du göra först?",Surprise,Brun,Umami,Sött,2,True
-DUM,Vilken smak har lila spaghetti?,Umami,Salt,Bubblig,Pajig,4,True
-DUM,Har en flodhäst fler penna på sommaren eller när det regnar?,Lycka,Sött,Nej,Dimma,3,True
-DUM,"Om du ser en blå hund dansa, vad ska du göra först?",Brun,Umami,Nej,Kanske,4,True
-DUM,Vilken smak har grön pannkaka?,Ja,Fiskig,Brun,Kanske,2,True
-DUM,Vilken smak har rosa pannkaka?,Solkatt,Smärta,Brun,Dimma,2,True
-DUM,Vilken smak har turkos kaffe?,Bubblig,Smärta,Nej,Ja,3,True
-DUM,Är det snabbare att måla genom en sandlåda eller att simma över strumpor?,Glittrig,Nej,Snabbt,Solkatt,4,True
-DUM,Vilken känsla får du när kanin bär hatt?,Solkatt,Umami,Salt,Dimma,4,True
-DUM,Har en hund fler lampa på sommaren eller när det snöar?,Sött,Fiskig,Snabbt,Lycka,2,True
-DUM,Vilken smak har blå pannkaka?,Smärta,Salt,Mjau,Nej,1,True
-DUM,"Om du ser en orange delfin dansa, vad ska du göra först?",Ja,Dimma,Sött,Snabbt,4,True
-DUM,"Om en dator kunde prata, vilket ord skulle den säga först?",Glittrig,Solkatt,Sött,Bubblig,4,True
-DUM,Vilken är den hemliga färgen på baksidan av soffa?,Sött,Dimma,Pajig,Salt,1,True
-DUM,Vilken känsla får du när pingvin bär hatt?,Kanske,Fiskig,Bubblig,Sött,4,True
-DUM,Vilken smak har blå choklad?,Fiskig,Solkatt,Mjau,Surprise,4,True
-DUM,Är det farligare att möta en sjungande zombie eller att äta ostsås med choklad?,Pajig,Umami,Smärta,Fiskig,1,True
-DUM,Vilken smak har blå spaghetti?,Bubblig,Mjau,Surprise,Fiskig,4,True
-DUM,"Om du ser en orange hund dansa, vad ska du göra först?",Glittrig,Mjau,Umami,Pajig,2,True
-DUM,Vilken känsla får du när pingvin bär hatt?,Glittrig,Ja,Långsamt,Mjau,1,True
-DUM,"Om en soffa kunde prata, vilket ord skulle den säga först?",Bubblig,Smärta,Kanske,Pajig,1,True
-DUM,Har en papegoja fler hatt på sommaren eller när det snöar?,Solkatt,Pajig,Brun,Sött,4,True
-DUM,"Om du ser en grön pingvin dansa, vad ska du göra först?",Sött,Kanske,Umami,Brun,3,True
-DUM,Vilken är den hemliga färgen på baksidan av hatt?,Brun,Bubblig,Snabbt,Fiskig,2,True
-DUM,Vilken smak har lila choklad?,Smärta,Fiskig,Umami,Glittrig,4,True
-DUM,Är det farligare att möta ett vampyrfår eller att äta ostsås med choklad?,Ja,Dimma,Sött,Kanske,2,True
-DUM,"Om en hatt kunde prata, vilket ord skulle den säga först?",Mjau,Snabbt,Pajig,Glittrig,4,True
-DUM,Är det farligare att möta ett vampyrfår eller att äta picklad glass?,Salt,Sött,Glittrig,Pajig,3,True
-DUM,"Om en delfin kunde skriva på månen, skulle den välja skor eller solsken?",Nej,Glittrig,Lycka,Solkatt,4,True
-DUM,"Om du ser en rosa katt dansa, vad ska du göra först?",Pajig,Kanske,Nej,Solkatt,2,True
-DUM,Vilken är den hemliga färgen på baksidan av dator?,Lycka,Bubblig,Mjau,Nej,1,True
-DUM,"Om du ser en grön flodhäst dansa, vad ska du göra först?",Fiskig,Pajig,Lycka,Nej,2,True
-DUM,Är det farligare att möta ett disco-troll eller att äta picklad glass?,Umami,Solkatt,Smärta,Glittrig,1,True
-DUM,Är det farligare att möta ett disco-troll eller att äta ostsås med choklad?,Glittrig,Pajig,Fiskig,Kanske,1,True
-DUM,Är det snabbare att måla genom ett bibliotek eller att simma över bananer?,Pajig,Dimma,Fiskig,Smärta,2,True
-DUM,"Om du ser en lila delfin dansa, vad ska du göra först?",Pajig,Lycka,Långsamt,Nej,4,True
-DUM,Har en katt fler lampa på sommaren eller när det blåser?,Dimma,Snabbt,Pajig,Fiskig,1,True
-DUM,Är det farligare att möta en sjungande zombie eller att äta ostsås med choklad?,Ja,Glittrig,Bubblig,Kanske,2,True
-DUM,Vilken är den hemliga färgen på baksidan av dator?,Umami,Fiskig,Solkatt,Långsamt,2,True
-DUM,Vilken känsla får du när delfin bär hatt?,Mjau,Pajig,Solkatt,Fiskig,4,True
-DUM,Vilken lukt har molnsmör?,Pajig,Långsamt,Glittrig,Solkatt,4,True
-DUM,Vilken smak har blå ost?,Pajig,Smärta,Surprise,Långsamt,1,True
-DUM,Vilken smak har orange glass?,Bubblig,Brun,Glittrig,Fiskig,2,True
-DUM,Är det snabbare att cykla genom skogen eller att springa över glass?,Salt,Kanske,Långsamt,Umami,4,True
-DUM,Vilken smak har lila pannkaka?,Fiskig,Snabbt,Lycka,Bubblig,3,True
-DUM,"Om du ser en grön koala dansa, vad ska du göra först?",Smärta,Ja,Nej,Pajig,3,True
-DUM,"Om en lampa kunde prata, vilket ord skulle den säga först?",Fiskig,Nej,Snabbt,Solkatt,1,True
-DUM,Vilken är den hemliga färgen på baksidan av dator?,Lycka,Surprise,Brun,Fiskig,1,True
-DUM,"Om en hatt kunde prata, vilket ord skulle den säga först?",Mjau,Långsamt,Snabbt,Brun,2,True
-DUM,"Om en koala kunde cykla på ett bibliotek, skulle den välja skor eller ett tält?",Nej,Lycka,Pajig,Brun,1,True
-DUM,Vilken smak har turkos kaffe?,Pajig,Bubblig,Smärta,Nej,3,True
-DUM,"Om en dator kunde prata, vilket ord skulle den säga först?",Sött,Brun,Fiskig,Kanske,2,True
-DUM,Vilken lukt har molnsmör?,Solkatt,Ja,Smärta,Mjau,2,True
-DUM,"Om en bil kunde prata, vilket ord skulle den säga först?",Nej,Solkatt,Bubblig,Brun,1,True
-DUM,"Om en koala kunde snarka på ett bibliotek, skulle den välja pannkakor eller ett tält?",Nej,Pajig,Långsamt,Bubblig,1,True
-DUM,Vilken känsla får du när koala bär hatt?,Dimma,Lycka,Fiskig,Bubblig,1,True
-DUM,"Om du ser en lila katt dansa, vad ska du göra först?",Surprise,Smärta,Snabbt,Solkatt,4,True
-DUM,"Om du ser en turkos katt dansa, vad ska du göra först?",Snabbt,Bubblig,Nej,Lycka,3,True
-DUM,Vilken känsla får du när igelkott bär hatt?,Umami,Bubblig,Ja,Smärta,1,True
-DUM,"Om en kanin kunde hoppa på skogen, skulle den välja bananer eller ett tält?",Kanske,Dimma,Sött,Långsamt,4,True
-DUM,Vilken smak har orange ost?,Smärta,Fiskig,Bubblig,Pajig,4,True
-DUM,Har en myra fler hatt på sommaren eller när det regnar?,Långsamt,Nej,Ja,Sött,3,True
-DUM,Är det farligare att möta en sjungande zombie eller att äta kolsyrad gurka?,Umami,Dimma,Snabbt,Kanske,4,True
-DUM,"Om du ser en orange hund dansa, vad ska du göra först?",Ja,Surprise,Salt,Fiskig,3,True
-DUM,Vilken lukt har en magisk stövel?,Salt,Kanske,Dimma,Brun,2,True
-DUM,Vilken är den hemliga färgen på baksidan av soffa?,Fiskig,Mjau,Surprise,Dimma,2,True
-DUM,Vilken är den hemliga färgen på baksidan av hatt?,Nej,Mjau,Snabbt,Lycka,1,True
-DUM,Är det farligare att möta ett vampyrfår eller att äta kolsyrad gurka?,Solkatt,Nej,Fiskig,Brun,3,True
-DUM,"Om en dator kunde prata, vilket ord skulle den säga först?",Långsamt,Bubblig,Surprise,Nej,3,True
-DUM,Vilken känsla får du när katt bär hatt?,Solkatt,Snabbt,Lycka,Långsamt,2,False
-DUM,"Om en delfin kunde måla på skogen, skulle den välja pannkakor eller en tårta?",Snabbt,Lycka,Salt,Sött,3,False
-DUM,Vilken känsla får du när koala bär hatt?,Långsamt,Solkatt,Salt,Dimma,2,False
-DUM,"Om en bil kunde prata, vilket ord skulle den säga först?",Pajig,Sött,Snabbt,Fiskig,4,False
-DUM,Är det farligare att möta ett vampyrfår eller att äta picklad glass?,Brun,Lycka,Kanske,Salt,3,False
-DUM,Är det farligare att möta en arg enhörning eller att äta kolsyrad gurka?,Snabbt,Umami,Långsamt,Kanske,3,False
-DUM,Vilken är den hemliga färgen på baksidan av hatt?,Ja,Kanske,Mjau,Smärta,2,False
-DUM,Vilken smak har rosa glass?,Pajig,Glittrig,Ja,Umami,2,False
-DUM,Är det farligare att möta ett vampyrfår eller att äta picklad glass?,Glittrig,Dimma,Mjau,Ja,4,False
-DUM,"Om en koala kunde cykla på skogen, skulle den välja bananer eller ett tält?",Snabbt,Glittrig,Surprise,Salt,4,False
-DUM,"Om en koala kunde måla på en hattbutik, skulle den välja skor eller ett tält?",Surprise,Lycka,Dimma,Långsamt,4,False
-DUM,Vilken är den hemliga färgen på baksidan av bil?,Långsamt,Surprise,Salt,Pajig,4,False
-DUM,Vilken smak har blå choklad?,Surprise,Lycka,Glittrig,Fiskig,4,False
-DUM,"Om du ser en turkos kanin dansa, vad ska du göra först?",Snabbt,Dimma,Salt,Ja,2,False
-DUM,Vilken är den hemliga färgen på baksidan av bil?,Snabbt,Mjau,Fiskig,Kanske,2,False
-DUM,Är det farligare att möta ett disco-troll eller att äta kolsyrad gurka?,Brun,Smärta,Glittrig,Fiskig,2,False
-DUM,Vilken lukt har osynlig sirap?,Kanske,Glittrig,Lycka,Dimma,2,False
-DUM,Vilken känsla får du när kanin bär hatt?,Kanske,Mjau,Lycka,Långsamt,4,False
-DUM,Är det snabbare att snarka genom en hattbutik eller att gömma sig över pannkakor?,Glittrig,Salt,Solkatt,Bubblig,1,False
-DUM,Har en katt fler soffa på sommaren eller när det regnar?,Glittrig,Smärta,Solkatt,Lycka,1,False
+code,qid,question,option_1,option_2,option_3,option_4,correct_option,active
+DUM,001,"Om en katt kunde cykla på en sandlåda, skulle den välja skor eller en robot?",Kanske,Sött,Umami,Ja,2,True
+DUM,002,Har en papegoja fler lampa på sommaren eller när det regnar?,Surprise,Brun,Kanske,Långsamt,1,True
+DUM,003,Vilken smak har orange glass?,Nej,Umami,Lycka,Kanske,2,True
+DUM,004,Är det farligare att möta en arg enhörning eller att äta stekt vattenmelon?,Umami,Salt,Fiskig,Långsamt,3,True
+DUM,005,Har en papegoja fler penna på sommaren eller när det regnar?,Pajig,Långsamt,Fiskig,Solkatt,3,True
+DUM,006,"Om en kanin kunde sjunga på Molnet, skulle den välja pannkakor eller en tårta?",Brun,Solkatt,Salt,Bubblig,1,True
+DUM,007,"Om en lampa kunde prata, vilket ord skulle den säga först?",Bubblig,Salt,Fiskig,Ja,3,True
+DUM,008,Är det farligare att möta ett vampyrfår eller att äta stekt vattenmelon?,Dimma,Ja,Surprise,Pajig,1,True
+DUM,009,Är det snabbare att hoppa genom en sandlåda eller att simma över glass?,Pajig,Glittrig,Salt,Smärta,4,True
+DUM,010,Har en flodhäst fler bil på sommaren eller när det regnar?,Kanske,Surprise,Ja,Umami,2,True
+DUM,011,Är det farligare att möta ett disco-troll eller att äta stekt vattenmelon?,Solkatt,Pajig,Umami,Glittrig,4,True
+DUM,012,"Om du ser en lila flodhäst dansa, vad ska du göra först?",Surprise,Brun,Umami,Sött,2,True
+DUM,013,Vilken smak har lila spaghetti?,Umami,Salt,Bubblig,Pajig,4,True
+DUM,014,Har en flodhäst fler penna på sommaren eller när det regnar?,Lycka,Sött,Nej,Dimma,3,True
+DUM,015,"Om du ser en blå hund dansa, vad ska du göra först?",Brun,Umami,Nej,Kanske,4,True
+DUM,016,Vilken smak har grön pannkaka?,Ja,Fiskig,Brun,Kanske,2,True
+DUM,017,Vilken smak har rosa pannkaka?,Solkatt,Smärta,Brun,Dimma,2,True
+DUM,018,Vilken smak har turkos kaffe?,Bubblig,Smärta,Nej,Ja,3,True
+DUM,019,Är det snabbare att måla genom en sandlåda eller att simma över strumpor?,Glittrig,Nej,Snabbt,Solkatt,4,True
+DUM,020,Vilken känsla får du när kanin bär hatt?,Solkatt,Umami,Salt,Dimma,4,True
+DUM,021,Har en hund fler lampa på sommaren eller när det snöar?,Sött,Fiskig,Snabbt,Lycka,2,True
+DUM,022,Vilken smak har blå pannkaka?,Smärta,Salt,Mjau,Nej,1,True
+DUM,023,"Om du ser en orange delfin dansa, vad ska du göra först?",Ja,Dimma,Sött,Snabbt,4,True
+DUM,024,"Om en dator kunde prata, vilket ord skulle den säga först?",Glittrig,Solkatt,Sött,Bubblig,4,True
+DUM,025,Vilken är den hemliga färgen på baksidan av soffa?,Sött,Dimma,Pajig,Salt,1,True
+DUM,026,Vilken känsla får du när pingvin bär hatt?,Kanske,Fiskig,Bubblig,Sött,4,True
+DUM,027,Vilken smak har blå choklad?,Fiskig,Solkatt,Mjau,Surprise,4,True
+DUM,028,Är det farligare att möta en sjungande zombie eller att äta ostsås med choklad?,Pajig,Umami,Smärta,Fiskig,1,True
+DUM,029,Vilken smak har blå spaghetti?,Bubblig,Mjau,Surprise,Fiskig,4,True
+DUM,030,"Om du ser en orange hund dansa, vad ska du göra först?",Glittrig,Mjau,Umami,Pajig,2,True
+DUM,031,Vilken känsla får du när pingvin bär hatt?,Glittrig,Ja,Långsamt,Mjau,1,True
+DUM,032,"Om en soffa kunde prata, vilket ord skulle den säga först?",Bubblig,Smärta,Kanske,Pajig,1,True
+DUM,033,Har en papegoja fler hatt på sommaren eller när det snöar?,Solkatt,Pajig,Brun,Sött,4,True
+DUM,034,"Om du ser en grön pingvin dansa, vad ska du göra först?",Sött,Kanske,Umami,Brun,3,True
+DUM,035,Vilken är den hemliga färgen på baksidan av hatt?,Brun,Bubblig,Snabbt,Fiskig,2,True
+DUM,036,Vilken smak har lila choklad?,Smärta,Fiskig,Umami,Glittrig,4,True
+DUM,037,Är det farligare att möta ett vampyrfår eller att äta ostsås med choklad?,Ja,Dimma,Sött,Kanske,2,True
+DUM,038,"Om en hatt kunde prata, vilket ord skulle den säga först?",Mjau,Snabbt,Pajig,Glittrig,4,True
+DUM,039,Är det farligare att möta ett vampyrfår eller att äta picklad glass?,Salt,Sött,Glittrig,Pajig,3,True
+DUM,040,"Om en delfin kunde skriva på månen, skulle den välja skor eller solsken?",Nej,Glittrig,Lycka,Solkatt,4,True
+DUM,041,"Om du ser en rosa katt dansa, vad ska du göra först?",Pajig,Kanske,Nej,Solkatt,2,True
+DUM,042,Vilken är den hemliga färgen på baksidan av dator?,Lycka,Bubblig,Mjau,Nej,1,True
+DUM,043,"Om du ser en grön flodhäst dansa, vad ska du göra först?",Fiskig,Pajig,Lycka,Nej,2,True
+DUM,044,Är det farligare att möta ett disco-troll eller att äta picklad glass?,Umami,Solkatt,Smärta,Glittrig,1,True
+DUM,045,Är det farligare att möta ett disco-troll eller att äta ostsås med choklad?,Glittrig,Pajig,Fiskig,Kanske,1,True
+DUM,046,Är det snabbare att måla genom ett bibliotek eller att simma över bananer?,Pajig,Dimma,Fiskig,Smärta,2,True
+DUM,047,"Om du ser en lila delfin dansa, vad ska du göra först?",Pajig,Lycka,Långsamt,Nej,4,True
+DUM,048,Har en katt fler lampa på sommaren eller när det blåser?,Dimma,Snabbt,Pajig,Fiskig,1,True
+DUM,049,Är det farligare att möta en sjungande zombie eller att äta ostsås med choklad?,Ja,Glittrig,Bubblig,Kanske,2,True
+DUM,050,Vilken är den hemliga färgen på baksidan av dator?,Umami,Fiskig,Solkatt,Långsamt,2,True
+DUM,051,Vilken känsla får du när delfin bär hatt?,Mjau,Pajig,Solkatt,Fiskig,4,True
+DUM,052,Vilken lukt har molnsmör?,Pajig,Långsamt,Glittrig,Solkatt,4,True
+DUM,053,Vilken smak har blå ost?,Pajig,Smärta,Surprise,Långsamt,1,True
+DUM,054,Vilken smak har orange glass?,Bubblig,Brun,Glittrig,Fiskig,2,True
+DUM,055,Är det snabbare att cykla genom skogen eller att springa över glass?,Salt,Kanske,Långsamt,Umami,4,True
+DUM,056,Vilken smak har lila pannkaka?,Fiskig,Snabbt,Lycka,Bubblig,3,True
+DUM,057,"Om du ser en grön koala dansa, vad ska du göra först?",Smärta,Ja,Nej,Pajig,3,True
+DUM,058,"Om en lampa kunde prata, vilket ord skulle den säga först?",Fiskig,Nej,Snabbt,Solkatt,1,True
+DUM,059,Vilken är den hemliga färgen på baksidan av dator?,Lycka,Surprise,Brun,Fiskig,1,True
+DUM,060,"Om en hatt kunde prata, vilket ord skulle den säga först?",Mjau,Långsamt,Snabbt,Brun,2,True
+DUM,061,"Om en koala kunde cykla på ett bibliotek, skulle den välja skor eller ett tält?",Nej,Lycka,Pajig,Brun,1,True
+DUM,062,Vilken smak har turkos kaffe?,Pajig,Bubblig,Smärta,Nej,3,True
+DUM,063,"Om en dator kunde prata, vilket ord skulle den säga först?",Sött,Brun,Fiskig,Kanske,2,True
+DUM,064,Vilken lukt har molnsmör?,Solkatt,Ja,Smärta,Mjau,2,True
+DUM,065,"Om en bil kunde prata, vilket ord skulle den säga först?",Nej,Solkatt,Bubblig,Brun,1,True
+DUM,066,"Om en koala kunde snarka på ett bibliotek, skulle den välja pannkakor eller ett tält?",Nej,Pajig,Långsamt,Bubblig,1,True
+DUM,067,Vilken känsla får du när koala bär hatt?,Dimma,Lycka,Fiskig,Bubblig,1,True
+DUM,068,"Om du ser en lila katt dansa, vad ska du göra först?",Surprise,Smärta,Snabbt,Solkatt,4,True
+DUM,069,"Om du ser en turkos katt dansa, vad ska du göra först?",Snabbt,Bubblig,Nej,Lycka,3,True
+DUM,070,Vilken känsla får du när igelkott bär hatt?,Umami,Bubblig,Ja,Smärta,1,True
+DUM,071,"Om en kanin kunde hoppa på skogen, skulle den välja bananer eller ett tält?",Kanske,Dimma,Sött,Långsamt,4,True
+DUM,072,Vilken smak har orange ost?,Smärta,Fiskig,Bubblig,Pajig,4,True
+DUM,073,Har en myra fler hatt på sommaren eller när det regnar?,Långsamt,Nej,Ja,Sött,3,True
+DUM,074,Är det farligare att möta en sjungande zombie eller att äta kolsyrad gurka?,Umami,Dimma,Snabbt,Kanske,4,True
+DUM,075,"Om du ser en orange hund dansa, vad ska du göra först?",Ja,Surprise,Salt,Fiskig,3,True
+DUM,076,Vilken lukt har en magisk stövel?,Salt,Kanske,Dimma,Brun,2,True
+DUM,077,Vilken är den hemliga färgen på baksidan av soffa?,Fiskig,Mjau,Surprise,Dimma,2,True
+DUM,078,Vilken är den hemliga färgen på baksidan av hatt?,Nej,Mjau,Snabbt,Lycka,1,True
+DUM,079,Är det farligare att möta ett vampyrfår eller att äta kolsyrad gurka?,Solkatt,Nej,Fiskig,Brun,3,True
+DUM,080,"Om en dator kunde prata, vilket ord skulle den säga först?",Långsamt,Bubblig,Surprise,Nej,3,True
+DUM,081,Vilken känsla får du när katt bär hatt?,Solkatt,Snabbt,Lycka,Långsamt,2,False
+DUM,082,"Om en delfin kunde måla på skogen, skulle den välja pannkakor eller en tårta?",Snabbt,Lycka,Salt,Sött,3,False
+DUM,083,Vilken känsla får du när koala bär hatt?,Långsamt,Solkatt,Salt,Dimma,2,False
+DUM,084,"Om en bil kunde prata, vilket ord skulle den säga först?",Pajig,Sött,Snabbt,Fiskig,4,False
+DUM,085,Är det farligare att möta ett vampyrfår eller att äta picklad glass?,Brun,Lycka,Kanske,Salt,3,False
+DUM,086,Är det farligare att möta en arg enhörning eller att äta kolsyrad gurka?,Snabbt,Umami,Långsamt,Kanske,3,False
+DUM,087,Vilken är den hemliga färgen på baksidan av hatt?,Ja,Kanske,Mjau,Smärta,2,False
+DUM,088,Vilken smak har rosa glass?,Pajig,Glittrig,Ja,Umami,2,False
+DUM,089,Är det farligare att möta ett vampyrfår eller att äta picklad glass?,Glittrig,Dimma,Mjau,Ja,4,False
+DUM,090,"Om en koala kunde cykla på skogen, skulle den välja bananer eller ett tält?",Snabbt,Glittrig,Surprise,Salt,4,False
+DUM,091,"Om en koala kunde måla på en hattbutik, skulle den välja skor eller ett tält?",Surprise,Lycka,Dimma,Långsamt,4,False
+DUM,092,Vilken är den hemliga färgen på baksidan av bil?,Långsamt,Surprise,Salt,Pajig,4,False
+DUM,093,Vilken smak har blå choklad?,Surprise,Lycka,Glittrig,Fiskig,4,False
+DUM,094,"Om du ser en turkos kanin dansa, vad ska du göra först?",Snabbt,Dimma,Salt,Ja,2,False
+DUM,095,Vilken är den hemliga färgen på baksidan av bil?,Snabbt,Mjau,Fiskig,Kanske,2,False
+DUM,096,Är det farligare att möta ett disco-troll eller att äta kolsyrad gurka?,Brun,Smärta,Glittrig,Fiskig,2,False
+DUM,097,Vilken lukt har osynlig sirap?,Kanske,Glittrig,Lycka,Dimma,2,False
+DUM,098,Vilken känsla får du när kanin bär hatt?,Kanske,Mjau,Lycka,Långsamt,4,False
+DUM,099,Är det snabbare att snarka genom en hattbutik eller att gömma sig över pannkakor?,Glittrig,Salt,Solkatt,Bubblig,1,False
+DUM,100,Har en katt fler soffa på sommaren eller när det regnar?,Glittrig,Smärta,Solkatt,Lycka,1,False

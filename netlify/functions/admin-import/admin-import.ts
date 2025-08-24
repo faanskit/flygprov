@@ -9,6 +9,7 @@ import Papa from "papaparse";
 
 interface CsvRow {
     code: string;
+    qid: string;
     question: string;
     option_1: string;
     option_2: string;
@@ -75,7 +76,7 @@ async function handleAnalyze(db: Db, csvContent: string) {
     }
 
     for (const row of data) {
-        if (!row.code || !row.question || !row.option_1 || !row.option_2 || !row.option_3 || !row.option_4 || !row.correct_option) {
+        if (!row.code || !row.qid || !row.question || !row.option_1 || !row.option_2 || !row.option_3 || !row.option_4 || !row.correct_option) {
             continue; // Skip incomplete rows
         }
 
@@ -94,6 +95,7 @@ async function handleAnalyze(db: Db, csvContent: string) {
         } else {
             newQuestions.push({
                 subjectId: subjectId,
+                questionId: row.qid.trim(),
                 questionText: row.question.trim(),
                 options: [row.option_1.trim(), row.option_2.trim(), row.option_3.trim(), row.option_4.trim()],
                 correctOptionIndex: parseInt(row.correct_option, 10) - 1,
@@ -119,6 +121,7 @@ async function handleExecute(db: Db, body: string) {
 
     const questionsWithObjectId = questionsToImport.map(q => ({
         subjectId: new ObjectId(q.subjectId),
+        questionId: q.questionId,
         questionText: q.questionText,
         options: q.options,
         correctOptionIndex: q.correctOptionIndex,

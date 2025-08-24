@@ -715,11 +715,12 @@ class QuestionManagement {
 
         const filteredQuestions = this.questions.filter(q => {
             const textMatch = q.questionText.toLowerCase().includes(filterText);
+            const idMatch = q.questionId.toLowerCase().includes(filterText);
             const isActive = q.active !== false;
             const statusMatch = this.currentStatusFilter === 'all' ||
                                 (this.currentStatusFilter === 'active' && isActive) ||
                                 (this.currentStatusFilter === 'inactive' && !isActive);
-            return textMatch && statusMatch;
+            return (idMatch || textMatch) && statusMatch;
         });
 
         if (filteredQuestions.length === 0) {
@@ -740,7 +741,7 @@ class QuestionManagement {
             card.innerHTML = `
                 <div class="card-body d-flex align-items-center">
                     <div class="flex-grow-1">
-                        <p class="card-text mb-1">${q.questionText}</p>
+                        <p class="card-text mb-1">(${q.questionId}) ${q.questionText}</p>
                         <span class="badge bg-${isActive ? 'success' : 'secondary'}">${isActive ? 'Aktiv' : 'Inaktiv'}</span>
                     </div>
                     <div class="mx-3">
@@ -817,6 +818,7 @@ class QuestionManagement {
             const question = this.questions.find(q => q._id === questionId);
             if (question) {
                 (document.getElementById('question-text') as HTMLTextAreaElement).value = question.questionText;
+                (document.getElementById('question-externalId') as HTMLTextAreaElement).value = question.questionId;
                 for (let i = 0; i < 4; i++) {
                     (document.getElementById(`option-${i}`) as HTMLInputElement).value = question.options[i] || '';
                 }
@@ -847,6 +849,7 @@ class QuestionManagement {
         const questionId = (document.getElementById('question-id') as HTMLInputElement).value;
         const imageId = (document.getElementById('question-image-id') as HTMLInputElement).value;
         const questionText = (document.getElementById('question-text') as HTMLTextAreaElement).value;
+        const externalQuestionId = (document.getElementById('question-externalId') as HTMLTextAreaElement).value.trim();
         const options = [
             (document.getElementById('option-0') as HTMLInputElement).value,
             (document.getElementById('option-1') as HTMLInputElement).value,
@@ -855,7 +858,7 @@ class QuestionManagement {
         ];
         const correctOptionIndex = parseInt((document.querySelector('input[name="correctOption"]:checked') as HTMLInputElement)?.value);
 
-        if (!questionText || options.some(o => !o) || isNaN(correctOptionIndex)) {
+        if (!questionText || !externalQuestionId || options.some(o => !o) || isNaN(correctOptionIndex)) {
             this.showError("Alla fält måste fyllas i.");
             return;
         }
@@ -864,6 +867,7 @@ class QuestionManagement {
         const method = questionId ? 'PUT' : 'POST';
         const bodyPayload: any = {
             subjectId: this.currentSubjectId,
+            questionId : externalQuestionId,
             questionText,
             options,
             correctOptionIndex,
@@ -1276,7 +1280,7 @@ class ImportManagement {
             newQuestions.slice(0, 10).forEach(q => { // Preview max 10 questions
                 const item = document.createElement('div');
                 item.className = 'list-group-item';
-                item.textContent = q.questionText;
+                item.textContent = `(${q.questionId}) ${q.questionText}`;
                 this.previewContainer.appendChild(item);
             });
             if (newQuestions.length > 10) {
