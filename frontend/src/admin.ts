@@ -618,6 +618,7 @@ class QuestionManagement {
 
         this.initializeModals();
         this.bindEvents();
+        this.setupEventListeners();
         this.loadInitialData();
     }
 
@@ -805,12 +806,61 @@ class QuestionManagement {
         }
     }
 
+    // Lägg till en ny metod för att sätta upp event listeners
+    private setupEventListeners(): void {
+        const fetchIdBtn = document.getElementById('fetch-id-btn');
+        if (fetchIdBtn) {
+            fetchIdBtn.addEventListener('click', this.handleFetchNextId.bind(this));
+        }
+    }
+
+    // Lägg till en ny metod som anropar backend och uppdaterar fältet
+    private async handleFetchNextId(): Promise<void> {
+        const subjectId = this.currentSubjectId; // Antag att du har subjectId tillgängligt i klassen
+        const externalIdInput = document.getElementById('question-externalId') as HTMLInputElement;
+        const token = localStorage.getItem('jwt_token');
+
+        if (!subjectId) {
+            this.showError("Välj ett ämne först för att hämta nästa ID.");
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/next-question-id?subjectId=${subjectId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}` // Antag att du har en token lagrad
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Kunde inte hämta nytt ID: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            if (data.nextId) {
+                externalIdInput.value = data.nextId;
+            } else {
+                this.showError("Svaret från servern saknade ett 'nextId'.");
+            }
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : "Ett okänt fel inträffade vid hämtning av ID.";
+            this.showError(errorMessage);
+        }
+    }
+
+    // Uppdatera showEditModal
     private showEditModal(questionId?: string): void {
         const form = document.getElementById('edit-question-form') as HTMLFormElement;
         form.reset();
         this.removeImage();
         (document.getElementById('question-id') as HTMLInputElement).value = questionId || '';
         (document.getElementById('select-image-btn') as HTMLElement).classList.remove('d-none');
+        
+        // Nollställ det externa ID-fältet när en ny fråga ska skapas
+        if (!questionId) {
+            (document.getElementById('question-externalId') as HTMLInputElement).value = '';
+        }
 
         const modalLabel = document.getElementById('editQuestionModalLabel')!;
         if (questionId) {
@@ -834,7 +884,6 @@ class QuestionManagement {
                         previewContainer.classList.remove('d-none');
                         (document.getElementById('remove-image-btn') as HTMLElement).classList.remove('d-none');
                     } else {
-                        // Image ID exists but image not found in cache (e.g., deleted from Drive)
                         this.showError("Bilden som är kopplad till frågan kunde inte hittas. Den kan ha tagits bort.");
                     }
                 }

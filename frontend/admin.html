@@ -349,9 +349,11 @@
                     <form id="edit-question-form">
                         <input type="hidden" id="question-id">
                         <div class="mb-3">
-                            <label for="question-id" class="form-label">Fråge ID</label>
-                            <input type="text" class="form-control" id="question-externalId" placeholder="Ange ID till frågan...">
-
+                            <label for="question-externalId" class="form-label">Fråge ID</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="question-externalId" placeholder="Ange ID till frågan...">
+                                <button type="button" class="btn btn-outline-primary" id="fetch-id-btn">Hämta ID...</button>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="question-text" class="form-label">Frågetext</label>
